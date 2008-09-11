@@ -286,7 +286,9 @@ public class SynthContainer
 	{
 		Method[] methods = child.getClass().getMethods();
 	
-		child.g = parent.g;
+//		I do this later for 0148, otherwise for some reason it is turned into a PGraphicsJava2D.
+//		Having it here worked with 0135.		
+//		child.g = parent.g;
 						
 		child.setSize(parent.width, parent.height);
 		
@@ -344,6 +346,8 @@ public class SynthContainer
 		{
 			System.out.println("CRASH standalone: " + e.getMessage());
 		}
+		
+		child.g = parent.g;
 	}
 
 }

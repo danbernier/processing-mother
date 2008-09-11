@@ -82,7 +82,7 @@ public class Mother extends PApplet
             
             m_Synth_Folder = fp.getStringValue("SynthFolder");
             
-            if(fp.getIntValue("FullScreen")==1)
+            if(fp.getIntValue("FullScreen") == 1)
             {
             	m_FullScreen = true;
             }
