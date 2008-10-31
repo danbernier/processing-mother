@@ -242,7 +242,7 @@ public class Mother extends PApplet
 		String 		typetag 	= theOscMessage.typetag();
 		String[] 	splits 		= addrPattern.split("/");
 		
-		println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
+//		println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
 		
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
@@ -311,7 +311,7 @@ public class Mother extends PApplet
 			}
 			else if ( splits[2].compareTo("Child") == 0 && splits.length >= 4)
 			{
-				System.out.println(theOscMessage.addrPattern());
+//				System.out.println(theOscMessage.addrPattern());
 				
 				StringBuffer newAddrPattern = new StringBuffer();
 				String childName;
@@ -356,7 +356,7 @@ public class Mother extends PApplet
 		}
 		else // Message not for mother
 		{
-			println("Unhandled OSC message: " + theOscMessage.addrPattern());
+//			println("Unhandled OSC message: " + theOscMessage.addrPattern());
 		}
 	}
 	
