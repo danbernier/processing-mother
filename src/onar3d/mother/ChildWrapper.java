@@ -22,7 +22,6 @@ onar3d@hotmail.com, www.onar3d.com
 
 package onar3d.mother;
 
-
 import processing.core.*; 
 import processing.opengl.*;
 import oscP5.*;
@@ -87,7 +86,9 @@ public class ChildWrapper
 		m_Blending_Source 		= GL.GL_SRC_ALPHA;
 		m_Blending_Destination 	= GL.GL_ONE_MINUS_SRC_ALPHA;
 		
-		m_Child = LoadSketch(classPath, className);
+		//m_Child = LoadSketch(classPath, className);
+		
+		m_Child = new CubeSpine();
 	}
 		
 	/**

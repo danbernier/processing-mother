@@ -4,6 +4,11 @@ import processing.core.PApplet;
 
 public class Mother
 {
+	// -Djava.library.path=src/processing/opengl/library  
+	
+	// For remote debugging, haven't gotten it right yet though: -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,suspend=n,server=y
+	
+	
 	static public void main(String args[]) 
 	{     
 		// Instead of using present mode for fullscreen, I use the fullscreen-hack from here:

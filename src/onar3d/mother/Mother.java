@@ -144,6 +144,7 @@ public class Mother extends PApplet
 		// For testing
 //		m_SynthContainer.Add("Gradient1", "Gradient", m_Width, m_Height, this);
 //		m_SynthContainer.Add("Waltz1", "Waltz", m_Width, m_Height, this);
+		m_SynthContainer.Add("CubeSpine_02", "CubeSpine", m_Width, m_Height, this);
 	}
 			
 	/*
@@ -339,7 +340,7 @@ public class Mother extends PApplet
 								// removing "/Mother/Child/Synth_Name" from address pattern
 								theOscMessage.setAddrPattern(newAddrPattern.toString());
 																			
-								oscEventMethod = child.getClass().getMethod("oscEvent", new Class[] {OscMessage.class});
+								oscEventMethod = child.getClass().getDeclaredMethod("oscEvent", new Class[] {OscMessage.class});
 								
 								oscEventMethod.invoke(child, new Object[] {theOscMessage});
 							}

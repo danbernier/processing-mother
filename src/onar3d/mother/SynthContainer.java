@@ -75,7 +75,7 @@ public class SynthContainer
 			try
 			{
 				fileName 				= files[i].getName().split(".jar");
-				m_Visual_Synth_urls[i] 	= files[i].toURL();
+				m_Visual_Synth_urls[i] 	= files[i].toURI().toURL();
 				System.out.println("Found Synth: " + fileName[0]);
 				
 				m_Visual_Synth_Names.put(fileName[0], fileName[0]);
@@ -285,6 +285,7 @@ public class SynthContainer
 	private void InitChild(PApplet child, PApplet parent)
 	{
 		Method[] methods = child.getClass().getMethods();
+		Method[] declaredMethods = child.getClass().getDeclaredMethods();
 	
 		child.g = parent.g;
 						
@@ -326,17 +327,17 @@ public class SynthContainer
 					
 		try
 		{	
-			for(int i = 0; i < methods.length; i++)
+			for(int i = 0; i < declaredMethods.length; i++)
 			{
-				if(methods[i].getName().equals("initializeFoetus"))
+				if(declaredMethods[i].getName().equals("initializeFoetus"))
 				{
-					methods[i].invoke(child, new Object[] {});
+					declaredMethods[i].invoke(child, new Object[] {});
 					
 					break;
 				}
 			}
 			
-			foetusField = (Foetus)child.getClass().getField("f").get(child);
+			foetusField = (Foetus)child.getClass().getDeclaredField("f").get(child);
 
 			foetusField.standalone = false;	
 		}
