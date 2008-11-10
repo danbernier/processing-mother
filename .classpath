@@ -7,6 +7,6 @@
 	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/oscP5/library/oscP5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Timing_Sandbox"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
