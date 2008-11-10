@@ -27,20 +27,22 @@ public class FoetusParameter
 	{
 		if(m_Splerp)
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
-		
+
 		return m_Value;
 	}
 	
 	/*
 	 * 
 	 */
-	public FoetusParameter(Foetus f, float value)
+	public FoetusParameter(Foetus f, float value, String address, String typetag )
 	{
 		r_f 					= f;		
 		m_Value 				= value;
 		m_NewValue				= value;
 		m_LastValue				= value;
 		m_InterpolationSpeed 	= 0.1f;
+
+		f.registerMethod(address, typetag);
 		
 		float times[] 	= {0, 1};
         Float values[] 	= {new Float(0), new Float(1)};
@@ -54,8 +56,10 @@ public class FoetusParameter
 									Animator.RepeatBehavior.LOOP, 
 									new PropertySetter(this, "factor", keyFrames) );
 		
+		m_LastTimeStamp = animation.getTotalElapsedTime();
+		
 		//animation.setAcceleration(0.5f);
-	   // animation.setDeceleration(0.5f);
+		//animation.setDeceleration(0.5f);
 	}
 
 	public void setFactor(Float factor)
@@ -64,15 +68,17 @@ public class FoetusParameter
 	}
 	
 	
+	/*
 	public void setInterpolationSpeed(float speed)
 	{
 		m_InterpolationSpeed = speed;
 	}
-	
+	*/
 	
 	public void interpolateStep()
 	{
-		/*m_InterpolationPosition += m_InterpolationSpeed;
+		/*
+		m_InterpolationPosition += m_InterpolationSpeed;
 		 
 		if(m_InterpolationPosition>1.0)
 		{

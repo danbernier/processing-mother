@@ -54,41 +54,28 @@ public class CubeSpine extends PApplet
 
 	void initializeFoetus()
 	{
-		m_Scale 		= new FoetusParameter(f, 1.0f);
-		m_Repetitions_1 = new FoetusParameter(f, 25);
-		m_InitSize 		= new FoetusParameter(f, 100);
-		m_Step 			= new FoetusParameter(f, 1.19f);
-		m_A 			= new FoetusParameter(f, 0);
-		m_B 			= new FoetusParameter(f, 0);
-		m_Red 			= new FoetusParameter(f, 255);
-		m_Green 		= new FoetusParameter(f, 0);
-		m_Blue 			= new FoetusParameter(f, 0);
-		m_Position_X 	= new FoetusParameter(f, 0.5f);
-		m_Position_Y 	= new FoetusParameter(f, 0.5f);
-
+		// Instantiate foetus object here  
+		f = new Foetus(this);
+		
 		pgl = (PGraphicsOpenGL) g;
 		opengl = pgl.gl;
 		glu = ((PGraphicsOpenGL) g).glu;
-
-		// Instantiate foetus object here  
-		f = new Foetus(this);
-
-		// Register messages that synth responds to (see OSC documentation)
-		f.registerMethod("/Scale", "f");
-		f.registerMethod("/Repetitions_1", "i");
-		f.registerMethod("/InitSize", "i");
-		f.registerMethod("/Step", "f");
-		f.registerMethod("/A", "f");
-		f.registerMethod("/B", "f");
-		f.registerMethod("/Position_X", "f");
-		f.registerMethod("/Position_Y", "f");
-		f.registerMethod("/InterpSpeed", "f");
+		
+		m_Scale 		= new FoetusParameter(f, 1.0f, 	"/Scale", 			"f");
+		m_Repetitions_1 = new FoetusParameter(f, 25, 	"/Repetitions_1", 	"i");
+		m_InitSize 		= new FoetusParameter(f, 100, 	"/InitSize", 		"i");
+		m_Step 			= new FoetusParameter(f, 1.19f, "/Step", 			"f");
+		m_A 			= new FoetusParameter(f, 0, 	"/A", 				"f");
+		m_B 			= new FoetusParameter(f, 0, 	"/B", 				"f");
+		m_Red 			= new FoetusParameter(f, 255,	"/Red", 			"i");
+		m_Green 		= new FoetusParameter(f, 0, 	"/Green", 			"i");
+		m_Blue 			= new FoetusParameter(f, 0, 	"/Blue", 			"i");
+		m_Position_X 	= new FoetusParameter(f, 0.5f, 	"/Position_X", 		"f");
+		m_Position_Y 	= new FoetusParameter(f, 0.5f, 	"/Position_Y", 		"f");	
 	}
 
 	public void draw()
 	{
-		interpolateValues();
-
 //	  	m_A = mouseX;
 //	  	m_B = mouseY;
 
@@ -190,22 +177,6 @@ public class CubeSpine extends PApplet
 
 	}
 
-	void interpolateValues()
-	{
-		m_Scale.interpolateStep();
-	//	System.out.println(m_Scale.getValue());
-		m_Repetitions_1.interpolateStep();
-		m_InitSize.interpolateStep();
-		m_Step.interpolateStep();
-		m_A.interpolateStep();
-		m_B.interpolateStep();
-		m_Red.interpolateStep();
-		m_Green.interpolateStep();
-		m_Blue.interpolateStep();
-		m_Position_X.interpolateStep();
-		m_Position_Y.interpolateStep();
-	}
-
 	/**
 	 * This method is called when an OSC message is received by the synth.
 	 */
@@ -217,54 +188,59 @@ public class CubeSpine extends PApplet
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_Scale.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/Repetitions_1") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Repetitions_1") == true)
 			{
 				if (theOscMessage.checkTypetag("i"))
 					m_Repetitions_1.setValue(theOscMessage.get(0).intValue());
-			} else if (theOscMessage.checkAddrPattern("/InitSize") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/InitSize") == true)
 			{
 				if (theOscMessage.checkTypetag("i"))
 					m_InitSize.setValue(theOscMessage.get(0).intValue());
-			} else if (theOscMessage.checkAddrPattern("/Step") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Step") == true)
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_Step.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/A") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/A") == true)
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_A.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/B") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/B") == true)
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_B.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/Red") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Red") == true)
 			{
 				if (theOscMessage.checkTypetag("i"))
 					m_Red.setValue(theOscMessage.get(0).intValue());
-			} else if (theOscMessage.checkAddrPattern("/Green") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Green") == true)
 			{
 				if (theOscMessage.checkTypetag("i"))
 					m_Green.setValue(theOscMessage.get(0).intValue());
-			} else if (theOscMessage.checkAddrPattern("/Blue") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Blue") == true)
 			{
 				if (theOscMessage.checkTypetag("i"))
 					m_Blue.setValue(theOscMessage.get(0).intValue());
-			} else if (theOscMessage.checkAddrPattern("/Position_X") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Position_X") == true)
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_Position_X.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/Position_Y") == true)
+			} 
+			else if (theOscMessage.checkAddrPattern("/Position_Y") == true)
 			{
 				if (theOscMessage.checkTypetag("f"))
 					m_Position_Y.setValue(theOscMessage.get(0).floatValue());
-			} else if (theOscMessage.checkAddrPattern("/InterpSpeed") == true)
-			{
-				if (theOscMessage.checkTypetag("f"))
-				{
-					//m_InterpSpeed  = theOscMessage.get(0).floatValue();
-				}
 			}
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			println("Exception while processing CubeSpine input " + " " + theOscMessage.addrPattern());
 		}
