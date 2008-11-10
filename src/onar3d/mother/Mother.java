@@ -142,9 +142,9 @@ public class Mother extends PApplet
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
 
 		// For testing
-//		m_SynthContainer.Add("Gradient1", "Gradient", m_Width, m_Height, this);
+//		m_SynthContainer.Add("Grad_02", "Gradient", m_Width, m_Height, this);
 //		m_SynthContainer.Add("Waltz1", "Waltz", m_Width, m_Height, this);
-		m_SynthContainer.Add("CubeSpine_02", "CubeSpine", m_Width, m_Height, this);
+//		m_SynthContainer.Add("CubeSpine_02", "CubeSpine", m_Width, m_Height, this);
 	}
 			
 	/*
@@ -185,27 +185,28 @@ public class Mother extends PApplet
 		{
 			current = (ChildWrapper)m_SynthContainer.Synths().get(i);
 			
-			PreDrawChildUpdate(current.Child());
-		
-			opengl.glEnable(GL.GL_BLEND);
-//			opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
-						
-//			//For testing (getting opengl state)		
-//			IntBuffer arg1 = IntBuffer.allocate(1);
-//			opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
-//			println(arg1.get(0));
+			
+					PreDrawChildUpdate(current.Child());
+				
+					opengl.glEnable(GL.GL_BLEND);
+		//			opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
+								
+		//			//For testing (getting opengl state)		
+		//			IntBuffer arg1 = IntBuffer.allocate(1);
+		//			opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
+		//			println(arg1.get(0));
+							
+					pgl.colorMode( RGB, 255 );
 					
-			pgl.colorMode( RGB, 255 );
-			
-			pushMatrix();
-			
-//			Hack for now !!!
-			noStroke();
-			
-			opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
-			current.draw();
-			
-			popMatrix();
+					pushMatrix();
+					
+		//			Hack for now !!!
+					noStroke();
+					
+					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+					current.draw();
+					
+					popMatrix();
 		}
 	}
 		
@@ -263,6 +264,9 @@ public class Mother extends PApplet
 			{
 				if (theOscMessage.checkTypetag("ss"))
 				{				
+					this.redraw = false;
+					noLoop();
+					
 					ChildWrapper w = m_SynthContainer.Add(	theOscMessage.get(1).stringValue(), 
 											theOscMessage.get(0).stringValue(), 
 											m_Width, 
@@ -270,6 +274,9 @@ public class Mother extends PApplet
 											this);
 					
 					sendSupportedMessages(w);
+					
+					loop();
+					this.redraw = true;
 				}
 			}
 			else if ( splits[2].compareTo("Reset") == 0 )

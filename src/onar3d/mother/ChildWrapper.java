@@ -29,6 +29,9 @@ import netP5.*;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+
+import foetus.Foetus;
+
 import java.util.*;
 import java.io.File;
 import java.lang.reflect.*;
@@ -86,9 +89,9 @@ public class ChildWrapper
 		m_Blending_Source 		= GL.GL_SRC_ALPHA;
 		m_Blending_Destination 	= GL.GL_ONE_MINUS_SRC_ALPHA;
 		
-		//m_Child = LoadSketch(classPath, className);
+		m_Child = LoadSketch(classPath, className);
 		
-		m_Child = new CubeSpine();
+//		m_Child = new Gradient();
 	}
 		
 	/**

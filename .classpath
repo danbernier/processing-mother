@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/oscP5/library/oscP5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -288,7 +288,7 @@ public class SynthContainer
 		Method[] declaredMethods = child.getClass().getDeclaredMethods();
 	
 		child.g = parent.g;
-						
+		
 		child.setSize(parent.width, parent.height);
 		
 		/* With this, I'm hoping the child will run in a separate thread, but its timer will not call the draw method.
@@ -322,7 +322,9 @@ public class SynthContainer
 		  
 		child.width 		= parent.width;
 		child.height 		= parent.height;
-					 
+		
+		child.noLoop();
+		
 		Foetus foetusField;
 					
 		try
