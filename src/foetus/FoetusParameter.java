@@ -1,13 +1,7 @@
 package foetus;
 
-import java.awt.Point;
-
 import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.interpolation.Interpolator;
-import org.jdesktop.animation.timing.interpolation.KeyFrames;
-import org.jdesktop.animation.timing.interpolation.KeyTimes;
-import org.jdesktop.animation.timing.interpolation.KeyValues;
-import org.jdesktop.animation.timing.interpolation.PropertySetter;
+import org.jdesktop.animation.timing.interpolation.*;
 
 import processing.core.PApplet;
 
@@ -27,9 +21,13 @@ public class FoetusParameter
 	long m_LastTimeStamp;
 	Animator animation = null;
 	
+	boolean m_Splerp = true;
+	
 	public float getValue()
 	{
-		m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
+		if(m_Splerp)
+			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
+		
 		return m_Value;
 	}
 	
@@ -49,15 +47,15 @@ public class FoetusParameter
 		
 		KeyTimes  keyTimes 	= new KeyTimes(times);
 	    KeyValues keyValues = KeyValues.create(values);
-		KeyFrames keyFrames = new KeyFrames(keyValues, keyTimes, (Interpolator)null);
+		KeyFrames keyFrames = new KeyFrames(keyValues, keyTimes,  new SplineInterpolator(1.00f, 0.00f, 0.00f, 1.00f));
 		
 		animation = new Animator(	1000, 
 									1,  
 									Animator.RepeatBehavior.LOOP, 
 									new PropertySetter(this, "factor", keyFrames) );
 		
-		animation.setAcceleration(0.5f);
-	    animation.setDeceleration(0.5f);
+		//animation.setAcceleration(0.5f);
+	   // animation.setDeceleration(0.5f);
 	}
 
 	public void setFactor(Float factor)
@@ -99,9 +97,20 @@ public class FoetusParameter
 		    m_LastTimeStamp = animation.getTotalElapsedTime();
 		    
 		    animation.stop();
-		    animation.setDuration(toSet.intValue());
-		    System.out.println(toSet.intValue() + ", " + toSet);
-		    animation.start();
+		    
+		    if(toSet<100)
+		    {
+		    	m_Splerp 	= false;
+		    	m_LastValue = val;
+		    	m_Value 	= val;
+		    }
+		    else
+		    {
+		    	m_Splerp = true;
+		    	animation.setDuration(toSet.intValue());
+		    	animation.start();
+		    }
+		    
 	    }
 	    catch(Exception e)
 	    {
