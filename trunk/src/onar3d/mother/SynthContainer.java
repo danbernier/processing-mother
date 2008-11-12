@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import processing.core.PApplet;
+import processing.core.PApplet.RegisteredMethods;
 
 import foetus.*;
 
@@ -314,11 +315,11 @@ public class SynthContainer
 
 		child.frameCount	= parent.frameCount;
 		child.frameRate		= parent.frameRate;		  
-		child.frame			= parent.frame;		  
-		child.screen		= parent.screen;
+		child.frame			  = parent.frame;		  
+		child.screen		  = parent.screen;
 		child.recorder		= parent.recorder;
 		child.sketchPath	= parent.sketchPath;
-		child.pixels		= parent.pixels;
+		child.pixels		  = parent.pixels;
 		  
 		child.width 		= parent.width;
 		child.height 		= parent.height;

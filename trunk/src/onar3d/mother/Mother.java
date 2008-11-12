@@ -23,6 +23,7 @@ onar3d@hotmail.com, www.onar3d.com
 package onar3d.mother;
 
 import processing.core.*; 
+
 import processing.opengl.*;
  
 import oscP5.*;
@@ -33,8 +34,11 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import java.util.*;
 
+import java.awt.Dimension;
 import java.lang.reflect.*;
 import foetus.*;
+
+import javax.swing.SwingUtilities;
 
 public class Mother extends PApplet
 {
@@ -201,14 +205,36 @@ public class Mother extends PApplet
 					pushMatrix();
 					
 		//			Hack for now !!!
-					noStroke();
+					//noStroke();
 					
 					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+					
+					//AsyncThread ail = new AsyncThread(current.Child(), this);
+					//ail.start();
+					
 					current.draw();
 					
 					popMatrix();
 		}
 	}
+	
+	class AsyncThread extends Thread 
+	{
+	    PApplet r_child;
+	    PApplet r_parent;
+	    
+	    public AsyncThread(PApplet ch, PApplet p) 
+	    {
+	    	r_child = ch;
+	    	r_parent = p;
+	    }
+
+	    public void run() 
+	    {
+	    	r_child.g = r_parent.g;
+	    }
+	}
+
 		
 	public void keyPressed()
 	{

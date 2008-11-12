@@ -66,11 +66,11 @@ public class ChildWrapper
 	public boolean GetRenderBillboard()							{ return m_RenderBillboard; }
 	public void	   SetRenderBillboard(boolean renderBillboard)	{ m_RenderBillboard = renderBillboard; }
 	
-	public int 	GetBlending_Source()			{ return m_Blending_Source; }
-	public void	SetBlending_Source(int source)	{ m_Blending_Source = source; }
+	public int 	GetBlending_Source()							{ return m_Blending_Source; }
+	public void	SetBlending_Source(int source)					{ m_Blending_Source = source; }
 	
-	public int 	GetBlending_Destination()			{ return m_Blending_Destination; }
-	public void	SetBlending_Destination(int dest)	{ m_Blending_Destination = dest; }
+	public int 	GetBlending_Destination()						{ return m_Blending_Destination; }
+	public void	SetBlending_Destination(int dest)				{ m_Blending_Destination = dest; }
 		
 	public String GetName() { return m_Name; }
 		
@@ -91,7 +91,7 @@ public class ChildWrapper
 		
 		m_Child = LoadSketch(classPath, className);
 		
-//		m_Child = new Gradient();
+		//m_Child = new Gradient();
 	}
 		
 	/**
@@ -159,8 +159,8 @@ public class ChildWrapper
 		
 		try
 		{		
-			toReturn = (PApplet)Class.forName(className, true, cl).newInstance();
-						
+			toReturn = (PApplet)Class.forName("onar3d.mother." + className, true, cl).newInstance();
+			//PApplet toReturn2 = new Gradient();
 			return toReturn;
 		} 
 		catch (Exception ex)
