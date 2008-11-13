@@ -32,6 +32,8 @@ import processing.opengl.PGraphicsOpenGL;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import foetus.*;
+
 public abstract class RenderToTexture
 {
 	private int m_Texture_Width  = 640;
@@ -41,20 +43,20 @@ public abstract class RenderToTexture
 	private int m_Texture_Coordinate_H;
 	private boolean m_Texture_Rectange_Available;
 
-	private float m_R = 1;
-	private float m_G = 1;
-	private float m_B = 1;
-	private float m_A = 1;
+	private FoetusParameter m_R;
+	private FoetusParameter m_G;
+	private FoetusParameter m_B;
+	private FoetusParameter m_A;
 	
-	public float GetR() { return m_R; }
-	public float GetG() { return m_G; }
-	public float GetB() { return m_B; }
-	public float GetA() { return m_A; }
+	public float GetR() { return m_R.getValue(); }
+	public float GetG() { return m_G.getValue(); }
+	public float GetB() { return m_B.getValue(); }
+	public float GetA() { return m_A.getValue(); }
 	
-	public void SetR(float r) { m_R = r; }
-	public void SetG(float g) { m_G = g; }
-	public void SetB(float b) { m_B = b; }
-	public void SetA(float a) { m_A = a; }
+	public void SetR(float r) { m_R.setValue(r); }
+	public void SetG(float g) { m_G.setValue(g); }
+	public void SetB(float b) { m_B.setValue(b); }
+	public void SetA(float a) { m_A.setValue(a); }
 	
 	// An Unsigned Int To Store The Texture Number
 	private static int m_Texture;
@@ -92,6 +94,11 @@ public abstract class RenderToTexture
 		m_Gl 	= m_Pgl.gl;
 		m_Glu 	= ((PGraphicsOpenGL) pgl).glu;
 
+		m_R = new FoetusParameter(null, 1.0f, "", "f");
+		m_G = new FoetusParameter(null, 1.0f, "", "f");
+		m_B = new FoetusParameter(null, 1.0f, "", "f");
+		m_A = new FoetusParameter(null, 1.0f, "", "f");
+		
 		// Create Our Empty Texture
 		if(!m_TextureCreated)
 		{
@@ -276,7 +283,7 @@ public abstract class RenderToTexture
 
 		m_Gl.glBegin(GL.GL_QUADS);
 
-		m_Gl.glColor4f(m_R, m_G, m_B, m_A);
+		m_Gl.glColor4f(m_R.getValue(), m_G.getValue(), m_B.getValue(), m_A.getValue());
 
 		// Texture Coordinate ( 0, 1 )
 		m_Gl.glTexCoord2f(0, m_Texture_Height);
