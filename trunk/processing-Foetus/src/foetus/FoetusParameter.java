@@ -7,22 +7,19 @@ import processing.core.PApplet;
 
 public class FoetusParameter
 {
-	Foetus r_f; 
-	
 	float m_Value;
-	
-	float m_InterpolationPosition;
 	float m_LastValue;
 	float m_NewValue;
-	
-	float m_InterpolationSpeed;
-	
 	float m_Factor;
-	long m_LastTimeStamp;
-	Animator animation = null;
 	
 	boolean m_Splerp = true;
 	
+	long m_LastTimeStamp;
+
+	Foetus r_f; 
+	
+	Animator animation = null;
+		
 	public float getValue()
 	{
 		if(m_Splerp)
@@ -40,7 +37,6 @@ public class FoetusParameter
 		m_Value 				= value;
 		m_NewValue				= value;
 		m_LastValue				= value;
-		m_InterpolationSpeed 	= 0.1f;
 
 		f.registerMethod(address, typetag);
 		
@@ -66,33 +62,9 @@ public class FoetusParameter
 	{
 		m_Factor = factor;
 	}
-	
-	
-	/*
-	public void setInterpolationSpeed(float speed)
-	{
-		m_InterpolationSpeed = speed;
-	}
-	*/
-	
-	public void interpolateStep()
-	{
-		/*
-		m_InterpolationPosition += m_InterpolationSpeed;
-		 
-		if(m_InterpolationPosition>1.0)
-		{
-			m_InterpolationPosition = 1.0f;
-		}
 		
-	    m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_InterpolationPosition);
-	    */
-	}
-	
-	
 	public void setValue(float val)
 	{
-		m_InterpolationPosition  	= 0.0f;
 	    m_LastValue 				= m_Value;
 	    m_NewValue  				= val;
 
@@ -114,8 +86,8 @@ public class FoetusParameter
 		    {
 		    	m_Splerp = true;
 		    	
-		    	if(toSet>5000)
-		    		toSet = 5000.0;
+		    	if(toSet>3000)
+		    		toSet = 3000.0;
 		    	
 		    	animation.setDuration(toSet.intValue());
 		    	animation.start();
@@ -124,7 +96,7 @@ public class FoetusParameter
 	    }
 	    catch(Exception e)
 	    {
-	    	System.out.println(e.getMessage());
+	    	System.out.println("Something exceptional happened in FoetusParameter! " + e.getMessage());
 	    }
 	}
 }
