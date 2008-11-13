@@ -1,4 +1,4 @@
-package onar3d.mother;
+
 
 import oscP5.*;
 import netP5.*;
@@ -12,7 +12,7 @@ import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
-public class test extends PApplet
+public class testi extends PApplet
 {
 	// Messages:
 	// "/Gradient/TopColor" iii
@@ -63,7 +63,7 @@ public class test extends PApplet
 	 */
 	public void draw()
 	{
-		System.out.println("drawing");
+		//System.out.println("drawing");
 	//	background(0);
 		/*pushMatrix();
 		fill(0,0,255);
@@ -72,8 +72,8 @@ public class test extends PApplet
 		rotateX(map(mouseY, 0, height, 0, PI));
 		box(90);
 		popMatrix();*/
-		
-		fill(255,0,0);
+	
+		/*fill(255,0,0);
 		pushMatrix();
 		translate(0.25f*width, 0.25f*height);
 		rotateY(map(mouseX, 0, width, 0, PI));
@@ -84,7 +84,7 @@ public class test extends PApplet
 		vertex(0, 90, 90);
 		vertex(0, 0, 90);
 		endShape();
-		popMatrix();
+		popMatrix();*/
 }
 
 	/**
