@@ -20,8 +20,6 @@ onar3d@hotmail.com, www.onar3d.com
  
 */
 
-
-
 import processing.core.*; 
 
 import processing.opengl.*;
@@ -34,11 +32,8 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import java.util.*;
 
-import java.awt.Dimension;
 import java.lang.reflect.*;
 import foetus.*;
-
-import javax.swing.SwingUtilities;
 
 public class Mother extends PApplet
 {
@@ -178,10 +173,8 @@ public class Mother extends PApplet
 		
 		// If minimized, expand again
 		if (frame.getExtendedState()==1)
-		{
 			frame.setExtendedState(0);  
-		}
-		
+				
 		opengl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
 		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
 		
@@ -217,6 +210,7 @@ public class Mother extends PApplet
 		}
 	}
 	
+	/*
 	class AsyncThread extends Thread 
 	{
 	    PApplet r_child;
@@ -233,7 +227,7 @@ public class Mother extends PApplet
 	    	r_child.g = r_parent.g;
 	    }
 	}
-
+	*/
 		
 	public void keyPressed()
 	{
