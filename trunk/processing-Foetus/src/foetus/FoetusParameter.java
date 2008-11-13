@@ -38,7 +38,8 @@ public class FoetusParameter
 		m_NewValue				= value;
 		m_LastValue				= value;
 
-		f.registerMethod(address, typetag);
+		if(r_f!=null)
+			r_f.registerMethod(address, typetag);
 		
 		float times[] 	= {0, 1};
         Float values[] 	= {new Float(0), new Float(1)};
