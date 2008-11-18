@@ -1,0 +1,16 @@
+
+To get the included examples running, follow the following steps:
+
+1. Copy Gradient.jar and Waltz.jar to wherever you want to keep your synths.
+
+2. Update mother.ini to refer to that path, eg: SynthFolder=X:\\My Synths;
+
+3. Start "Mother_Controller_Example - 0.2.exe", 
+   and make sure to allow it through any firewalls you have, 
+   or it will not be able to communicate with Mother.
+
+4. Start Mother.exe, add an instance of each synth using the controller example buttons, 
+   and try out the various adjustments.
+
+5. Read the included documentation, documentation related to using OSC (http://opensoundcontrol.org/), 
+   and get started making your own synths and user interfaces for controlling them!
