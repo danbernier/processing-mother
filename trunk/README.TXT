@@ -92,5 +92,10 @@ are met:
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ 
+ - The FullScreen API (http://www.superduper.org/processing/fullscreen_api/)
+ 
+ Available under GPL
 
 - Finally, Mother was developed using Eclipse, and exported using the excellent Eclipse P5 Exporter!
