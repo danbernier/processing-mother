@@ -21,6 +21,7 @@ If it doesn't work right away:
 	  
 	* Make sure you graphics card and the installed drivers support OpenGL 2.0
 	
-	* Make sure the communication between the controller and Mother is not blocked by a firewall.
+	* Make sure the communication between the controller and Mother is not blocked by a firewall,
+	  and that the network ports specified in Mother.ini are available.
 	
 	* Email me at onar3d@hotmail.com :)
