@@ -35,8 +35,12 @@ import java.util.*;
 import java.lang.reflect.*;
 import foetus.*;
 
+import fullscreen.*;  
+
 public class Mother extends PApplet
 {
+	SoftFullScreen fs;
+	
 	PGraphicsOpenGL pgl;
 	GL opengl;
 	GLU glu;
@@ -114,12 +118,19 @@ public class Mother extends PApplet
 		
 		if(m_FullScreen)
 		{
-			// From ProcessingHacks, for fullscreen without problems 
+			/*// From ProcessingHacks, for fullscreen without problems 
 			// where window minimizes when focus is lost.		
 			frame.dispose();  
 			frame.setUndecorated(true);
 			frame.setVisible(true); 
-	
+			*/
+			
+			// Create the fullscreen object
+			fs = new SoftFullScreen(this);
+
+			// enter fullscreen mode
+			fs.enter(); 
+			
 			m_Width 	= screen.width;
 			m_Height 	= screen.height;
 		}
@@ -431,13 +442,7 @@ public class Mother extends PApplet
 	
 	
 	static public void main(String args[]) 
-	{     
-		// Instead of using present mode for fullscreen, I use the fullscreen-hack from here:
-		// http://itp.nyu.edu/varwiki/BigScreens/FullScreenHacks
-		// This is due to a bug/problem in java that has not yet been dealt with in Processing,
-		// where a fullscreen window is minimized as soon as it loses focus.
-		// Should revert to present mode when this bug is fixed.
-		
+	{
 //		PApplet.main(new String[] { "--present", "Mother"} );	
 		PApplet.main(new String[] { "Mother"} );
 	}
