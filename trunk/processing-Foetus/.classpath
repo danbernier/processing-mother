@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
+	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/oscP5/library/oscP5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
