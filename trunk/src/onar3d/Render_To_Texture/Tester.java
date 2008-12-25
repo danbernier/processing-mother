@@ -73,6 +73,6 @@ public class Tester extends PApplet
 			m_RenderBlurredBox = new RenderBlurredBox(m_Width, m_Height, m_Pgl);
 			m_TexturesDone = true;
 		}
-		m_RenderBlurredBox.draw();		
+		m_RenderBlurredBox.draw(0);		
 	}
 }

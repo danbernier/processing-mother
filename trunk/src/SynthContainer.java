@@ -70,6 +70,16 @@ public class SynthContainer
 		}
 	}
 	
+	public boolean contains(String key)
+	{
+		if(!m_Visual_Synth_Keys.containsKey(key))
+		{
+			return false;
+		}
+		else
+			return true;
+	}
+	
 	/*
 	 * Create a new synth layer
 	 */

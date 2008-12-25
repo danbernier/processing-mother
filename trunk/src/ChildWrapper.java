@@ -68,15 +68,13 @@ public class ChildWrapper
 		m_Blending_Destination 	= GL.GL_ONE_MINUS_SRC_ALPHA;
 		
 		m_Child = LoadSketch(classPath, className);
-		
-		//m_Child = new Gradient();
 	}
 		
 	/**
 	 * METHODS
 	 */
 	
-	public void draw()
+	public void draw(int i)
 	{		
 		// Checking whether applet thread has been properly initialized
 		if( (m_Child.g != null) && (((PGraphicsOpenGL)m_Child.g).gl != null) )
@@ -86,13 +84,14 @@ public class ChildWrapper
 				if( m_RenderToTexture == null)
 				{
 					m_RenderToTexture = new RenderSketchToTexture(m_Width, m_Height, m_Child);
+					System.out.println(m_Name);
 				}
 				
-				m_RenderToTexture.draw();
+				m_RenderToTexture.draw(i);				
 			}
 			else
 			{
-				m_Child.draw();
+			//	m_Child.draw();
 			}
 		}
 		else
@@ -108,47 +107,30 @@ public class ChildWrapper
 	 * @param className
 	 * @return
 	 */
-	private PApplet LoadSketch(String classPath, String className)
-	{
-		String fileName = "";
-		PApplet toReturn;
-		
-		File oooClassPath = new File(classPath);
-		File[] files = oooClassPath.listFiles();
-		
-		URL[] urls = new URL[files.length];
-		
-		for (int i = 0; i < files.length; i++)
-		{
-			try
-			{
-				fileName = files[i].getName();
-				urls[i] = files[i].toURL();
-			} 
-			catch (MalformedURLException ex)
-			{
-				System.out.println("MalformedURLException: " + ex.getMessage());
-			}
-		}
-		
-		URLClassLoader cl = new URLClassLoader(urls);
-
-		String[] derivedClassNames = fileName.split(".jar"); 
-		
-		try
-		{		
-			toReturn = (PApplet)Class.forName(className, true, cl).newInstance();
-			//PApplet toReturn2 = new Gradient();
-			return toReturn;
-		} 
-		catch (Exception ex)
-		{
-			System.out.println(ex.toString() +  ex.getMessage());
-		}
-		
-		return new PApplet();
-	}
 	
+	private PApplet LoadSketch(String classPath, String className)
+    {   
+        File oooClassPath; // = new File(classPath + "//" + className + ".jar");
+        
+        if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
+        	oooClassPath = new File(classPath); // Mac
+        else 
+        	oooClassPath = new File(classPath + "//" + className + ".jar"); // Windows
+        
+        try
+        {
+        	URLClassLoader cl = new URLClassLoader( new URL[] {oooClassPath.toURI().toURL()} );
+
+            return (PApplet)Class.forName(className, true, cl).newInstance();
+        } 
+        catch (Exception ex)
+        {
+            System.out.println(ex.toString() +  ex.getMessage());
+        }
+        
+        return new PApplet();
+    } 
+
 	public void Set_Color(float r, float g, float b, float a)
 	{
 		m_RenderToTexture.SetR(r);

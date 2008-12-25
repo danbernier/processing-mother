@@ -26,27 +26,29 @@ import com.sun.opengl.util.BufferUtil;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+import javax.swing.JOptionPane;
 
 import processing.opengl.PGraphicsOpenGL;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import foetus.*;
 
 public abstract class RenderToTexture
 {
-	private int m_Texture_Width  = 640;
-	private int m_Texture_Height = 480;
+	protected int m_Texture_Width  = 640;
+	protected int m_Texture_Height = 480;
 	
 	private int m_Texture_Coordinate_W;
 	private int m_Texture_Coordinate_H;
-	private boolean m_Texture_Rectange_Available;
+	private boolean m_Texture_Rectangle_Available;
 
-	private FoetusParameter m_R;
-	private FoetusParameter m_G;
-	private FoetusParameter m_B;
-	private FoetusParameter m_A;
+	protected FoetusParameter m_R;
+	protected FoetusParameter m_G;
+	protected FoetusParameter m_B;
+	protected FoetusParameter m_A;
 	
 	public float GetR() { return m_R.getValue(); }
 	public float GetG() { return m_G.getValue(); }
@@ -59,11 +61,11 @@ public abstract class RenderToTexture
 	public void SetA(float a) { m_A.setValue(a); }
 	
 	// An Unsigned Int To Store The Texture Number
-	private static int m_Texture;
+	protected static int m_Texture;
 
 	private static int m_FrameBufferObject = -1;
 
-	private static boolean m_TextureCreated = false;
+	private static boolean m_TextureCreated 	= false;
 	private static boolean m_FrameBufferCreated = false;
 	
 	PGraphicsOpenGL m_Pgl;
@@ -73,9 +75,11 @@ public abstract class RenderToTexture
 	GLU m_Glu;
 
 	int m_Width;
-
 	int m_Height;
-
+	
+	
+	GLPbuffer pbuffer;
+	
 	/**
 	 * CONSTRUCTOR
 	 * 
@@ -87,8 +91,8 @@ public abstract class RenderToTexture
 	{
 		m_Width  = w;
 		m_Height = h;
-		m_Texture_Width 	= w;
-		m_Texture_Height 	= h;
+		m_Texture_Width 	= (int)(w*2); // TEST
+		m_Texture_Height 	= (int)(h*2); // TEST
 		
 		m_Pgl 	= (PGraphicsOpenGL) pgl;
 		m_Gl 	= m_Pgl.gl;
@@ -102,46 +106,59 @@ public abstract class RenderToTexture
 		// Create Our Empty Texture
 		if(!m_TextureCreated)
 		{
-			m_Texture = createBlurTexture(m_Gl);
-			m_TextureCreated = true;
+			m_Texture 			= createTexture(m_Gl);
+			m_TextureCreated 	= true;
+			System.out.println("created!");
 		}
-		
-		if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
-		{
+
+	    if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
+	    {
 			m_FrameBufferObject = createFrameBufferObject();
 			m_FrameBufferCreated = true;
 		}
 
+		if (!GLDrawableFactory.getFactory().canCreateGLPbuffer())
+		{
+			System.out.println("Requires pbuffer support");
+			System.exit(1);
+		}
+		// Use a pbuffer for rendering
+		GLCapabilities caps = new GLCapabilities();
+		caps.setDoubleBuffered(false);
+		caps.setAlphaBits(8);
+		pbuffer = GLDrawableFactory.getFactory().createGLPbuffer(caps, null, 640, 480, null);
+
 		if (m_FrameBufferObject != -1)
 		{
 			System.out.println(" using frame buffer object");
-		} else
+		} 
+		else
 		{
 			System.out.println(" using default frame buffer");
 		}
-		
+	
 		if (m_Gl.isExtensionAvailable("GL_ARB_texture_rectangle"))
 		{
 			// Query the maximum texture size available
-//			IntBuffer val = BufferUtil.newIntBuffer(1);
-//			m_Gl.glGetIntegerv(GL.GL_MAX_RECTANGLE_TEXTURE_SIZE_ARB, val);			
-//			System.out.println("Max rectangle texture size: " + val.get(0));
+			IntBuffer val = BufferUtil.newIntBuffer(1);
+			m_Gl.glGetIntegerv(GL.GL_MAX_RECTANGLE_TEXTURE_SIZE_ARB, val);			
+			System.out.println("Max rectangle texture size: " + val.get(0));
 			
-			m_Texture_Coordinate_W 		= m_Texture_Width;
-			m_Texture_Coordinate_H 		= m_Texture_Height;
-			m_Texture_Rectange_Available = true;
+			m_Texture_Coordinate_W 			= m_Texture_Width;
+			m_Texture_Coordinate_H 			= m_Texture_Height;
+			m_Texture_Rectangle_Available 	= true;
 		}
 		else
 		{
-			m_Texture_Coordinate_W 		= 1;
-			m_Texture_Coordinate_H 		= 1;
-			m_Texture_Rectange_Available = false;
-			m_Texture_Height = m_Texture_Width;
+			m_Texture_Coordinate_W 			= 1;
+			m_Texture_Coordinate_H 			= 1;
+			m_Texture_Rectangle_Available 	= false;
+			m_Texture_Height 				= m_Texture_Width;
 		}
 	}
 
 	// Create An Empty Texture
-	private int createBlurTexture(GL gl)
+	private int createTexture(GL gl)
 	{
 		ByteBuffer data = BufferUtil.newByteBuffer(m_Texture_Width * m_Texture_Height * 4); // Create Storage Space For
 		// Texture
@@ -155,14 +172,14 @@ public abstract class RenderToTexture
 
 		// Build Texture Using Information In data
 		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, GL.GL_RGBA, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data);
-		gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-		gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+		gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
+		gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR );
 
 		return txtnumber[0]; // Return The Texture ID
 	}
 
 	// Set Up an Ortho View
-	private void viewOrtho()
+	protected void viewOrtho()
 	{
 		// Select Projection
 		m_Gl.glMatrixMode(GL.GL_PROJECTION);
@@ -181,7 +198,7 @@ public abstract class RenderToTexture
 	}
 
 	// Set Up a Perspective View
-	private void viewPerspective()
+	protected void viewPerspective()
 	{
 		// Select Projection
 		m_Gl.glMatrixMode(GL.GL_PROJECTION);
@@ -193,7 +210,7 @@ public abstract class RenderToTexture
 		m_Gl.glPopMatrix();
 	}
 
-	public void draw()
+	public void draw(int i)
 	{
 		m_Pgl.pushMatrix();
 
@@ -201,31 +218,21 @@ public abstract class RenderToTexture
 		// m_Gl.glLoadIdentity(); // Reset The View
 		renderToTexture(); // Render To A Texture
 
-		// Moved from within renderToTexture
-		if (m_FrameBufferObject != -1)
-		{
-			// If we used the fbo, restore the default frame buffer
-			m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
-		}
-
 		m_Pgl.popMatrix();
-
-		// drawGeometry();
+	
+		// Checking whether processing creates an A channel. It doesn't.
+//		IntBuffer val = BufferUtil.newIntBuffer(1);
+//		m_Gl.glGetIntegerv(GL.GL_ALPHA_BITS, val);
+//		System.out.println(val.get(0));
 		
-//		m_Gl.glEnable(GL.GL_DEPTH_TEST);
-		
-		// Draw The Blur Effect
-		// drawBlur(25, 0.005f);
-		drawBillboard();
-
-//		m_Gl.glDisable(GL.GL_DEPTH_TEST); // Disable Depth Testing
+		drawBillboard(i);
 		
 		// Flush The GL Rendering Pipeline
 		m_Gl.glFlush();
 	}
 
 	protected abstract void drawGeometry();
-
+	
 	/**
 	 * Renders To A Texture
 	 */
@@ -236,55 +243,90 @@ public abstract class RenderToTexture
 			// Bind the fbo
 			m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_FrameBufferObject);
 		}
+		
+		/*GLContext context = pbuffer.getContext();
+		if (context.makeCurrent() == GLContext.CONTEXT_NOT_CURRENT)
+		{
+			System.out.println("Error making pbuffer's context current");
+			System.exit(1);
+		}
 
+		GL tempgl = m_Gl;
+		GL pbuffer_gl = pbuffer.getGL();
+		
+		m_Gl = pbuffer_gl;*/
+		
 		// Set Our Viewport (Match Texture Size)
 		m_Gl.glViewport(0, 0, m_Texture_Width, m_Texture_Height);
 
-		// Clear the frame buffer (either the default frame buffer or the fbo)
-		m_Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		m_Gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-
-		m_Pgl.hint( m_Pgl.ENABLE_OPENGL_4X_SMOOTH );
-		
-		drawGeometry();
+    	drawGeometry();
 
 		// Copy Our ViewPort To The Blur Texture (From 0,0 To 128,128... No Border)
 		m_Gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, m_Texture);
 		m_Gl.glCopyTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, GL.GL_RGBA, 0, 0, m_Texture_Width, m_Texture_Height, 0);
 		
-		// if (m_FrameBufferObject != -1)
-		// {
-		// // If we used the fbo, restore the default frame buffer
-		// m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
-		// }
-
+		// Clear the frame buffer (either the default frame buffer or the fbo)
+		m_Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		m_Gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		
 		// Restore the viewport (0,0 to 640x480)
 		m_Gl.glViewport(0, 0, m_Width, m_Height);
+		
+		if (m_FrameBufferObject != -1)
+		{
+			// If we used the fbo, restore the default frame buffer
+			m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
+		}
+		
+		
+		/*context = m_Pgl.getContext();
+		if (context.makeCurrent() == GLContext.CONTEXT_NOT_CURRENT)
+		{
+			System.out.println("Error making main context current");
+			System.exit(1);
+		}
+		
+		m_Gl = tempgl;*/
 	}
 
-	// Draw The Blurred Image
-	public void drawBillboard()
+	// Draw The Image
+	public void drawBillboard(int i)
 	{
 		// Disable AutoTexture Coordinates
 		m_Gl.glDisable(GL.GL_TEXTURE_GEN_S);
 		m_Gl.glDisable(GL.GL_TEXTURE_GEN_T);
 
+		/*if(i==1)
+		{
+			m_Pgl.pushMatrix();
+			m_Pgl.color(1.0f, 1.0f, 1.0f, 1.0f);
+			m_Gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	    	m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
+	    	m_Pgl.box(100);
+	    	m_Pgl.popMatrix();
+		}*/
+		
 		// Disable Depth Testing
 		m_Gl.glDisable(GL.GL_DEPTH_TEST);
-
+		m_Gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+		 
+		m_Gl.glEnable(GL.GL_BLEND);
+			
 		// Enable 2D Texture Mapping
 		m_Gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
 
 		// Bind To The Texture
 		m_Gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, m_Texture);
-		
+			
 		// Switch To An Ortho View
 		viewOrtho();
-
-		m_Gl.glBegin(GL.GL_QUADS);
+		
+		m_Gl.glPushMatrix();
 
 		m_Gl.glColor4f(m_R.getValue(), m_G.getValue(), m_B.getValue(), m_A.getValue());
-
+		
+		m_Gl.glBegin(GL.GL_QUADS);
+		
 		// Texture Coordinate ( 0, 1 )
 		m_Gl.glTexCoord2f(0, m_Texture_Height);
 		// First Vertex ( 0, 0 )
@@ -303,10 +345,15 @@ public abstract class RenderToTexture
 		m_Gl.glVertex2f(m_Width, 0);
 
 		m_Gl.glEnd();
+		m_Gl.glPopMatrix();
 
+		m_Gl.glColor4f(1, 1, 1, 1);
+		
+		m_Gl.glDisable(GL.GL_BLEND);
+		
 		// Switch To A Perspective View
 		viewPerspective();
-
+    	
 		// Enable Depth Testing
 		m_Gl.glEnable(GL.GL_DEPTH_TEST);
 		
@@ -315,87 +362,7 @@ public abstract class RenderToTexture
 
 		// Unbind The Blur Texture
 		m_Gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, 0);
-
 	}
-
-//	// Draw The Blurred Image
-//	public void drawBlur(int times, float inc)
-//	{
-//		// Starting Texture Coordinate Offset
-//		float spost = 0.0f;
-//		// Starting Alpha Value
-//		float alpha = 0.2f;
-//
-//		// Disable AutoTexture Coordinates
-//		m_Gl.glDisable(GL.GL_TEXTURE_GEN_S);
-//		m_Gl.glDisable(GL.GL_TEXTURE_GEN_T);
-//
-//		// Enable 2D Texture Mapping
-//		m_Gl.glEnable(GL.GL_TEXTURE_2D);
-//
-//		// Disable Depth Testing
-//		m_Gl.glDisable(GL.GL_DEPTH_TEST);
-//
-//		// Set Blending Mode
-//		m_Gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
-//
-//		// Enable Blending
-//		m_Gl.glEnable(GL.GL_BLEND);
-//
-//		// Bind To The Blur Texture
-//		m_Gl.glBindTexture(GL.GL_TEXTURE_2D, m_Texture);
-//
-//		// Switch To An Ortho View
-//		viewOrtho();
-//
-//		// alphainc=0.2f / Times To Render Blur
-//		float alphainc = alpha / times;
-//
-//		m_Gl.glBegin(GL.GL_QUADS);
-//
-//		// Number Of Times To Render Blur
-//		for (int num = 0; num < times; num++)
-//		{
-//			// Set The Alpha Value (Starts At 0.2)
-//			m_Gl.glColor4f(1.0f, 1.0f, 1.0f, alpha);
-//			// Texture Coordinate ( 0, 1 )
-//			m_Gl.glTexCoord2f(0 + spost, 1 - spost);
-//			// First Vertex ( 0, 0 )
-//			m_Gl.glVertex2f(0, 0);
-//			// Texture Coordinate ( 0, 0 )
-//			m_Gl.glTexCoord2f(0 + spost, 0 + spost);
-//			// Second Vertex ( 0, 480 )
-//			m_Gl.glVertex2f(0, m_Height);
-//			// Texture Coordinate ( 1, 0 )
-//			m_Gl.glTexCoord2f(1 - spost, 0 + spost);
-//			// Third Vertex ( 640, 480 )
-//			m_Gl.glVertex2f(m_Width, m_Height);
-//			// Texture Coordinate ( 1, 1 )
-//			m_Gl.glTexCoord2f(1 - spost, 1 - spost);
-//			// Fourth Vertex ( 640, 0 )
-//			m_Gl.glVertex2f(m_Width, 0);
-//
-//			// Gradually Increase spost (Zooming Closer To Texture Center)
-//			spost += inc;
-//
-//			// Gradually Decrease alpha (Gradually Fading Image Out)
-//			alpha = alpha - alphainc;
-//		}
-//
-//		m_Gl.glEnd();
-//
-//		// Switch To A Perspective View
-//		viewPerspective();
-//
-//		// Enable Depth Testing
-//		m_Gl.glEnable(GL.GL_DEPTH_TEST);
-//		// Disable 2D Texture Mapping
-//		m_Gl.glDisable(GL.GL_TEXTURE_2D);
-//		// Disable Blending
-//		m_Gl.glDisable(GL.GL_BLEND);
-//		// Unbind The Blur Texture
-//		m_Gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
-//	}
 
 	/**
 	 * Creates a frame buffer object.
@@ -490,4 +457,5 @@ public abstract class RenderToTexture
 			}
 		}
 	}
+
 }

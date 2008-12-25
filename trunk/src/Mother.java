@@ -37,6 +37,8 @@ import foetus.*;
 
 import fullscreen.*;  
 
+import onar3d.mothergraphics.*;
+
 public class Mother extends PApplet
 {
 	SoftFullScreen fs;
@@ -135,12 +137,14 @@ public class Mother extends PApplet
 			m_Height 	= screen.height;
 		}
 		
-		size(m_Width, m_Height, OPENGL);
+		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS/*OPENGL*/);
 		
 		frameRate(24);
 		
-		hint( ENABLE_OPENGL_4X_SMOOTH );
-		  
+		//hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
+		//hint( ENABLE_OPENGL_2X_SMOOTH ); // Calling this directly doesn't work.
+		hint(DISABLE_OPENGL_2X_SMOOTH);
+		
 		pgl 	= (PGraphicsOpenGL) g; 
 		opengl 	= pgl.gl;
 		glu 	= ((PGraphicsOpenGL)g).glu;
@@ -152,9 +156,9 @@ public class Mother extends PApplet
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
 
 		// For testing
-//		m_SynthContainer.Add("Grad_02", "Gradient", m_Width, m_Height, this);
-//		m_SynthContainer.Add("Waltz1", "Waltz", m_Width, m_Height, this);
-//		m_SynthContainer.Add("CubeSpine_02", "CubeSpine", m_Width, m_Height, this);
+		m_SynthContainer.Add("Grad_02", 		"Gradient", 	m_Width, m_Height, this);
+		m_SynthContainer.Add("Waltz_02", 		"Waltz", 		m_Width, m_Height, this);
+		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 	m_Width, m_Height, this);
 	}
 			
 	/*
@@ -187,59 +191,37 @@ public class Mother extends PApplet
 			frame.setExtendedState(0);  
 				
 		opengl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
-		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
+		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		
 		for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 		{
 			current = (ChildWrapper)m_SynthContainer.Synths().get(i);
 			
-					PreDrawChildUpdate(current.Child());
-				
-					opengl.glEnable(GL.GL_BLEND);
-		//			opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
-								
-		//			//For testing (getting opengl state)		
-		//			IntBuffer arg1 = IntBuffer.allocate(1);
-		//			opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
-		//			println(arg1.get(0));
-							
-					pgl.colorMode( RGB, 255 );
+			PreDrawChildUpdate(current.Child());
+		
+			opengl.glEnable(GL.GL_BLEND);
+//			opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
+						
+//			//For testing (getting opengl state)		
+//			IntBuffer arg1 = IntBuffer.allocate(1);
+//			opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
+//			println(arg1.get(0));
 					
-					pushMatrix();
+			pgl.colorMode( RGB, 255 );
+			
+			opengl.glPushMatrix();
 					
-		//			Hack for now !!!
-					//noStroke();
-					
-					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
-					
-					/*AsyncThread ail = new AsyncThread(current.Child(), this);
-					ail.start();*/
-					
-					current.draw();
-					
-					popMatrix();
+			opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+			
+			current.draw(i);
+			
+			opengl.glPopMatrix();
+			
+			opengl.glDisable(GL.GL_BLEND);
 		}
+	
 	}
 	
-	/*
-	class AsyncThread extends Thread 
-	{
-	    PApplet r_child;
-	    PApplet r_parent;
-	    
-	    public AsyncThread(PApplet ch, PApplet p) 
-	    {
-	    	r_child = ch;
-	    	r_parent = p;
-	    }
-
-	    public void run() 
-	    {
-	    	r_child.g = r_parent.g;
-	    }
-	}
-	*/
-		
 	public void keyPressed()
 	{
 		PApplet child;
@@ -274,7 +256,7 @@ public class Mother extends PApplet
 		String 		typetag 	= theOscMessage.typetag();
 		String[] 	splits 		= addrPattern.split("/");
 		
-//		println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
+		println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
 		
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
@@ -293,20 +275,23 @@ public class Mother extends PApplet
 			else if ( splits[2].compareTo("Add_synth") == 0 )
 			{
 				if (theOscMessage.checkTypetag("ss"))
-				{				
-					this.redraw = false;
-					noLoop();
-					
-					ChildWrapper w = m_SynthContainer.Add(	theOscMessage.get(1).stringValue(), 
-											theOscMessage.get(0).stringValue(), 
-											m_Width, 
-											m_Height, 
-											this);
-					
-					sendSupportedMessages(w);
-					
-					loop();
-					this.redraw = true;
+				{			
+					if(!m_SynthContainer.contains(theOscMessage.get(1).stringValue()))
+					{
+						this.redraw = false;
+						noLoop();
+						
+						ChildWrapper w = m_SynthContainer.Add(	theOscMessage.get(1).stringValue(), 
+												theOscMessage.get(0).stringValue(), 
+												m_Width, 
+												m_Height, 
+												this);
+						
+						sendSupportedMessages(w);
+						
+						loop();
+						this.redraw = true;
+					}
 				}
 			}
 			else if ( splits[2].compareTo("Reset") == 0 )

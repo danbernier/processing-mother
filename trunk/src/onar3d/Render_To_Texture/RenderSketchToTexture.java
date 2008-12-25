@@ -22,6 +22,8 @@ onar3d@hotmail.com, www.onar3d.com
 
 package onar3d.Render_To_Texture;
 
+import javax.media.opengl.GL;
+
 import processing.core.*; 
 import processing.opengl.PGraphicsOpenGL;
 
@@ -51,13 +53,40 @@ public class RenderSketchToTexture extends RenderToTexture
 	 */
 	protected void drawGeometry()
 	{
-//		m_Gl.glPushMatrix();
-//		m_Gl.glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-//    	m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
-//    	m_Pgl.box(100);
-//    	m_Gl.glPopMatrix();
-    	
+	/*	m_Gl.glPushMatrix();
+		m_Gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    	m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
+    	m_Pgl.box(100);
+    	m_Gl.glPopMatrix();*/
+   	
  		m_Sketch.draw();
 	}
+	
+/*	protected void moveBillboard(int i)
+	{	
+		if(m_Sketch!=null)
+		{
+		m_Sketch.pushMatrix();
 
+		if(i == 0)
+		{
+			m_Sketch.translate(0, m_Height/2, 0);
+		}
+		else if(i == 1)
+		{
+			m_Sketch.translate(0, -m_Height/4, 0);
+			
+			m_Gl.glPushMatrix();
+			m_Gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
+			m_Sketch.box(100);
+			m_Gl.glPopMatrix();
+		}
+		else if(i == 2)
+		{
+			m_Sketch.translate(-m_Width/2, 0, 0);
+		}
+		
+		}
+	}*/
 }
