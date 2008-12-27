@@ -91,8 +91,8 @@ public abstract class RenderToTexture
 	{
 		m_Width  = w;
 		m_Height = h;
-		m_Texture_Width 	= (int)(w*2); // TEST
-		m_Texture_Height 	= (int)(h*2); // TEST
+		m_Texture_Width 	= (int)(w); // TEST
+		m_Texture_Height 	= (int)(h); // TEST
 		
 		m_Pgl 	= (PGraphicsOpenGL) pgl;
 		m_Gl 	= m_Pgl.gl;
@@ -111,11 +111,11 @@ public abstract class RenderToTexture
 			System.out.println("created!");
 		}
 
-	    if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
+	 /*   if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
 	    {
 			m_FrameBufferObject = createFrameBufferObject();
 			m_FrameBufferCreated = true;
-		}
+		}*/
 
 		if (!GLDrawableFactory.getFactory().canCreateGLPbuffer())
 		{
