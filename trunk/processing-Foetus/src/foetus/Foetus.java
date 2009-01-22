@@ -25,13 +25,12 @@ package foetus;
 import processing.core.*;
 
 import java.util.*;
-import java.lang.reflect.Method;
 
 public class Foetus
 {
 	PApplet parent;
 	
-	Hashtable m_Messages;
+	Hashtable<String,String> m_Messages;
 	
 	public boolean standalone = true;
 
@@ -43,7 +42,7 @@ public class Foetus
 	{
 		this.parent = parent;
 		
-		m_Messages = new Hashtable();
+		m_Messages = new Hashtable<String,String>();
 				
 		parent.registerDispose(this);
 		parent.registerPre(this);
@@ -64,7 +63,7 @@ public class Foetus
 		m_Messages.remove(address);
 	}
 	
-	public Hashtable getSupportedMessages()
+	public Hashtable<String,String> getSupportedMessages()
 	{
 		return m_Messages;
 	}
