@@ -266,9 +266,9 @@ public class Mother extends PApplet
 			{				
 				OscMessage oscMessage = new OscMessage("/Synth_names");
 							
-				for (Enumeration e = m_SynthContainer.get_Synth_Names().keys(); e.hasMoreElements();)
+				for (Enumeration<String> e = m_SynthContainer.get_Synth_Names().keys(); e.hasMoreElements();)
 				{
-					oscMessage.add( (String)e.nextElement() );
+					oscMessage.add( e.nextElement() );
 			    }		
 				
 				oscP5.send(oscMessage, oscBroadcastLocation);
@@ -402,13 +402,13 @@ public class Mother extends PApplet
 				println("CRASH: Accessing child's foetus failed!" + e.getMessage());
 			}
 						
-			Hashtable supportedMessages = f.getSupportedMessages();
+			Hashtable<String,String> supportedMessages = f.getSupportedMessages();
 																
 			OscMessage oscMessage = new OscMessage("/Synth_supported_messages/" + childName);
 			
-			Enumeration e = supportedMessages.elements();
+			Enumeration<String> e = supportedMessages.elements();
 			
-			for (Enumeration ek = supportedMessages.keys(); ek.hasMoreElements();)
+			for (Enumeration<String> ek = supportedMessages.keys(); ek.hasMoreElements();)
 			{
 				oscMessage.add( (String)ek.nextElement() );
 				oscMessage.add( (String)e.nextElement() );

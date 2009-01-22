@@ -1,23 +1,10 @@
 
-
 import processing.core.*; 
 import processing.opengl.*;
-import oscP5.*;
-import netP5.*;
-
 import javax.media.opengl.*;
-import javax.media.opengl.glu.*;
-
-import foetus.Foetus;
-
-import java.util.*;
 import java.io.File;
-import java.lang.reflect.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.*;
-
 import onar3d.Render_To_Texture.*;
 
 /**

@@ -65,8 +65,7 @@ public class SynthContainer
 					System.out.println("Found Synth: " + fileName[0]);
 					
 					m_Visual_Synth_Names.put(fileName[0], fileName[0]);
-				}
-				
+				}	
 			} 
 			catch (MalformedURLException ex)
 			{
@@ -89,24 +88,31 @@ public class SynthContainer
 		// Check if Libraries folder exists. If not, create empty list.
 		if(files != null)
 		{
-			m_Library_file_URLS	= new URL[files.length];
-			
-			for (int i = 0; i < files.length; i++)
+			try
 			{
-				try
+				if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
 				{
-					fileName 				= files[i].getName().split(".jar");
-					m_Library_file_URLS[i] 	= files[i].toURI().toURL();
-					System.out.println("Found library: " + fileName[0]);
-				} 
-				catch (MalformedURLException ex)
-				{
-					System.out.println("MalformedURLException: " + ex.getMessage());
+					m_Library_file_URLS		= new URL[] {oooClassPath.toURI().toURL()};
 				}
-				catch(Exception e)
-				{
-					System.out.println(e.getMessage());
-				}
+		        else 
+		        {
+		        	m_Library_file_URLS	= new URL[files.length];
+		        	
+					for (int i = 0; i < files.length; i++)
+					{
+						fileName 				= files[i].getName().split(".jar");
+						m_Library_file_URLS[i] 	= files[i].toURI().toURL();
+						System.out.println("Found library: " + fileName[0]);
+					}
+		        }
+			} 
+			catch (MalformedURLException ex)
+			{
+				System.out.println("MalformedURLException: " + ex.getMessage());
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
 			}
 		}
 		else
