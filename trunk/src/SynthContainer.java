@@ -8,35 +8,39 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import processing.core.PApplet;
-import processing.core.PApplet.RegisteredMethods;
 
 import foetus.*;
 
 public class SynthContainer
 {
-	URL[] m_Visual_Synth_urls;
+	ArrayList<URL> m_Visual_Synth_urls;
 	
-	Hashtable m_Visual_Synth_Names;
+	URL[] m_Library_file_URLS;
 	
-	Hashtable Synth_Names() { return m_Visual_Synth_Names; }
+	Hashtable<String,String> m_Visual_Synth_Names;
+
+	ArrayList<ChildWrapper> m_VisualSynths;
 	
-	ArrayList m_VisualSynths;
+	ArrayList<ChildWrapper> Synths() { return m_VisualSynths; } 
 	
-	ArrayList Synths() { return m_VisualSynths; } 
-	
-	Hashtable m_Visual_Synth_Keys;
+	Hashtable<String,String> m_Visual_Synth_Keys;
 
 	String m_Synth_Folder;
 
+	URL[] get_Library_File_URLS() { return m_Library_file_URLS; }
+	
+	Hashtable<String,String> get_Synth_Names() { return m_Visual_Synth_Names; }
+		
 	public SynthContainer(String folder)
 	{
-		m_VisualSynths 			= new ArrayList();
-		m_Visual_Synth_Names 	= new Hashtable();
-		m_Visual_Synth_Keys 	= new Hashtable();
+		m_VisualSynths 			= new ArrayList<ChildWrapper>();
+		m_Visual_Synth_Names 	= new Hashtable<String,String>();
+		m_Visual_Synth_Keys 	= new Hashtable<String,String>();
 		
 		m_Synth_Folder = folder;
 		
 		PopulateSynthURLS();
+		PopulateLibraryURLS();
 	}
 	
 	/*
@@ -47,17 +51,22 @@ public class SynthContainer
 		String[] fileName;
 		File oooClassPath 		= new File(m_Synth_Folder);
 		File[] files 			= oooClassPath.listFiles();
-		m_Visual_Synth_urls 	= new URL[files.length];
+		m_Visual_Synth_urls 	= new ArrayList<URL>();
 		
 		for (int i = 0; i < files.length; i++)
 		{
 			try
 			{
-				fileName 				= files[i].getName().split(".jar");
-				m_Visual_Synth_urls[i] 	= files[i].toURI().toURL();
-				System.out.println("Found Synth: " + fileName[0]);
+				fileName = files[i].getName().split(".jar");
 				
-				m_Visual_Synth_Names.put(fileName[0], fileName[0]);
+				if(fileName[fileName.length-1].compareTo(".jar")==0)
+				{
+					m_Visual_Synth_urls.add(files[i].toURI().toURL());
+					System.out.println("Found Synth: " + fileName[0]);
+					
+					m_Visual_Synth_Names.put(fileName[0], fileName[0]);
+				}
+				
 			} 
 			catch (MalformedURLException ex)
 			{
@@ -67,6 +76,42 @@ public class SynthContainer
 			{
 				System.out.println(e.getMessage());
 			}
+		}
+	}
+	
+	private void PopulateLibraryURLS()
+	{
+		String[] fileName;
+		
+		File oooClassPath 		= new File(m_Synth_Folder + "//" + "Libraries");
+		File[] files 			= oooClassPath.listFiles();
+		
+		// Check if Libraries folder exists. If not, create empty list.
+		if(files != null)
+		{
+			m_Library_file_URLS	= new URL[files.length];
+			
+			for (int i = 0; i < files.length; i++)
+			{
+				try
+				{
+					fileName 				= files[i].getName().split(".jar");
+					m_Library_file_URLS[i] 	= files[i].toURI().toURL();
+					System.out.println("Found library: " + fileName[0]);
+				} 
+				catch (MalformedURLException ex)
+				{
+					System.out.println("MalformedURLException: " + ex.getMessage());
+				}
+				catch(Exception e)
+				{
+					System.out.println(e.getMessage());
+				}
+			}
+		}
+		else
+		{
+			m_Library_file_URLS	= new URL[0];
 		}
 	}
 	
@@ -95,9 +140,10 @@ public class SynthContainer
 													w, 
 													h, 
 													m_Synth_Folder, 
+													m_Library_file_URLS,
 													sketchName, 
 													key, 
-													true); // Render Billboard 
+													false); // Render Billboard 
 				m_VisualSynths.add( new_Wrapper );
 				
 				InitChild( new_Wrapper.Child(), mother );
@@ -303,11 +349,11 @@ public class SynthContainer
 
 		child.frameCount	= parent.frameCount;
 		child.frameRate		= parent.frameRate;		  
-		child.frame			  = parent.frame;		  
-		child.screen		  = parent.screen;
+		child.frame			= parent.frame;		  
+		child.screen		= parent.screen;
 		child.recorder		= parent.recorder;
 		child.sketchPath	= parent.sketchPath;
-		child.pixels		  = parent.pixels;
+		child.pixels		= parent.pixels;
 		  
 		child.width 		= parent.width;
 		child.height 		= parent.height;

@@ -141,9 +141,9 @@ public class Mother extends PApplet
 		
 		frameRate(24);
 		
-		//hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
+		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
 		//hint( ENABLE_OPENGL_2X_SMOOTH ); // Calling this directly doesn't work.
-		hint(DISABLE_OPENGL_2X_SMOOTH);
+		//hint(DISABLE_OPENGL_2X_SMOOTH);
 		
 		pgl 	= (PGraphicsOpenGL) g; 
 		opengl 	= pgl.gl;
@@ -156,9 +156,10 @@ public class Mother extends PApplet
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
 
 		// For testing
-		m_SynthContainer.Add("Grad_02", 		"Gradient", 	m_Width, m_Height, this);
-		m_SynthContainer.Add("Waltz_02", 		"Waltz", 		m_Width, m_Height, this);
-		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 	m_Width, m_Height, this);
+		m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
+		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
+		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
+		m_SynthContainer.Add("Flight_02", 		"source_particles", m_Width, m_Height, this);
 	}
 			
 	/*
@@ -265,7 +266,7 @@ public class Mother extends PApplet
 			{				
 				OscMessage oscMessage = new OscMessage("/Synth_names");
 							
-				for (Enumeration e = m_SynthContainer.Synth_Names().keys(); e.hasMoreElements();)
+				for (Enumeration e = m_SynthContainer.get_Synth_Names().keys(); e.hasMoreElements();)
 				{
 					oscMessage.add( (String)e.nextElement() );
 			    }		

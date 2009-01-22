@@ -6,7 +6,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/jogl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar" sourcepath="/processing-head-1.0.1/opengl/src/processing/opengl"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar" sourcepath="/processing-head-1.0.1"/>
 	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/fullscreen/library/fullscreen.jar"/>

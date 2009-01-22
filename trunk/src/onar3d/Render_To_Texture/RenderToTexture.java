@@ -111,7 +111,9 @@ public abstract class RenderToTexture
 			System.out.println("created!");
 		}
 
-	 /*   if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
+		// Commented so that offcreen rendering is performed using backbuffer instead.
+		/*   
+		if (m_Gl.isExtensionAvailable("GL_EXT_framebuffer_object") && !m_FrameBufferCreated)
 	    {
 			m_FrameBufferObject = createFrameBufferObject();
 			m_FrameBufferCreated = true;
@@ -220,7 +222,9 @@ public abstract class RenderToTexture
 
 		m_Pgl.popMatrix();
 	
-		// Checking whether processing creates an A channel. It doesn't.
+		// Checking whether processing creates an Alpha channel. It doesn't.
+		// I have now subclassed the processing OGL renderer and made it
+		// to create an Alpha channel in the rendering buffers.
 //		IntBuffer val = BufferUtil.newIntBuffer(1);
 //		m_Gl.glGetIntegerv(GL.GL_ALPHA_BITS, val);
 //		System.out.println(val.get(0));
@@ -244,18 +248,6 @@ public abstract class RenderToTexture
 			m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_FrameBufferObject);
 		}
 		
-		/*GLContext context = pbuffer.getContext();
-		if (context.makeCurrent() == GLContext.CONTEXT_NOT_CURRENT)
-		{
-			System.out.println("Error making pbuffer's context current");
-			System.exit(1);
-		}
-
-		GL tempgl = m_Gl;
-		GL pbuffer_gl = pbuffer.getGL();
-		
-		m_Gl = pbuffer_gl;*/
-		
 		// Set Our Viewport (Match Texture Size)
 		m_Gl.glViewport(0, 0, m_Texture_Width, m_Texture_Height);
 
@@ -277,16 +269,6 @@ public abstract class RenderToTexture
 			// If we used the fbo, restore the default frame buffer
 			m_Gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
 		}
-		
-		
-		/*context = m_Pgl.getContext();
-		if (context.makeCurrent() == GLContext.CONTEXT_NOT_CURRENT)
-		{
-			System.out.println("Error making main context current");
-			System.exit(1);
-		}
-		
-		m_Gl = tempgl;*/
 	}
 
 	// Draw The Image
@@ -398,10 +380,7 @@ public abstract class RenderToTexture
 				GL.GL_RGBA, 
 				GL.GL_UNSIGNED_BYTE, 
 				BufferUtil.newByteBuffer(m_Texture_Width * m_Texture_Height * 4));
-
-//		m_Gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-//		m_Gl.glTexParameteri(GL.GL_TEXTURE_RECTANGLE_ARB, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-
+		
 		// Attach the texture to the frame buffer as the color attachment. This
 		// will cause the results of rendering to the FBO to be written in the blur texture.
 		m_Gl.glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_TEXTURE_RECTANGLE_ARB, colorBuffer[0], 0);
