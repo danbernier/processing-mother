@@ -157,9 +157,9 @@ public class Mother extends PApplet
 
 		// For testing
 		m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
-		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
-		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
-		m_SynthContainer.Add("Flight_02", 		"source_particles", m_Width, m_Height, this);
+//		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
+//		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
+//		m_SynthContainer.Add("flight_02", 		"source_particles", m_Width, m_Height, this);
 	}
 			
 	/*

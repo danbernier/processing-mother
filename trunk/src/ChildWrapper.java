@@ -136,7 +136,11 @@ public class ChildWrapper
              
         	URLClassLoader cl = new URLClassLoader( toUse, ClassLoader.getSystemClassLoader() );
 
-            return (PApplet)Class.forName(className, true, cl).newInstance();
+        	PApplet toReturn = (PApplet)Class.forName(className, true, cl).newInstance(); 
+        	
+        	toReturn.noLoop();
+        	
+            return toReturn;
         } 
         catch (Exception ex)
         {
