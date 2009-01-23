@@ -157,9 +157,9 @@ public class Mother extends PApplet
 
 		// For testing
 		m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
-//		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
-//		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
-//		m_SynthContainer.Add("flight_02", 		"source_particles", m_Width, m_Height, this);
+		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
+		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
+		m_SynthContainer.Add("flight_02", 		"source_particles", m_Width, m_Height, this);
 	}
 			
 	/*
@@ -207,7 +207,7 @@ public class Mother extends PApplet
 //			IntBuffer arg1 = IntBuffer.allocate(1);
 //			opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
 //			println(arg1.get(0));
-					
+
 			pgl.colorMode( RGB, 255 );
 			
 			opengl.glPushMatrix();
@@ -235,6 +235,10 @@ public class Mother extends PApplet
 			// Handling messages to synths							
 			try
 			{
+				child.keyEvent 	= this.keyEvent;
+				child.key		= this.key;
+				child.keyCode   = this.keyCode;
+				
 				keyMethod = child.getClass().getMethod("keyPressed", new Class[] {});
 				keyMethod.invoke(child, new Object[] {});
 			}
