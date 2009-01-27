@@ -156,10 +156,10 @@ public class Mother extends PApplet
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
 
 		// For testing
-		m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
-		m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
-		m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
-		m_SynthContainer.Add("flight_02", 		"source_particles", m_Width, m_Height, this);
+	//	m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
+	//	m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
+	//	m_SynthContainer.Add("CubeSpine_02", 	"CubeSpine", 		m_Width, m_Height, this);
+	//	m_SynthContainer.Add("flight_02", 		"source_particles", m_Width, m_Height, this);
 	}
 			
 	/*
@@ -214,8 +214,14 @@ public class Mother extends PApplet
 					
 			opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 			
+			try
+			{
 			current.draw(i);
-			
+			}
+			catch(Exception e)
+			{
+				println("Drawing kid crashed!");
+			}
 			opengl.glPopMatrix();
 			
 			opengl.glDisable(GL.GL_BLEND);
