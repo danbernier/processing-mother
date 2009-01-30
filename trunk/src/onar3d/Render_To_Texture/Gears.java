@@ -2,9 +2,7 @@ package onar3d.Render_To_Texture;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.media.opengl.*;
-
 import com.sun.opengl.util.*;
 
 /**
@@ -15,11 +13,7 @@ import com.sun.opengl.util.*;
  */
 
 public class Gears implements GLEventListener, MouseListener, MouseMotionListener
-{
-	/*protected static int[] fbo = {0};
-	protected static int[] depthbuffer = {0};
-	protected static int[] img = {0};*/
-	
+{	
 	protected static int[] m_multisampledFloatFBuffer = {0};
 	protected static int[] m_multisampledRenderBuffer = {0};
 	protected static int[] m_multisampledDepthBuffer = {0};
@@ -76,7 +70,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 	public void init(GLAutoDrawable drawable)
 	{
 		// Use debug pipeline
-		// drawable.setGL(new DebugGL(drawable.getGL()));
+		//drawable.setGL(new DebugGL(drawable.getGL()));
 
 		GL gl = drawable.getGL();
 
@@ -86,10 +80,8 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 
 		gl.setSwapInterval(1);
 
-		float pos[] = { 5.0f, 5.0f, 10.0f, 0.0f };
-		float red[] = { 0.8f, 0.1f, 0.0f, 1.0f };
+		float pos[] = { 5.0f, 5.0f, 10.0f, 0.0f };		
 		float green[] = { 0.0f, 0.8f, 0.2f, 1.0f };
-		float blue[] = { 0.2f, 0.2f, 1.0f, 1.0f };
 
 		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, pos, 0);
 		gl.glEnable(GL.GL_CULL_FACE);
@@ -98,11 +90,6 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gl.glEnable(GL.GL_DEPTH_TEST);
 
 		/* make the gears */
-		gear1 = gl.glGenLists(1);
-		gl.glNewList(gear1, GL.GL_COMPILE);
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, red, 0);
-		gear(gl, 1.0f, 4.0f, 1.0f, 20, 0.7f);
-		gl.glEndList();
 
 		gear2 = gl.glGenLists(1);
 		gl.glNewList(gear2, GL.GL_COMPILE);
@@ -110,39 +97,10 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gear(gl, 0.5f, 2.0f, 2.0f, 10, 0.7f);
 		gl.glEndList();
 
-		gear3 = gl.glGenLists(1);
-		gl.glNewList(gear3, GL.GL_COMPILE);
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, blue, 0);
-		gear(gl, 1.3f, 2.0f, 0.5f, 10, 0.7f);
-		gl.glEndList();
-
 		gl.glEnable(GL.GL_NORMALIZE);
 
 		drawable.addMouseListener(this);
 		drawable.addMouseMotionListener(this);
-		
-/*		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
-		
-		// Creating handle for FBO
-		gl.glGenFramebuffersEXT(1, fbo, 0);
-		// Binding FBO 
-		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
-		
-		// Creating handle for depth buffer
-		gl.glGenRenderbuffersEXT(1, depthbuffer, 0);
-		// Binding depth buffer
-		gl.glBindRenderbufferEXT(GL.GL_RENDERBUFFER_EXT, depthbuffer[0]);
-		gl.glRenderbufferStorageEXT(GL.GL_RENDERBUFFER_EXT, GL.GL_DEPTH_COMPONENT, m_Texture_Width, m_Texture_Height);
-		
-		gl.glFramebufferRenderbufferEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_DEPTH_ATTACHMENT_EXT, GL.GL_RENDERBUFFER_EXT, depthbuffer[0]);
-		
-		// Creating texture for color data
-		gl.glGenTextures(1, img, 0);
-		gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, img[0]);
-		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, m_OGL_PixelFormat, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_INT, null);
-		// Attaching texture to FBO
-		gl.glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_TEXTURE_RECTANGLE_ARB, img[0], 0);
-*/
 		
 		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
 		
@@ -208,7 +166,6 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 	
 		// First draw the multisampled scene
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]);
-//		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
 		
 		gl.glPushAttrib(GL.GL_VIEWPORT_BIT);
 		
@@ -225,7 +182,6 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		
 		gl.glPopAttrib();
 
-		
 		// Then downsample the multisampled to the normal buffer with a blit
 
 	//	gl.glBindFramebufferEXT(GL.GL_READ_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]); // source
@@ -240,16 +196,13 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	
 		
-//		drawBillboard(img, m_Texture_Width, m_Texture_Height, drawable);
 		drawBillboard(m_textureFloat, m_Texture_Width, m_Texture_Height, drawable);
 		
 		drawGears(drawable);
 	}
 
 	private void drawGears(GLAutoDrawable drawable)
-	{
-		//System.out.println("Drawing billboard");
-		
+	{	
 		// Get the GL corresponding to the drawable we are animating
 		GL gl = drawable.getGL();
 
@@ -264,33 +217,18 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		// Rotate the entire assembly of gears based on how the user
 		// dragged the mouse around
 		gl.glPushMatrix();
-		gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
-		gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f);
-		gl.glRotatef(view_rotz, 0.0f, 0.0f, 1.0f);
+		
+			gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
+			gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f);
+			gl.glRotatef(view_rotz, 0.0f, 0.0f, 1.0f);
+	
+			// Place the second gear and call its display list
+			gl.glPushMatrix();
+				gl.glTranslatef(3.1f, -2.0f, 0.0f);
+				gl.glRotatef(-2.0f * angle - 9.0f, 0.0f, 0.0f, 1.0f);
+				gl.glCallList(gear2);
+			gl.glPopMatrix();
 
-		// Place the first gear and call its display list
-		gl.glPushMatrix();
-		gl.glTranslatef(-3.0f, -2.0f, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glCallList(gear1);
-		gl.glPopMatrix();
-
-		// Place the second gear and call its display list
-		gl.glPushMatrix();
-		gl.glTranslatef(3.1f, -2.0f, 0.0f);
-		gl.glRotatef(-2.0f * angle - 9.0f, 0.0f, 0.0f, 1.0f);
-		gl.glCallList(gear2);
-		gl.glPopMatrix();
-
-		// Place the third gear and call its display list
-		gl.glPushMatrix();
-		gl.glTranslatef(-3.1f, 4.2f, 0.0f);
-		gl.glRotatef(-2.0f * angle - 25.0f, 0.0f, 0.0f, 1.0f);
-		gl.glCallList(gear3);
-		gl.glPopMatrix();
-
-		// Remember that every push needs a pop; this one is paired with
-		// rotating the entire gear assembly
 		gl.glPopMatrix();
 	}
 	
@@ -326,6 +264,9 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		
 		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		
+		// Dislocating billboard so that i can see it behind gear. 
+		gl.glTranslatef(-width/4, -height/4, 0);
+		
 		gl.glBegin(GL.GL_QUADS);
 		
 		// Texture Coordinate ( 0, 1 )
@@ -335,15 +276,15 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		// Texture Coordinate ( 0, 0 )
 		gl.glTexCoord2f(0, 0);
 		// Second Vertex ( 0, height )
-		gl.glVertex2f(0, height/2);
+		gl.glVertex2f(0, height);
 		// Texture Coordinate ( 1, 0 )
 		gl.glTexCoord2f(m_Texture_Width, 0);
 		// Third Vertex ( width, height )
-		gl.glVertex2f(width/2, height/2);
+		gl.glVertex2f(width, height);
 		// Texture Coordinate ( 1, 1 )
 		gl.glTexCoord2f(m_Texture_Width, m_Texture_Height);
 		// Fourth Vertex ( width, 0 )
-		gl.glVertex2f(width/2, 0);
+		gl.glVertex2f(width, 0);
 
 		gl.glEnd();
 		gl.glPopMatrix();
