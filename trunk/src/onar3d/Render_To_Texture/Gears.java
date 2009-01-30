@@ -16,17 +16,17 @@ import com.sun.opengl.util.*;
 
 public class Gears implements GLEventListener, MouseListener, MouseMotionListener
 {
-	protected static int[] fbo = {0};
+	/*protected static int[] fbo = {0};
 	protected static int[] depthbuffer = {0};
-	protected static int[] img = {0};
+	protected static int[] img = {0};*/
 	
-	/*protected static int[] m_multisampledFloatFBuffer = {0};
+	protected static int[] m_multisampledFloatFBuffer = {0};
 	protected static int[] m_multisampledRenderBuffer = {0};
 	protected static int[] m_multisampledDepthBuffer = {0};
 	protected static int[] m_normalFloatFBuffer = {0};
 	protected static int[] m_textureFloat = {0};
-	*/
-	protected int m_OGL_PixelFormat = GL.GL_RGBA16F_ARB;//GL_RGBA8;
+	
+	protected int m_OGL_PixelFormat = GL.GL_RGBA16F_ARB;
 	protected int m_multisamples = 4;
 
 	int m_Texture_Width = 640;
@@ -121,13 +121,12 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		drawable.addMouseListener(this);
 		drawable.addMouseMotionListener(this);
 		
-		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
+/*		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
 		
 		// Creating handle for FBO
 		gl.glGenFramebuffersEXT(1, fbo, 0);
 		// Binding FBO 
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
-		
 		
 		// Creating handle for depth buffer
 		gl.glGenRenderbuffersEXT(1, depthbuffer, 0);
@@ -137,13 +136,15 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		
 		gl.glFramebufferRenderbufferEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_DEPTH_ATTACHMENT_EXT, GL.GL_RENDERBUFFER_EXT, depthbuffer[0]);
 		
+		// Creating texture for color data
 		gl.glGenTextures(1, img, 0);
 		gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, img[0]);
 		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, m_OGL_PixelFormat, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_INT, null);
+		// Attaching texture to FBO
 		gl.glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_TEXTURE_RECTANGLE_ARB, img[0], 0);
-
+*/
 		
-	/*	gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
+		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
 		
 		// Creating handle for FBO
 		gl.glGenFramebuffersEXT(1, m_multisampledFloatFBuffer, 0);
@@ -151,7 +152,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]);
 		
 		gl.glGenRenderbuffersEXT(1, m_multisampledRenderBuffer, 0);
-		gl.glRenderbufferStorageMultisampleEXT(GL.GL_RENDERBUFFER_EXT, m_multisamples, m_OGL_PixelFormat, m_Texture_Width, m_Texture_Height);
+//		gl.glRenderbufferStorageMultisampleEXT(GL.GL_RENDERBUFFER_EXT, m_multisamples, m_OGL_PixelFormat, m_Texture_Width, m_Texture_Height);
 		gl.glFramebufferRenderbufferEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_RENDERBUFFER_EXT, m_multisampledRenderBuffer[0]);
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]);
 		
@@ -161,12 +162,13 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gl.glBindRenderbufferEXT(GL.GL_RENDERBUFFER_EXT, m_multisampledDepthBuffer[0]);
 		
 		// Allocating space for multisampled depth buffer
-		gl.glRenderbufferStorageMultisampleEXT(GL.GL_RENDERBUFFER_EXT, m_multisamples, GL.GL_DEPTH_COMPONENT24, m_Texture_Width, m_Texture_Height);
+		gl.glRenderbufferStorageEXT(GL.GL_RENDERBUFFER_EXT, GL.GL_DEPTH_COMPONENT, m_Texture_Width, m_Texture_Height);
+//		gl.glRenderbufferStorageMultisampleEXT(GL.GL_RENDERBUFFER_EXT, m_multisamples, GL.GL_DEPTH_COMPONENT, m_Texture_Width, m_Texture_Height);
 		// Attaching allocated space to FBO
 		gl.glFramebufferRenderbufferEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_DEPTH_ATTACHMENT_EXT, GL.GL_RENDERBUFFER_EXT, m_multisampledDepthBuffer[0]);
 
-		gl.glGenFramebuffersEXT(1, m_normalFloatFBuffer, 0);
-		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_normalFloatFBuffer[0]);
+//		gl.glGenFramebuffersEXT(1, m_normalFloatFBuffer, 0);
+//		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_normalFloatFBuffer[0]);
 
 		// Creating texture for color data
 		gl.glGenTextures(1, m_textureFloat, 0);
@@ -174,7 +176,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, m_OGL_PixelFormat, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_INT, null);
 		// Attaching texture to FBO
 		gl.glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_TEXTURE_RECTANGLE_ARB, m_textureFloat[0], 0);
-*/
+
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height)
@@ -205,13 +207,12 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		GL gl = drawable.getGL();
 	
 		// First draw the multisampled scene
-		//gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]);
-		/*Clear(both);
-		RenderScene(); // <- hdr scene as you do usually*/
-				
-		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
+		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]);
+//		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
+		
 		gl.glPushAttrib(GL.GL_VIEWPORT_BIT);
-		gl.glViewport(0,0,m_Texture_Width, m_Texture_Height);
+		
+		gl.glViewport(0, 0, m_Texture_Width, m_Texture_Height);
 
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -223,24 +224,24 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		// ------------
 		
 		gl.glPopAttrib();
-		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
 
 		
 		// Then downsample the multisampled to the normal buffer with a blit
 
-	/*	gl.glBindFramebufferEXT(GL.GL_READ_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]); // source
-		gl.glBindFramebufferEXT(GL.GL_DRAW_FRAMEBUFFER_EXT, m_normalFloatFBuffer[0]); // dest
+	//	gl.glBindFramebufferEXT(GL.GL_READ_FRAMEBUFFER_EXT, m_multisampledFloatFBuffer[0]); // source
+	//	gl.glBindFramebufferEXT(GL.GL_DRAW_FRAMEBUFFER_EXT, m_normalFloatFBuffer[0]); // dest
 		
-		gl.glBlitFramebufferEXT(0, 0, m_Texture_Width, m_Texture_Height, 0, 0, m_Texture_Width, m_Texture_Height, GL.GL_COLOR_BUFFER_BIT, GL.GL_LINEAR);
-*/
-		// Then do the tone mapping pass
-		//gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0); // unbind all (render to back buffer)
-		//gl.glActiveTexture(GL.GL_TEXTURE0);
-		//gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, m_textureFloat[0]);
+	//	gl.glBlitFramebufferEXT(0, 0, m_Texture_Width, m_Texture_Height, 0, 0, m_Texture_Width, m_Texture_Height, GL.GL_COLOR_BUFFER_BIT, GL.GL_LINEAR);
+		
+		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
+		
+		gl.glActiveTexture(GL.GL_TEXTURE0);
 		
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	
-		drawBillboard(img, m_Texture_Width, m_Texture_Height, drawable);
+		
+//		drawBillboard(img, m_Texture_Width, m_Texture_Height, drawable);
+		drawBillboard(m_textureFloat, m_Texture_Width, m_Texture_Height, drawable);
 		
 		drawGears(drawable);
 	}
