@@ -12,11 +12,11 @@ import onar3d.Render_To_Texture.*;
  */
 public class ChildWrapper
 {
-	PApplet m_Child;
+	PApplet m_Child, r_Mother;
 	
 	RenderSketchToTexture m_RenderToTexture;
 		
-	boolean m_RenderBillboard = false;
+	boolean m_RenderBillboard = true;
 	
 	int m_Width;
 	int m_Height;
@@ -27,6 +27,8 @@ public class ChildWrapper
 	String m_Name;
 	
 	public PApplet Child()	{ return m_Child;	}
+	
+	public PApplet Mother()	{ return r_Mother;	}
 	
 	public boolean GetRenderBillboard()							{ return m_RenderBillboard; }
 	public void	   SetRenderBillboard(boolean renderBillboard)	{ m_RenderBillboard = renderBillboard; }
@@ -40,12 +42,13 @@ public class ChildWrapper
 	public String GetName() { return m_Name; }
 		
 	/**
-	 * CONSTRUCTOR
+	 * CONSTRUCTORRenderToTexture
 	 */
 	
 
-	public ChildWrapper(int w, int h, String classPath, URL[] libraryULS, String className, String name, boolean billboard)
+	public ChildWrapper(int w, int h, String classPath, URL[] libraryULS, String className, String name, boolean billboard, PApplet mother)
 	{	
+		r_Mother			= mother;
 		m_Width 			= w;
 		m_Height 			= h;
 		m_Name 				= name;
@@ -83,10 +86,10 @@ public class ChildWrapper
 			{
 				if( m_RenderToTexture == null)
 				{
-					m_RenderToTexture = new RenderSketchToTexture(m_Width, m_Height, m_Child);
+					m_RenderToTexture = new RenderSketchToTexture(m_Width, m_Height, m_Child, r_Mother);
 				}
 				
-				m_RenderToTexture.draw(i);				
+				m_RenderToTexture.draw();				
 			}
 			else
 			{
@@ -149,12 +152,4 @@ public class ChildWrapper
         
         return new PApplet();
     } 
-
-	public void Set_Color(float r, float g, float b, float a)
-	{
-		m_RenderToTexture.SetR(r);
-		m_RenderToTexture.SetG(g);
-		m_RenderToTexture.SetB(b);
-		m_RenderToTexture.SetA(a);
-	}
 }

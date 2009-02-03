@@ -149,7 +149,8 @@ public class SynthContainer
 													m_Library_file_URLS,
 													sketchName, 
 													key, 
-													false); // Render Billboard 
+													false, // Render Billboard
+													mother);
 				m_VisualSynths.add( new_Wrapper );
 				
 				InitChild( new_Wrapper.Child(), mother );
@@ -233,30 +234,6 @@ public class SynthContainer
 					m_VisualSynths.remove(i);
 					
 					m_VisualSynths.add(newLocation, element);
-					break;
-				}
-			}	
-					
-			return true;
-		}	
-		else
-		{
-			return false;
-		}
-	}
-	
-	public boolean Set_Synth_Color(String key, float r, float g, float b, float a)
-	{
-		if(m_Visual_Synth_Keys.containsKey(key))
-		{
-			for(int i = 0; i < m_VisualSynths.size(); i++)
-			{
-				ChildWrapper element = ((ChildWrapper)m_VisualSynths.get(i));
-				
-				if( element.GetName().compareTo(key) == 0)
-				{	 
-					element.Set_Color(r,g,b,a);
-					
 					break;
 				}
 			}	

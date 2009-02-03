@@ -3,6 +3,7 @@ package onar3d.Render_To_Texture;
 import java.awt.*;
 import java.awt.event.*;
 import javax.media.opengl.*;
+
 import com.sun.opengl.util.*;
 
 /**
@@ -24,7 +25,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 	protected int m_multisamples = 4;
 
 	int m_Texture_Width = 640;
-	int m_Texture_Height = 480;
+	int m_Texture_Height = 640;
 	
 	public static void main(String[] args)
 	{
@@ -33,7 +34,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 
 		canvas.addGLEventListener(new Gears());
 		frame.add(canvas);
-		frame.setSize(640, 480);
+		frame.setSize(640, 640);
 		final Animator animator = new Animator(canvas);
 		
 		frame.addWindowListener(new WindowAdapter()
@@ -102,7 +103,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		drawable.addMouseListener(this);
 		drawable.addMouseMotionListener(this);
 		
-		gl.glEnable(GL.GL_TEXTURE_RECTANGLE_ARB);
+	//	gl.glEnable(GL.GL_TEXTURE_2D);
 	
 		gl.glGenRenderbuffersEXT(1, colorBuffer, 0);
 		gl.glBindRenderbufferEXT(GL.GL_RENDERBUFFER_EXT, colorBuffer[0]); // Binding render buffer		
@@ -123,13 +124,24 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 		// Creating texture
 		gl.glGenTextures(1, texture, 0);
 		gl.glBindTexture(GL.GL_TEXTURE_RECTANGLE_ARB, texture[0]);
-		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, GL.GL_RGBA, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_INT, null);
+		gl.glTexImage2D(GL.GL_TEXTURE_RECTANGLE_ARB, 0, GL.GL_RGBA, m_Texture_Width, m_Texture_Height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, null);
 		
 		// Creating actual resolution FBO
 		gl.glGenFramebuffersEXT(1, fbo, 0);
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, fbo[0]);
 		// Attaching texture to FBO
 		gl.glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, GL.GL_COLOR_ATTACHMENT0_EXT, GL.GL_TEXTURE_RECTANGLE_ARB, texture[0], 0);
+		
+		int status = gl.glCheckFramebufferStatusEXT(GL.GL_FRAMEBUFFER_EXT);
+		
+		if(status == GL.GL_FRAMEBUFFER_COMPLETE_EXT)
+		{
+			System.out.println("GL_FRAMEBUFFER_EXT Status Complete:" + status);
+		}
+		else
+		{
+			System.out.println("GL_FRAMEBUFFER_EXT Status Not complete... " + status);
+		}
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height)
@@ -185,7 +197,7 @@ public class Gears implements GLEventListener, MouseListener, MouseMotionListene
 	
 		gl.glBindFramebufferEXT(GL.GL_FRAMEBUFFER_EXT, 0);
 		
-		gl.glActiveTexture(GL.GL_TEXTURE0);
+		//gl.glActiveTexture(GL.GL_TEXTURE0);
 		
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	

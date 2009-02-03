@@ -137,14 +137,12 @@ public class Mother extends PApplet
 			m_Height 	= screen.height;
 		}
 		
-		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS/*OPENGL*/);
+		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 		
 		frameRate(24);
 		
 		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
-		//hint( ENABLE_OPENGL_2X_SMOOTH ); // Calling this directly doesn't work.
-		//hint(DISABLE_OPENGL_2X_SMOOTH);
-		
+			
 		pgl 	= (PGraphicsOpenGL) g; 
 		opengl 	= pgl.gl;
 		glu 	= ((PGraphicsOpenGL)g).glu;
@@ -216,7 +214,7 @@ public class Mother extends PApplet
 			
 			try
 			{
-			current.draw(i);
+				current.draw(i);
 			}
 			catch(Exception e)
 			{
@@ -321,17 +319,6 @@ public class Mother extends PApplet
 				if (theOscMessage.checkTypetag("si"))
 				{				
 					m_SynthContainer.Move( theOscMessage.get(0).stringValue(), theOscMessage.get(1).intValue() );
-				}
-			}
-			else if ( splits[2].compareTo("Set_synth_color") == 0 )
-			{
-				if (theOscMessage.checkTypetag("sffff"))
-				{				
-					m_SynthContainer.Set_Synth_Color( 	theOscMessage.get(0).stringValue(), 
-														theOscMessage.get(1).floatValue(),
-														theOscMessage.get(2).floatValue(),
-														theOscMessage.get(3).floatValue(),
-														theOscMessage.get(4).floatValue());
 				}
 			}
 			else if ( splits[2].compareTo("Set_synth_blending") == 0 )
