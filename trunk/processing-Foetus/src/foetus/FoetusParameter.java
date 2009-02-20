@@ -13,8 +13,6 @@ public class FoetusParameter
 	float m_Factor;
 	
 	boolean m_Splerp = true;
-	
-	long m_LastTimeStamp;
 
 	Foetus r_f; 
 	
@@ -25,7 +23,7 @@ public class FoetusParameter
 		if(m_Splerp)
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
 		
-		//System.out.println("Last: " + m_LastValue + " New: " + " Factor: " + m_Factor);
+		//System.out.println("Last: " + m_LastValue + " New: " + m_NewValue + " Factor: " + m_Factor);
 		
 		return m_Value;
 	}
@@ -56,9 +54,7 @@ public class FoetusParameter
 									Animator.RepeatBehavior.LOOP, 
 									new PropertySetter(this, "factor", keyFrames) );
 		
-		
 		//animation.setResolution(42);
-		m_LastTimeStamp = animation.getTotalElapsedTime();
 		
 		//animation.setAcceleration(0.5f);
 		//animation.setDeceleration(0.5f);
@@ -67,24 +63,25 @@ public class FoetusParameter
 	
 	public void setFactor(Float factor)
 	{
-//		System.out.println(animation.getTimingFraction());
 		m_Factor = factor;
 	}
 		
 	public void setValue(float val)
 	{
-	    m_LastValue 				= m_Value;
-	    m_NewValue  				= val;
+		long elapsed;
+		
+	    m_LastValue = m_Value;
+	    m_NewValue  = val;
 
 	    try
 	    {
-		    m_Factor 		= 0.0f;
-		    Double toSet 	= Math.abs(new Double(m_LastTimeStamp-animation.getTotalElapsedTime()));
-		    m_LastTimeStamp = animation.getTotalElapsedTime();
+		    m_Factor = 0.0f;
 		    
+		    elapsed = animation.getTotalElapsedTime();
+		    		    
 		    animation.stop();
 		    
-		    if(toSet<100)
+		    if(elapsed<500)
 		    {
 		    	m_Splerp 	= false;
 		    	m_LastValue = val;
@@ -94,10 +91,10 @@ public class FoetusParameter
 		    {
 		    	m_Splerp = true;
 		    	
-		    	if(toSet>3000)
-		    		toSet = 3000.0;
-		    	
-		    	animation.setDuration(toSet.intValue());
+		    	if(elapsed>3000)
+		    		elapsed = 3000;
+		  
+		    	animation.setDuration((int)elapsed);
 		    	animation.start();
 		    }
 		    
