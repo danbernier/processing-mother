@@ -20,7 +20,7 @@ public class MotherGraphics extends PGraphicsOpenGL //implements GLConstants
 		return context;
 	}
 
-/*	protected void renderTriangles(int start, int stop)
+	protected void renderTriangles(int start, int stop)
 	{
 		report("render_triangles in");
 		
@@ -170,7 +170,7 @@ public class MotherGraphics extends PGraphicsOpenGL //implements GLConstants
 
 		gl.glEnable(GL.GL_LIGHTING);
 		report("render_triangles out");
-	}*/
+	}
 
 /*	protected void allocate()
 	{

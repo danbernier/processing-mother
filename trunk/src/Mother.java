@@ -214,7 +214,11 @@ public class Mother extends PApplet
 			
 			try
 			{
+				pushStyle();
+				opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
 				current.draw(i);
+				opengl.glPopAttrib();
+				popStyle();
 			}
 			catch(Exception e)
 			{
