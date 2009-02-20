@@ -30,6 +30,8 @@ public class Foetus
 {
 	PApplet parent;
 	
+	int[] m_BGColor;
+	
 	Hashtable<String,String> m_Messages;
 	
 	public boolean standalone = true;
@@ -46,6 +48,15 @@ public class Foetus
 				
 		parent.registerDispose(this);
 		parent.registerPre(this);
+		
+		m_BGColor = new int[] {128, 128, 128};
+	}
+	
+	public void setBGColor(int r, int g, int b)
+	{
+		m_BGColor[0] = r;
+		m_BGColor[1] = g;
+		m_BGColor[2] = b;
 	}
 	
 	public void dispose()
@@ -71,7 +82,7 @@ public class Foetus
 	public void pre()
 	{
 		if (standalone)
-			parent.background(128);
+			parent.background(m_BGColor[0],m_BGColor[1],m_BGColor[2]);
 	}
 	
 }

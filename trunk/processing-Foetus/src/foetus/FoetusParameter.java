@@ -24,7 +24,9 @@ public class FoetusParameter
 	{
 		if(m_Splerp)
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
-
+		
+		//System.out.println("Last: " + m_LastValue + " New: " + " Factor: " + m_Factor);
+		
 		return m_Value;
 	}
 	
@@ -48,19 +50,24 @@ public class FoetusParameter
 	    KeyValues keyValues = KeyValues.create(values);
 		KeyFrames keyFrames = new KeyFrames(keyValues, keyTimes,  new SplineInterpolator(1.00f, 0.00f, 0.00f, 1.00f));
 		
+		
 		animation = new Animator(	1000, 
 									1,  
 									Animator.RepeatBehavior.LOOP, 
 									new PropertySetter(this, "factor", keyFrames) );
 		
+		
+		//animation.setResolution(42);
 		m_LastTimeStamp = animation.getTotalElapsedTime();
 		
 		//animation.setAcceleration(0.5f);
 		//animation.setDeceleration(0.5f);
 	}
 
+	
 	public void setFactor(Float factor)
 	{
+//		System.out.println(animation.getTimingFraction());
 		m_Factor = factor;
 	}
 		
