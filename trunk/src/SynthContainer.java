@@ -82,7 +82,7 @@ public class SynthContainer
 	{
 		String[] fileName;
 		
-		File oooClassPath 		= new File(m_Synth_Folder + "//" + "Libraries");
+		File oooClassPath 		= new File(m_Synth_Folder + "//" + "libraries");
 		File[] files 			= oooClassPath.listFiles();
 		
 		// Check if Libraries folder exists. If not, create empty list.
@@ -335,7 +335,10 @@ public class SynthContainer
 		child.frame			= parent.frame;		  
 		child.screen		= parent.screen;
 		child.recorder		= parent.recorder;
-		child.sketchPath	= parent.sketchPath;
+//		child.sketchPath	= parent.sketchPath;
+		
+		child.sketchPath	=  m_Synth_Folder;
+			
 		child.pixels		= parent.pixels;
 		  
 		child.width 		= parent.width;
