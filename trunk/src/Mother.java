@@ -32,12 +32,14 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import java.util.*;
 
+import java.io.PrintWriter;
 import java.lang.reflect.*;
 import foetus.*;
 
 import fullscreen.*;  
 
 import onar3d.mothergraphics.*;
+
 
 public class Mother extends PApplet
 {
@@ -65,8 +67,10 @@ public class Mother extends PApplet
 		
 	FileParser fp;
 	
+	PrintWriter output;
+	
 	boolean m_FullScreen;
-		
+	
 	/**
      * Loads the Settings from the Client INI file
      */
@@ -139,7 +143,7 @@ public class Mother extends PApplet
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 		
-		frameRate(24);
+		frameRate(30);
 		
 		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
 			
@@ -152,7 +156,7 @@ public class Mother extends PApplet
 		// start oscP5
 		oscP5 					= new OscP5(this, m_osc_receive_port);
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
-
+			
 		// For testing
 	//	m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
 	//	m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
@@ -222,20 +226,32 @@ public class Mother extends PApplet
 			}
 			catch(Exception e)
 			{
-				println("Drawing kid crashed!");
+				if(output == null)
+					 output = createWriter("C:\\MotherErrors.txt");
+				
+				output.println(e.getMessage());
+				println("Drawing kid crashed!: " + current.GetName());
 			}
 			opengl.glPopMatrix();
 			
 			opengl.glDisable(GL.GL_BLEND);
 		}
-	
 	}
+	
+	
+	protected void finalize()
+	{
+		System.out.println("FINALIZING");
+		output.flush(); // Write the remaining data
+		output.close(); // Finish the file
+	}
+	
 	
 	public void keyPressed()
 	{
 		PApplet child;
 		Method keyMethod;
-		
+			
 		for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 		{
 			child = ((ChildWrapper)m_SynthContainer.Synths().get(i)).Child();
@@ -257,6 +273,7 @@ public class Mother extends PApplet
 		} 
 	}
 	
+	
 	/*
 	 * incoming osc message are forwarded to the oscEvent method.
 	 */
@@ -269,7 +286,7 @@ public class Mother extends PApplet
 		String 		typetag 	= theOscMessage.typetag();
 		String[] 	splits 		= addrPattern.split("/");
 		
-		println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
+	//	println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
 		
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
@@ -392,7 +409,7 @@ public class Mother extends PApplet
 		
 		try
 		{
-			Foetus			f = null;
+			Foetus	f = null;
 			
 			try
 			{
