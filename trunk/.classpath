@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/fullscreen/library/fullscreen.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/fullscreen/library/fullscreen_GLsupport.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/glgraphics/library/glgraphics.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother Synths"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

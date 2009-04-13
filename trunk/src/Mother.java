@@ -32,6 +32,9 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import java.util.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
 import foetus.*;
@@ -71,6 +74,11 @@ public class Mother extends PApplet
 	
 	boolean m_FullScreen;
 	
+	boolean m_WriteImage = false;
+	
+	float m_FrameRate = 29.97f;
+	String m_ImageFolder;
+	
 	/**
      * Loads the Settings from the Client INI file
      */
@@ -99,6 +107,11 @@ public class Mother extends PApplet
             {
             	m_FullScreen = false;
             }
+            
+            String frameRateString = fp.getStringValue("frameRate"); 
+            
+            m_FrameRate 	= Float.parseFloat(frameRateString); 
+            m_ImageFolder 	= fp.getStringValue("imagePath");
         }
     }
 
@@ -143,7 +156,7 @@ public class Mother extends PApplet
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 		
-		frameRate(30);
+		frameRate(m_FrameRate);
 		
 		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
 			
@@ -156,7 +169,27 @@ public class Mother extends PApplet
 		// start oscP5
 		oscP5 					= new OscP5(this, m_osc_receive_port);
 		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
-			
+				
+		pgl.beginGL();
+		opengl.setSwapInterval(1); //set vertical sync on
+		pgl.endGL();
+		 
+		this.frame.addWindowListener(new WindowAdapter() 
+		{
+		        public void windowClosing(WindowEvent e) 
+		        {
+		        	try
+					{
+						this.finalize();
+					}
+					catch (Throwable e1)
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }
+		});
+		 
 		// For testing
 	//	m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
 	//	m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
@@ -226,16 +259,22 @@ public class Mother extends PApplet
 			}
 			catch(Exception e)
 			{
-				if(output == null)
+				//if(output == null)
 					 output = createWriter("C:\\MotherErrors.txt");
-				
+												
 				output.println(e.getMessage());
 				println("Drawing kid crashed!: " + current.GetName());
+				
+				output.flush(); // Write the remaining data
+				output.close(); // Finish the file
 			}
 			opengl.glPopMatrix();
 			
 			opengl.glDisable(GL.GL_BLEND);
 		}
+		
+		if(m_WriteImage)
+			saveFrame(m_ImageFolder + "Mother-####.tif");
 	}
 	
 	
@@ -251,7 +290,14 @@ public class Mother extends PApplet
 	{
 		PApplet child;
 		Method keyMethod;
-			
+		
+		switch (key)
+		{
+		case ' ':
+			m_WriteImage = !m_WriteImage;
+			break;
+		}
+		
 		for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 		{
 			child = ((ChildWrapper)m_SynthContainer.Synths().get(i)).Child();
@@ -450,5 +496,4 @@ public class Mother extends PApplet
 //		PApplet.main(new String[] { "--present", "Mother"} );	
 		PApplet.main(new String[] { "Mother"} );
 	}
-
 }
