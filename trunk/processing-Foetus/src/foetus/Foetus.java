@@ -36,6 +36,8 @@ public class Foetus
 	
 	public boolean standalone = true;
 
+	float m_SpeedFraction = 1;
+	
 	/**
 	 * Constructor
 	 * @param parent
@@ -50,6 +52,17 @@ public class Foetus
 		parent.registerPre(this);
 		
 		m_BGColor = new int[] {128, 128, 128};
+	}
+	
+	public void setSpeedFraction(float inSF) { m_SpeedFraction = inSF; }
+	
+	public float getSpeedFraction() { return m_SpeedFraction; }
+	
+	public int millis() 
+	{	
+		double pm = parent.millis();
+	    return (int)(pm/m_SpeedFraction);
+	    //return (int)(parent.millis()/m_SpeedFraction);
 	}
 	
 	public void setBGColor(int r, int g, int b)

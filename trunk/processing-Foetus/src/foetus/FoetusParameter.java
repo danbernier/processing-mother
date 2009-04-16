@@ -49,7 +49,7 @@ public class FoetusParameter
 		KeyFrames keyFrames = new KeyFrames(keyValues, keyTimes,  new SplineInterpolator(1.00f, 0.00f, 0.00f, 1.00f));
 		
 		
-		animation = new Animator(	1000, 
+		animation = new Animator(	(int)(1000/r_f.getSpeedFraction()), 
 									1,  
 									Animator.RepeatBehavior.LOOP, 
 									new PropertySetter(this, "factor", keyFrames) );
@@ -77,11 +77,11 @@ public class FoetusParameter
 	    {
 		    m_Factor = 0.0f;
 		    
-		    elapsed = animation.getTotalElapsedTime();
+		    elapsed = (long)(animation.getTotalElapsedTime()/r_f.getSpeedFraction());
 		    		    
 		    animation.stop();
 		    
-		    if(elapsed<500)
+		    if(elapsed<(500/r_f.getSpeedFraction()))
 		    {
 		    	m_Splerp 	= false;
 		    	m_LastValue = val;
@@ -91,8 +91,8 @@ public class FoetusParameter
 		    {
 		    	m_Splerp = true;
 		    	
-		    	if(elapsed>3000)
-		    		elapsed = 3000;
+		    	if(elapsed>(3000/r_f.getSpeedFraction()))
+		    		elapsed = (long)(3000/r_f.getSpeedFraction());
 		  
 		    	animation.setDuration((int)elapsed);
 		    	animation.start();
