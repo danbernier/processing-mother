@@ -134,7 +134,7 @@ public class SynthContainer
 	/*
 	 * Create a new synth layer
 	 */
-	public ChildWrapper Add(String key, String sketchName, int w, int h, PApplet mother)
+	public ChildWrapper Add(String key, String sketchName, int w, int h, Mother mother)
 	{
 		ChildWrapper new_Wrapper = null;
 		
@@ -289,7 +289,7 @@ public class SynthContainer
 		}
 	}
 	
-	public void Initialize(PApplet mother)
+	public void Initialize(Mother mother)
 	{
 		for(int i = 0; i < m_VisualSynths.size(); i++)
 		{
@@ -300,7 +300,7 @@ public class SynthContainer
 	/*
 	 * 
 	 */
-	private void InitChild(PApplet child, PApplet parent)
+	private void InitChild(PApplet child, Mother parent)
 	{
 		Method[] methods = child.getClass().getMethods();
 		Method[] declaredMethods = child.getClass().getDeclaredMethods();
@@ -362,7 +362,9 @@ public class SynthContainer
 			
 			foetusField = (Foetus)child.getClass().getDeclaredField("f").get(child);
 
-			foetusField.standalone = false;	
+			foetusField.standalone = false;
+			
+			foetusField.setSpeedFraction(parent.getSpeedFraction());
 		}
 		catch(Exception e)
 		{

@@ -78,6 +78,11 @@ public class Mother extends PApplet
 	
 	float m_FrameRate = 29.97f;
 	String m_ImageFolder;
+	float m_SpeedFraction;
+	
+	
+	public float getSpeedFraction() { return m_SpeedFraction; }
+	
 	
 	/**
      * Loads the Settings from the Client INI file
@@ -112,6 +117,10 @@ public class Mother extends PApplet
             
             m_FrameRate 	= Float.parseFloat(frameRateString); 
             m_ImageFolder 	= fp.getStringValue("imagePath");
+            
+            String speedFractionString = fp.getStringValue("speedFraction");
+            
+            m_SpeedFraction = Float.parseFloat(speedFractionString);
         }
     }
 
@@ -156,7 +165,7 @@ public class Mother extends PApplet
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 		
-		frameRate(m_FrameRate);
+		frameRate(m_FrameRate/m_SpeedFraction);
 		
 		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
 			
@@ -274,7 +283,7 @@ public class Mother extends PApplet
 		}
 		
 		if(m_WriteImage)
-			saveFrame(m_ImageFolder + "Mother-####.tif");
+			saveFrame(m_ImageFolder + "Mother-#####.png");
 	}
 	
 	
@@ -293,12 +302,12 @@ public class Mother extends PApplet
 		
 		switch (key)
 		{
-		case ' ':
+		case 'r':
 			m_WriteImage = !m_WriteImage;
 			break;
 		}
 		
-		for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
+		/*for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 		{
 			child = ((ChildWrapper)m_SynthContainer.Synths().get(i)).Child();
 
@@ -316,7 +325,7 @@ public class Mother extends PApplet
 			{
 				println("CRASH keyPressed" + e.getMessage());
 			}
-		} 
+		} */
 	}
 	
 	
@@ -439,6 +448,18 @@ public class Mother extends PApplet
 												
 						break;
 					}
+				}
+			}
+			else if ( splits[2].compareTo("Record") == 0 )
+			{
+				if (theOscMessage.checkTypetag("i"))
+				{	
+					int in = theOscMessage.get(0).intValue();
+					
+					if (in == 1)
+						m_WriteImage = true;
+					else if(in == 0)
+						m_WriteImage = false;
 				}
 			}
 		}
