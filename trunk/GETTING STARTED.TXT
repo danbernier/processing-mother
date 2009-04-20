@@ -4,6 +4,8 @@ To get the included examples running, follow the following steps:
 1. Copy Gradient.jar and Waltz.jar to wherever you want to keep your synths.
 
 2. Update mother.ini to refer to that path, eg: SynthFolder=X:\\Stuff\\My Synths;
+   Also create subfolders "data" and "libraries", 
+   e.g. X:\Stuff\My Synths\data and X:\Stuff\My Synths\libraries.
 
 3. Start "Mother_Controller_Example - 0.2.exe", 
    and make sure to allow it through any firewalls you have, 
