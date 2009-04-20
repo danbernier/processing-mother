@@ -59,7 +59,7 @@ public class Foetus
 	public float getSpeedFraction() { return m_SpeedFraction; }
 	
 	public int millis() 
-	{	
+	{
 		double pm = parent.millis();
 	    return (int)(pm/m_SpeedFraction);
 	    //return (int)(parent.millis()/m_SpeedFraction);
