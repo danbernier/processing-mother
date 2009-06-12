@@ -76,9 +76,18 @@ public class Mother extends PApplet
 	
 	boolean m_WriteImage = false;
 	
-	float m_FrameRate = 29.97f;
+	float m_FrameRate = 30f;
 	String m_ImageFolder;
 	float m_SpeedFraction;
+	
+	// Frames-per-second computation
+	private boolean firstProfiledFrame;
+
+	private int profiledFrameCount;
+
+	private int numDrawElementsCalls;
+
+	private long startTimeMillis;
 	
 	
 	public float getSpeedFraction() { return m_SpeedFraction; }
@@ -159,8 +168,8 @@ public class Mother extends PApplet
 			// enter fullscreen mode
 			fs.enter(); 
 			
-			m_Width 	= screen.width;
-			m_Height 	= screen.height;
+			m_Width  = screen.width;
+			m_Height = screen.height;
 		}
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
@@ -284,6 +293,30 @@ public class Mother extends PApplet
 		
 		if(m_WriteImage)
 			saveFrame(m_ImageFolder + "Mother-#####.png");
+		
+		
+		if (!firstProfiledFrame)
+		{
+			if (++profiledFrameCount == 30)
+			{
+				long endTimeMillis = System.currentTimeMillis();
+				double secs = (endTimeMillis - startTimeMillis) / 1000.0;
+				double fps = 30.0 / secs;
+			//	double ppf = tileSize * tileSize * 2;
+			//	double mpps = ppf * fps / 1000000.0;
+			/*	System.err.println("fps: " + fps  + " polys/frame: " + ppf + " million polys/sec: " + mpps 
+						+ " DrawElements calls/frame: " + (numDrawElementsCalls / 30));*/
+//				System.err.println(vboEnabled);
+				profiledFrameCount = 0;
+				numDrawElementsCalls = 0;
+				startTimeMillis = System.currentTimeMillis();
+			}
+		}
+		else
+		{
+			startTimeMillis = System.currentTimeMillis();
+			firstProfiledFrame = false;
+		}
 	}
 	
 	
@@ -341,8 +374,15 @@ public class Mother extends PApplet
 		String 		typetag 	= theOscMessage.typetag();
 		String[] 	splits 		= addrPattern.split("/");
 		
-	//	println("Mother received an osc message with address pattern " + addrPattern + ", and typetag: " + typetag);
+//		System.err.println("Mother received an osc message with address pattern " + addrPattern + ", typetag: " + typetag + " and values: ");		
 		
+//		System.err.println(theOscMessage.toString());
+		
+	/*	for(int i  = 0; i <   theOscMessage.arguments().length; i++)
+		{
+			System.err.println( "	" + theOscMessage.get(i) );
+		}
+		*/
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
 		{
