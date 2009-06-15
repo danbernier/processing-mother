@@ -12,6 +12,8 @@ public class FoetusParameter
 	float m_NewValue;
 	float m_Factor;
 	
+	String m_Address;
+	
 	boolean m_Splerp = true;
 
 	Foetus r_f; 
@@ -21,7 +23,9 @@ public class FoetusParameter
 	public float getValue()
 	{
 		if(m_Splerp)
+		{
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
+		}
 		
 		//System.out.println("Last: " + m_LastValue + " New: " + m_NewValue + " Factor: " + m_Factor);
 		
@@ -38,6 +42,8 @@ public class FoetusParameter
 		m_NewValue				= value;
 		m_LastValue				= value;
 
+		m_Address = address;
+		
 		if(r_f!=null)
 			r_f.registerMethod(address, typetag);
 		
@@ -64,6 +70,15 @@ public class FoetusParameter
 	public void setFactor(Float factor)
 	{
 		m_Factor = factor;
+		
+		if(m_Factor>=1.0f)
+		{
+			r_f.setUpdatingStatus(m_Address, false);
+		}
+		else
+		{
+			r_f.setUpdatingStatus(m_Address, true);	
+		}
 	}
 		
 	public void setValue(float val)
@@ -86,6 +101,7 @@ public class FoetusParameter
 		    	m_Splerp 	= false;
 		    	m_LastValue = val;
 		    	m_Value 	= val;
+		    	r_f.setUpdatingStatus(m_Address, false);
 		    }
 		    else
 		    {

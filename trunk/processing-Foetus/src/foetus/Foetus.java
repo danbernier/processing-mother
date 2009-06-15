@@ -32,7 +32,9 @@ public class Foetus
 	
 	int[] m_BGColor;
 	
-	Hashtable<String,String> m_Messages;
+	Hashtable<String, String> m_Messages;
+	
+	Hashtable<String, Boolean> m_Updating;
 	
 	public boolean standalone = true;
 
@@ -47,6 +49,8 @@ public class Foetus
 		this.parent = parent;
 		
 		m_Messages = new Hashtable<String,String>();
+		
+		m_Updating = new Hashtable<String,Boolean>();
 				
 		parent.registerDispose(this);
 		parent.registerPre(this);
@@ -80,16 +84,35 @@ public class Foetus
 	public void registerMethod(String address, String typetag)
 	{
 		m_Messages.put(address, typetag);
+		m_Updating.put(address, false);
 	}
 
 	public void unregisterMethod(String address)
 	{
 		m_Messages.remove(address);
+		m_Updating.remove(address);
 	}
 	
 	public Hashtable<String,String> getSupportedMessages()
 	{
 		return m_Messages;
+	}
+	
+	public void setUpdatingStatus(String address, boolean status)
+	{
+		m_Updating.put(address, status);
+	}
+	
+	public boolean getUpdatingStatus()
+	{
+		if(m_Updating.containsValue(true))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public void pre()
