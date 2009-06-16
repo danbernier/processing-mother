@@ -20,20 +20,12 @@ public class FoetusParameter
 	
 	Animator animation = null;
 		
-	public float getValue()
-	{
-		if(m_Splerp)
-		{
-			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
-		}
-		
-		//System.out.println("Last: " + m_LastValue + " New: " + m_NewValue + " Factor: " + m_Factor);
-		
-		return m_Value;
-	}
-	
-	/*
-	 * 
+	/**
+	 * Allows spline interpolation for individual floating point synth parameters.
+	 * @param f
+	 * @param value
+	 * @param address
+	 * @param typetag
 	 */
 	public FoetusParameter(Foetus f, float value, String address, String typetag )
 	{
@@ -61,7 +53,6 @@ public class FoetusParameter
 									new PropertySetter(this, "factor", keyFrames) );
 		
 		//animation.setResolution(42);
-		
 		//animation.setAcceleration(0.5f);
 		//animation.setDeceleration(0.5f);
 	}
@@ -80,7 +71,30 @@ public class FoetusParameter
 			r_f.setUpdatingStatus(m_Address, true);	
 		}
 	}
+	
+	
+	/**
+	 * Returns the interpolated value held by the parameter at the current time.
+	 * @return
+	 */
+	public float getValue()
+	{
+		if(m_Splerp)
+		{
+			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
+		}
 		
+		//System.out.println("Last: " + m_LastValue + " New: " + m_NewValue + " Factor: " + m_Factor);
+		
+		return m_Value;
+	}
+	
+		
+	/**
+	 * Set a new value for the parameter. This will trigger an interpolation with the 
+	 * new value as target.
+	 * @param val
+	 */
 	public void setValue(float val)
 	{
 		long elapsed;

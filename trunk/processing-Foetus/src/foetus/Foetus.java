@@ -36,9 +36,14 @@ public class Foetus
 	
 	Hashtable<String, Boolean> m_Updating;
 	
+	/**
+	 * For use by Mother, do not alter!
+	 */
 	public boolean standalone = true;
 
 	float m_SpeedFraction = 1;
+	
+	public final String VERSION = "0.4.0";
 	
 	/**
 	 * Constructor
@@ -58,17 +63,55 @@ public class Foetus
 		m_BGColor = new int[] {128, 128, 128};
 	}
 	
-	public void setSpeedFraction(float inSF) { m_SpeedFraction = inSF; }
+	/**
+	 * return the version of the library.
+	 * 
+	 * @return String
+	 */
+	public String version() 
+	{
+		return VERSION;
+	}
+
+	/**
+	 * For use by Mother, do not alter!
+	 * @param inSF
+	 */
+	public void setSpeedFraction(float inSF) 
+	{
+		m_SpeedFraction = inSF; 
+	}
 	
-	public float getSpeedFraction() { return m_SpeedFraction; }
+	/**
+	 * For use by Mother!
+	 * @param inSF
+	 */
+	public float getSpeedFraction() 
+	{
+		return m_SpeedFraction; 
+	}
 	
+	/**
+	 * millis() is the same as the Processing millis() function, 
+	 * with the additional feature that it takes the specified speed fraction into account. 
+	 * This is useful when running in non real-time mode, 
+	 * as the f.millis() call returns the time value at a given frame number 
+	 * that it would have if it were running in real-time. 
+	 * @return int
+	 */
 	public int millis() 
 	{
 		double pm = parent.millis();
 	    return (int)(pm/m_SpeedFraction);
-	    //return (int)(parent.millis()/m_SpeedFraction);
 	}
 	
+	/**
+	 * Use this to set the background color of the sketch when it is running in standalone mode,
+	 * i.e. when it is not hosted by Mother.
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
 	public void setBGColor(int r, int g, int b)
 	{
 		m_BGColor[0] = r;
@@ -80,29 +123,51 @@ public class Foetus
 	{
 
 	}
-		
+	
+	/**
+	 * Use this method to register your sketches methods with Mother. This means they will 
+	 * then be listed when the sketch is asked for a list of its capabilities.
+	 * @param OSC address
+	 * @param OSC typetag
+	 */
 	public void registerMethod(String address, String typetag)
 	{
 		m_Messages.put(address, typetag);
 		m_Updating.put(address, false);
 	}
 
+	/**
+	 * For use by Mother!
+	 * @return
+	 */
 	public void unregisterMethod(String address)
 	{
 		m_Messages.remove(address);
 		m_Updating.remove(address);
 	}
 	
+	/**
+	 * For use by Mother!
+	 * @return
+	 */
 	public Hashtable<String,String> getSupportedMessages()
 	{
 		return m_Messages;
 	}
 	
+	/**
+	 * For use by Mother, do not alter!
+	 * @return
+	 */
 	public void setUpdatingStatus(String address, boolean status)
 	{
 		m_Updating.put(address, status);
 	}
 	
+	/**
+	 * For use by Mother!
+	 * @return
+	 */
 	public boolean getUpdatingStatus()
 	{
 		if(m_Updating.containsValue(true))
@@ -115,6 +180,10 @@ public class Foetus
 		}
 	}
 	
+	/**
+	 * For use by Mother!
+	 * @return
+	 */
 	public void pre()
 	{
 		if (standalone)
