@@ -7,9 +7,13 @@ To get the included examples running, follow the following steps:
    Also create subfolders "data" and "libraries", 
    e.g. X:\Stuff\My Synths\data and X:\Stuff\My Synths\libraries.
 
-3. Start "Mother_Controller_Example - 0.2.exe", 
+3. Start "Mother_Controller_Example - 0.3.exe", 
    and make sure to allow it through any firewalls you have, 
    or it will not be able to communicate with Mother.
+
+3. - Alternative: 	Download and install Pure Data extended from: http://puredata.info/downloads,
+					and open the pd patch "PureData controller example.pd",
+					included with this Mother distribution.  
 
 4. Start Mother.exe, add an instance of each synth using the controller example buttons, 
    and try out the various adjustments.
@@ -18,6 +22,7 @@ To get the included examples running, follow the following steps:
    and get started making your own synths and user interfaces for controlling them!
 
 If it doesn't work right away:
+
 	* Make sure you are pointing mother to a valid filepath for the synths, 
 	  and that you are using the double backslash '\\' in the path.
 	  
