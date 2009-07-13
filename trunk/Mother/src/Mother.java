@@ -465,6 +465,8 @@ public class Mother extends PApplet
 					
 					if( childName.compareTo(splits[3]) == 0)
 					{
+						//System.err.println(childName);
+						
 						if(splits[4].compareTo("Get_Supported_Messages") == 0)
 						{
 							sendSupportedMessages((ChildWrapper)m_SynthContainer.Synths().get(i));
@@ -497,9 +499,15 @@ public class Mother extends PApplet
 					int in = theOscMessage.get(0).intValue();
 					
 					if (in == 1)
+					{
 						m_WriteImage = true;
+						System.out.println("Recording!");
+					}
 					else if(in == 0)
+					{
 						m_WriteImage = false;
+						System.out.println("Stopped Recording!");
+					}
 				}
 			}
 		}
