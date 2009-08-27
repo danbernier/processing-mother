@@ -102,7 +102,7 @@ public class FoetusParameter
 	    m_LastValue = m_Value;
 	    m_NewValue  = val;
 
-	    try
+//	    try
 	    {
 		    m_Factor = 0.0f;
 		    
@@ -129,9 +129,9 @@ public class FoetusParameter
 		    }
 		    
 	    }
-	    catch(Exception e)
-	    {
-	    	System.out.println("Something exceptional happened in FoetusParameter! " + e.getMessage());
-	    }
+//	    catch(Exception e)
+//	    {
+//	    	System.out.println("Something exceptional happened in FoetusParameter! " + e.getMessage());
+//	    }
 	}
 }
