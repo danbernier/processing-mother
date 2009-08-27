@@ -43,6 +43,8 @@ import fullscreen.*;
 
 import onar3d.mothergraphics.*;
 
+import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 public class Mother extends PApplet
 {
@@ -89,6 +91,7 @@ public class Mother extends PApplet
 
 	private long startTimeMillis;
 	
+	private Logger logger = null;
 	
 	public float getSpeedFraction() { return m_SpeedFraction; }
 	
@@ -208,6 +211,10 @@ public class Mother extends PApplet
 		        }
 		});
 		 
+		System.setProperty("log4j.configuration", "log4j.properties");
+		logger = Logger.getLogger(this.getName());
+		//BasicConfigurator.configure();
+		
 		// For testing
 	//	m_SynthContainer.Add("Grad_02", 		"Gradient", 		m_Width, m_Height, this);
 	//	m_SynthContainer.Add("Waltz_02", 		"Waltz", 			m_Width, m_Height, this);
@@ -267,16 +274,19 @@ public class Mother extends PApplet
 					
 			opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 			
-			try
+//			try
 			{
+				logger.info("Starting drawing");
 				pushStyle();
 				opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
 				current.draw(i);
 				opengl.glPopAttrib();
 				popStyle();
+				logger.info("Ending drawing");
 			}
-			catch(Exception e)
+/*			catch(Exception e)
 			{
+				e.printStackTrace();
 				//if(output == null)
 					 output = createWriter("C:\\MotherErrors.txt");
 												
@@ -285,15 +295,18 @@ public class Mother extends PApplet
 				
 				output.flush(); // Write the remaining data
 				output.close(); // Finish the file
-			}
+			}*/
 			opengl.glPopMatrix();
-			
+		
 			opengl.glDisable(GL.GL_BLEND);
 		}
 		
+	//	float m = millis();
+			
 		if(m_WriteImage)
 			saveFrame(m_ImageFolder + "Mother-#####.png");
 		
+	//	System.out.println(millis()-m);
 		
 		if (!firstProfiledFrame)
 		{
@@ -373,6 +386,8 @@ public class Mother extends PApplet
 		String 		addrPattern = theOscMessage.addrPattern();
 		String 		typetag 	= theOscMessage.typetag();
 		String[] 	splits 		= addrPattern.split("/");
+		
+		logger.info("Got message: " + theOscMessage.toString());
 		
 //		System.err.println("Mother received an osc message with address pattern " + addrPattern + ", typetag: " + typetag + " and values: ");		
 		
@@ -515,6 +530,8 @@ public class Mother extends PApplet
 		{
 //			println("Unhandled OSC message: " + theOscMessage.addrPattern());
 		}
+		
+		logger.info("Finished with message: " + theOscMessage.toString());
 	}
 	
 	protected void sendSupportedMessages(ChildWrapper wrapper)
@@ -522,7 +539,7 @@ public class Mother extends PApplet
 		PApplet child 		= wrapper.Child();
 		String childName 	= wrapper.GetName(); 
 		
-		try
+//		try
 		{
 			Foetus	f = null;
 			
@@ -549,10 +566,10 @@ public class Mother extends PApplet
 			
 			oscP5.send(oscMessage, oscBroadcastLocation);
 		}
-		catch(Exception e)
+	/*	catch(Exception e)
 		{
 			println("CRASH Child getSupportedMessages" + e.getMessage());
-		}
+		}*/
 	}
 	
 	// -Djava.library.path=src/processing/opengl/library  

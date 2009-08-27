@@ -2,6 +2,9 @@
 import processing.core.*; 
 import processing.opengl.*;
 import javax.media.opengl.*;
+
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -12,6 +15,8 @@ import onar3d.Render_To_Texture.*;
  */
 public class ChildWrapper
 {
+	private Logger logger = null;
+	
 	PApplet m_Child, r_Mother;
 	
 	RenderSketchToTexture m_RenderToTexture;
@@ -71,6 +76,8 @@ public class ChildWrapper
 			m_Child = LoadSketch(classPath, className, libraryULS);
 		//else
 		//	m_Child = new source_particles();
+			
+		logger = Logger.getLogger(this.GetName());
 	}
 		
 	/**
@@ -93,10 +100,14 @@ public class ChildWrapper
 			}
 			else
 			{
+				logger.info("Before Draw: " + m_Name);
+			
 				((PGraphicsOpenGL)m_Child.g).gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
 				((PGraphicsOpenGL)m_Child.g).pushMatrix();
 				m_Child.draw();
 				((PGraphicsOpenGL)m_Child.g).popMatrix();
+				
+				logger.info("After Draw: " + m_Name);
 			}
 		}
 		else

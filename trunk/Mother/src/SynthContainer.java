@@ -140,7 +140,7 @@ public class SynthContainer
 		
 		if(!m_Visual_Synth_Keys.containsKey(key))
 		{			
-			try
+//			try
 			{
 				new_Wrapper = new ChildWrapper(
 													w, 
@@ -158,10 +158,10 @@ public class SynthContainer
 				m_Visual_Synth_Keys.put(key, sketchName);
 			
 			} 
-			catch (Exception e)
+	/*		catch (Exception e)
 			{
 				e.printStackTrace();
-			}
+			}*/
 			
 			return new_Wrapper;
 		}	
