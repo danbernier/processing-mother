@@ -1,7 +1,8 @@
 package foetus;
 
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.interpolation.*;
+
+import megamu.shapetween.Shaper;
+import megamu.shapetween.Tween;
 
 import processing.core.PApplet;
 
@@ -17,9 +18,9 @@ public class FoetusParameter
 	boolean m_Splerp = true;
 
 	Foetus r_f; 
+			
+	Tween ani;
 	
-	Animator animation = null;
-		
 	/**
 	 * Allows spline interpolation for individual floating point synth parameters.
 	 * @param f
@@ -39,26 +40,15 @@ public class FoetusParameter
 		if(r_f!=null)
 			r_f.registerMethod(address, typetag);
 		
-		float times[] 	= {0, 1};
-        Float values[] 	= {new Float(0), new Float(1)};
+		r_f.addParameter(this);
+
+		timeStarted = System.currentTimeMillis();
 		
-		KeyTimes  keyTimes 	= new KeyTimes(times);
-	    KeyValues keyValues = KeyValues.create(values);
-		KeyFrames keyFrames = new KeyFrames(keyValues, keyTimes,  new SplineInterpolator(1.00f, 0.00f, 0.00f, 1.00f));
-		
-		
-		animation = new Animator(	(int)(1000/r_f.getSpeedFraction()), 
-									1,  
-									Animator.RepeatBehavior.LOOP, 
-									new PropertySetter(this, "factor", keyFrames) );
-		
-		//animation.setResolution(42);
-		//animation.setAcceleration(0.5f);
-		//animation.setDeceleration(0.5f);
+		ani = new Tween(null/*r_f.parent*/, r_f.getSpeedFraction(), Tween.SECONDS, Shaper.COSINE);
 	}
 
 	
-	public void setFactor(Float factor)
+/*	public void setFactor(Float factor)
 	{
 		m_Factor = factor;
 		
@@ -70,7 +60,7 @@ public class FoetusParameter
 		{
 			r_f.setUpdatingStatus(m_Address, true);	
 		}
-	}
+	}*/
 	
 	
 	/**
@@ -81,15 +71,27 @@ public class FoetusParameter
 	{
 		if(m_Splerp)
 		{
-			m_Value = PApplet.lerp(m_LastValue, m_NewValue, m_Factor);
+			m_Value = PApplet.lerp(m_LastValue, m_NewValue, ani.position());
+			//System.out.println(m_Value + ", " + ani.position());
+		}
+		
+		if(ani.position()>=1.0f)
+		{
+			r_f.setUpdatingStatus(m_Address, false);
+		}
+		else
+		{
+			r_f.setUpdatingStatus(m_Address, true);	
 		}
 		
 		//System.out.println("Last: " + m_LastValue + " New: " + m_NewValue + " Factor: " + m_Factor);
+		//System.out.println(m_Value + ", " + PApplet.lerp(m_LastValue, m_NewValue, ani.position()));
 		
 		return m_Value;
 	}
 	
-		
+	long timeStarted;
+	
 	/**
 	 * Set a new value for the parameter. This will trigger an interpolation with the 
 	 * new value as target.
@@ -98,40 +100,46 @@ public class FoetusParameter
 	public void setValue(float val)
 	{
 		long elapsed;
+		long elapsedTime = System.currentTimeMillis() - timeStarted;
 		
 	    m_LastValue = m_Value;
 	    m_NewValue  = val;
-
-//	    try
+		    
+	    elapsed = (long)(elapsedTime/r_f.getSpeedFraction());
+	  
+	//    System.out.println(elapsed/1000f);
+	    
+	    ani.end();
+	    
+	    if(elapsed<(500/r_f.getSpeedFraction()))
 	    {
-		    m_Factor = 0.0f;
-		    
-		    elapsed = (long)(animation.getTotalElapsedTime()/r_f.getSpeedFraction());
-		    		    
-		    animation.stop();
-		    
-		    if(elapsed<(500/r_f.getSpeedFraction()))
-		    {
-		    	m_Splerp 	= false;
-		    	m_LastValue = val;
-		    	m_Value 	= val;
-		    	r_f.setUpdatingStatus(m_Address, false);
-		    }
-		    else
-		    {
-		    	m_Splerp = true;
-		    	
-		    	if(elapsed>(3000/r_f.getSpeedFraction()))
-		    		elapsed = (long)(3000/r_f.getSpeedFraction());
-		  
-		    	animation.setDuration((int)elapsed);
-		    	animation.start();
-		    }
-		    
+	    	m_Splerp 	= false;
+	    	m_LastValue = val;
+	    	m_Value 	= val;
+	    	r_f.setUpdatingStatus(m_Address, false);
 	    }
-//	    catch(Exception e)
-//	    {
-//	    	System.out.println("Something exceptional happened in FoetusParameter! " + e.getMessage());
-//	    }
+	    else
+	    {
+	    	m_Splerp = true;
+	    	
+	    	if(elapsed>(3000/r_f.getSpeedFraction()))
+	    		elapsed = (long)(3000/r_f.getSpeedFraction());
+	  	    	
+	    	ani.setDuration(elapsed/1000f * r_f.parent.frameRate*r_f.getSpeedFraction(), Tween.FRAMES);
+	    //	ani.setDuration(elapsed/1000f , Tween.SECONDS);
+	    	
+	    	ani.start();
+	    	
+	    	timeStarted = System.currentTimeMillis();
+	    }
+	}
+	
+	public void tick()
+	{
+		if(ani.isTweening())
+		{
+			ani.tick();
+		}
+ 		//System.out.println("tick " + ani.position());
 	}
 }

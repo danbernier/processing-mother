@@ -45,6 +45,10 @@ public class Foetus
 	
 	public final String VERSION = "0.4.0";
 	
+	ArrayList<FoetusParameter> m_Parameters;
+	
+	public ArrayList<FoetusParameter> getParameters() { return m_Parameters; }
+	
 	/**
 	 * Constructor
 	 * @param parent
@@ -52,6 +56,8 @@ public class Foetus
 	public Foetus(PApplet parent)
 	{
 		this.parent = parent;
+	
+		m_Parameters = new ArrayList<FoetusParameter>();
 		
 		m_Messages = new Hashtable<String,String>();
 		
@@ -162,7 +168,10 @@ public class Foetus
 	 */
 	public void setUpdatingStatus(String address, boolean status)
 	{
-		m_Updating.put(address, status);
+		synchronized(m_Updating)
+		{
+			m_Updating.put(address, status);
+		}
 	}
 	
 	/**
@@ -171,13 +180,16 @@ public class Foetus
 	 */
 	public boolean getUpdatingStatus()
 	{
-		if(m_Updating.containsValue(true))
+		synchronized(m_Updating)
 		{
-			return true;
-		}
-		else
-		{
-			return false;
+			if(m_Updating.containsValue(true))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 	
@@ -203,4 +215,9 @@ public class Foetus
 		System.out.println("Post: " + parent.toString());
 	}
 	
+	
+	public void addParameter(FoetusParameter f)
+	{
+		m_Parameters.add(f);	
+	}
 }
