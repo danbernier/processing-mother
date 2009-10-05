@@ -170,7 +170,7 @@ public class ChildWrapper
         File oooClassPath; // = new File(classPath + "//" + className + ".jar");
         
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
-        	oooClassPath = new File(classPath); // Mac
+        	oooClassPath = new File(classPath + "//" + className + ".jar"); // Mac
         else 
         	oooClassPath = new File(classPath + "//" + className + ".jar"); // Windows
 
