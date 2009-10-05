@@ -2,12 +2,17 @@
 import processing.core.*; 
 import processing.opengl.*;
 import javax.media.opengl.*;
+/*
+import org.apache.log4j.Logger;*/
 
-import org.apache.log4j.Logger;
+import foetus.Foetus;
+import foetus.FoetusParameter;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+
 import onar3d.Render_To_Texture.*;
 
 /**
@@ -15,7 +20,7 @@ import onar3d.Render_To_Texture.*;
  */
 public class ChildWrapper
 {
-	private Logger logger = null;
+//	private Logger logger = null;
 	
 	PApplet m_Child, r_Mother;
 	
@@ -46,6 +51,18 @@ public class ChildWrapper
 		
 	public String GetName() { return m_Name; }
 		
+	Foetus foetusField;
+		
+	public Foetus getFoetusField()
+	{
+		return foetusField;
+	}
+
+	public void setFoetusField(Foetus foetusField)
+	{
+		this.foetusField = foetusField;
+	}
+
 	/**
 	 * CONSTRUCTORRenderToTexture
 	 */
@@ -77,7 +94,7 @@ public class ChildWrapper
 		//else
 		//	m_Child = new source_particles();
 			
-		logger = Logger.getLogger(this.GetName());
+//		logger = Logger.getLogger(this.GetName());
 	}
 		
 	/**
@@ -100,14 +117,22 @@ public class ChildWrapper
 			}
 			else
 			{
-				logger.info("Before Draw: " + m_Name);
+//				logger.info("Before Draw: " + m_Name);
 			
 				((PGraphicsOpenGL)m_Child.g).gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
 				((PGraphicsOpenGL)m_Child.g).pushMatrix();
+
+				ArrayList<FoetusParameter> params = this.foetusField.getParameters();
+				
+				for(int pi = 0; pi < params.size(); pi++)
+				{
+					params.get(pi).tick();
+				}
+				
 				m_Child.draw();
 				((PGraphicsOpenGL)m_Child.g).popMatrix();
 				
-				logger.info("After Draw: " + m_Name);
+//				logger.info("After Draw: " + m_Name);
 			}
 		}
 		else
@@ -130,6 +155,18 @@ public class ChildWrapper
 	
 	private PApplet LoadSketch(String classPath, String className, URL[] libraryURLS)
     {   
+		File dir1 = new File (".");
+	    
+		try 
+	    {
+	      System.out.println ("Current dir : " + dir1.getCanonicalPath());
+	    }
+	    catch(Exception e)
+	    {
+	    	 
+	    }
+		
+	    
         File oooClassPath; // = new File(classPath + "//" + className + ".jar");
         
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)

@@ -74,6 +74,7 @@ public class SynthContainer
 			catch(Exception e)
 			{
 				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -113,6 +114,7 @@ public class SynthContainer
 			catch(Exception e)
 			{
 				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		else
@@ -153,7 +155,7 @@ public class SynthContainer
 													mother);
 				m_VisualSynths.add( new_Wrapper );
 				
-				InitChild( new_Wrapper.Child(), mother );
+				InitChild( new_Wrapper, mother );
 				
 				m_Visual_Synth_Keys.put(key, sketchName);
 			
@@ -293,15 +295,17 @@ public class SynthContainer
 	{
 		for(int i = 0; i < m_VisualSynths.size(); i++)
 		{
-			InitChild( ((ChildWrapper)m_VisualSynths.get(i)).Child(), mother );
+			InitChild( ((ChildWrapper)m_VisualSynths.get(i)), mother );
 		}		
 	}
 	
 	/*
 	 * 
 	 */
-	private void InitChild(PApplet child, Mother parent)
+	private void InitChild(ChildWrapper cw, Mother parent)
 	{
+		PApplet child = cw.Child();
+		
 		Method[] methods = child.getClass().getMethods();
 		Method[] declaredMethods = child.getClass().getDeclaredMethods();
 	
@@ -362,6 +366,8 @@ public class SynthContainer
 			
 			foetusField = (Foetus)child.getClass().getDeclaredField("f").get(child);
 
+			cw.setFoetusField(foetusField);
+			
 			foetusField.standalone = false;
 			
 			foetusField.setSpeedFraction(parent.getSpeedFraction());
