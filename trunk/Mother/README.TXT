@@ -58,44 +58,23 @@ It was included here with permission from the authors, and is distributed under 
 as that applying to the complete MostPixelsEver project, GPL 3.
 For more details, see <http://code.google.com/p/mostpixelsever/> 
 
-- The Timing Framework (org.jdesktop.animation.timing)
+- The JavaOSC library.
 
-For the spline interpolation functionality. 
+Initiated by Chandrasekhar Ramakrishnan, and available from: http://www.illposed.com/software/javaosc.html
 
-Created by Chet Haase and others, made available through Sun under a Free BSD license:
+Copyright (c) 2002-2006, C. Ramakrishnan / Illposed Software
+All rights reserved. 
+    
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+    
+    •  Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    •  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    •  Neither the name of the Illposed Software nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+    
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Copyright (c) 2005-2006, Sun Microsystems, Inc
-All rights reserved.
+- The Shapetween library.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
+By Lee Byron & Golan Levin, available from http://www.megamu.com/processing/shapetween/
 
- * Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above
-   copyright notice, this list of conditions and the following 
-   disclaimer in the documentation and/or other materials provided 
-   with the distribution.
- * Neither the name of the TimingFramework project nor the names of its
-   contributors may be used to endorse or promote products derived 
-   from this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
- 
- - The FullScreen API (http://www.superduper.org/processing/fullscreen_api/)
- 
- Available under GPL
-
-- Finally, Mother was developed using Eclipse, and exported using the excellent Eclipse P5 Exporter!
+Under a Creative Commons, some rights reserved license: http://creativecommons.org/licenses/by-nc-sa/3.0/
