@@ -49,7 +49,7 @@ import java.net.UnknownHostException;
 
 import foetus.*;
 
-import fullscreen.*;  
+//import fullscreen.*;  
 
 import onar3d.mothergraphics.*;
 /*
@@ -66,7 +66,7 @@ import org.apache.log4j.Logger;
 
 public class Mother extends PApplet // implements OSCListener
 {
-	SoftFullScreen fs;
+//	SoftFullScreen fs;
 	
 	PGraphicsOpenGL pgl;
 	GL opengl;
@@ -135,28 +135,21 @@ public class Mother extends PApplet // implements OSCListener
 		
 		// Loading setup values from .ini file
 		loadIniFile(sketchPath("mother"+".ini"));
-		
+			
 		if(m_FullScreen)
 		{
-			/*// From ProcessingHacks, for fullscreen without problems 
-			// where window minimizes when focus is lost.		
-			frame.dispose();  
-			frame.setUndecorated(true);
-			frame.setVisible(true); 
-			*/
-			
-			// Create the fullscreen object
-			fs = new SoftFullScreen(this);
-
-			// enter fullscreen mode
-			fs.enter(); 
-			
 			m_Width  = screen.width;
 			m_Height = screen.height;
+			
+			// Create the fullscreen object
+//			fs = new SoftFullScreen(this);
+
+			// enter fullscreen mode
+//			fs.enter(); 
 		}
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
-		
+			
 		frameRate(m_FrameRate/m_SpeedFraction);
 		
 		hint( ENABLE_OPENGL_4X_SMOOTH ); // Just to trigger renderer change.
@@ -767,8 +760,25 @@ public class Mother extends PApplet // implements OSCListener
 	
 	
 	static public void main(String args[]) 
-	{
+	{	
+		FileParser fp = new FileParser("mother"+".ini");
+	        
+        //parse ini file if it exists
+        if (fp.fileExists()) 
+        {    		
+           
+            if(fp.getIntValue("FullScreen")==1)
+            {
+            	PApplet.main(new String[] { "--present", "Mother"} );
+            }
+            else
+            {
+            	PApplet.main(new String[] { "Mother"} );
+            }
+   
+        }
+	        
 //		PApplet.main(new String[] { "--present", "Mother"} );	
-		PApplet.main(new String[] { "Mother"} );
+//		PApplet.main(new String[] { "Mother"} );
 	}
 }
