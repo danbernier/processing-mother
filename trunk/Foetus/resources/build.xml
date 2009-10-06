@@ -18,7 +18,6 @@
 <!-- #### (3) add the jar files that are required for compiling. edit name.
 		for more include files. duplicate <include name="" /> #### -->
 			<include name="core.jar"/>
-			<include name="org.jdesktop.animation.timing.jar"/>
 		</fileset>
 	</path>		
 	
@@ -42,7 +41,7 @@
 	<property name="libraryName"  value="Foetus"/>
 	
 <!-- #### (8) give your library a name. edit value.   #### -->
-	<property name="versionNumber"  value="0.4.0"/>
+	<property name="versionNumber"  value="0.5.0"/>
 	
 <!-- #### (9) your contact url. edit value. #### -->
 	<property name="yourLink"  value="http://www.onar3d.com" />
@@ -54,7 +53,7 @@
 	<property name="tested:platform"  value="Windows" />
 	
 <!-- #### (12) the processing version this library has been tested with. edit value. #### -->
-	<property name="tested:processingVersion"  value="1.0.5" />
+	<property name="tested:processingVersion"  value="1.0.7" />
 	
 <!-- #### (13) does the library depend on any other library, dll, jnilib, etc. edit value. #### -->
 	<property name="tested:dependencies"  value="?" />
