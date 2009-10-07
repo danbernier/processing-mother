@@ -30,6 +30,7 @@ import netP5.*;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+import javax.swing.ImageIcon;
 
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
@@ -135,7 +136,11 @@ public class Mother extends PApplet // implements OSCListener
 		
 		// Loading setup values from .ini file
 		loadIniFile(sketchPath("mother"+".ini"));
-			
+		
+		ImageIcon titlebaricon = new ImageIcon(loadBytes("mother_icon.jpg"));
+		frame.setIconImage(titlebaricon.getImage());
+
+		
 		if(m_FullScreen)
 		{
 			m_Width  = screen.width;
