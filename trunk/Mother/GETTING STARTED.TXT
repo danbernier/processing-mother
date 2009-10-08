@@ -7,13 +7,20 @@ To get the included examples running, follow the following steps:
    Also create subfolders "data" and "libraries", 
    e.g. X:\Stuff\My Synths\data and X:\Stuff\My Synths\libraries.
 
-3. Start "Mother_Controller_Example - 0.3.exe", 
-   and make sure to allow it through any firewalls you have, 
-   or it will not be able to communicate with Mother.
+3. Running example controller: 
 
-3. - Alternative: 	Download and install Pure Data extended from: http://puredata.info/downloads,
-					and open the pd patch "PureData controller example.pd",
-					included with this Mother distribution.  
+   Max/MSP Windows: 
+	Start "Mother_Controller_Example - 0.3.exe", 
+   	and make sure to allow it through any firewalls you have, 
+   	or it will not be able to communicate with Mother.
+   OSX: 
+    Download Max/MSP runtime from www.cycling74.com, 
+    and use it to open the included "Mother_Controller_Example - 0.3.mxf" file.
+
+   Pure Data Alternative: 	
+	Download and install Pure Data extended from: http://puredata.info/downloads,
+	and open the pd patch "PureData controller example.pd",
+	included with this Mother distribution.  
 
 4. Start Mother.exe, add an instance of each synth using the controller example buttons, 
    and try out the various adjustments.
