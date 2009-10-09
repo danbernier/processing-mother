@@ -78,3 +78,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 By Lee Byron & Golan Levin, available from http://www.megamu.com/processing/shapetween/
 
 Under a Creative Commons, some rights reserved license: http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+- Pehr Hovey's code for making Processing work in fullscreen mode on a second screen (adapted and improved :P).
+
+http://pehrhovey.net/blog/2009/02/fullscreen-in-processingorg-with-eclipse/

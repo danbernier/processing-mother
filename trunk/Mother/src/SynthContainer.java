@@ -42,7 +42,7 @@ public class SynthContainer
 		PopulateSynthURLS();
 		PopulateLibraryURLS();
 	}
-	
+		
 	/*
 	 * Scans folder containing synths and stores URL for each
 	 */
@@ -57,9 +57,9 @@ public class SynthContainer
 		{
 			try
 			{
-				fileName = files[i].getName().split(".jar");
+				fileName = files[i].getName().split("\\.");
 				
-				if(fileName[fileName.length-1].compareTo(".jar")==0)
+				if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
 				{
 					m_Visual_Synth_urls.add(files[i].toURI().toURL());
 					System.out.println("Found Synth: " + fileName[0]);
@@ -98,14 +98,19 @@ public class SynthContainer
 		        else 
 		        {
 		        	m_Library_file_URLS	= new URL[files.length];
+		        }
 		        	
 					for (int i = 0; i < files.length; i++)
 					{
-						fileName 				= files[i].getName().split(".jar");
-						m_Library_file_URLS[i] 	= files[i].toURI().toURL();
-						System.out.println("Found library: " + fileName[0]);
+						fileName = files[i].getName().split("\\.");
+						
+						if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
+						{
+							m_Library_file_URLS[i] = files[i].toURI().toURL();
+							System.out.println("Found library: " + fileName[0]);
+						}
 					}
-		        }
+		  
 			} 
 			catch (MalformedURLException ex)
 			{

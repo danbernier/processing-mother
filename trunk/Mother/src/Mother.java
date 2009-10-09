@@ -39,6 +39,10 @@ import com.illposed.osc.OSCPortOut;
 
 import java.util.*;
 
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -88,12 +92,16 @@ public class Mother extends PApplet // implements OSCListener
 	
 	int m_Width;
 	int m_Height;
-		
+	
+	static int pos_X;
+	static int pos_Y;
+	
 	FileParser fp;
 	
 	PrintWriter output;
 	
 	boolean m_FullScreen;
+	int		m_OutputScreen;
 	
 	boolean m_WriteImage = false;
 	
@@ -117,41 +125,39 @@ public class Mother extends PApplet // implements OSCListener
 	
 	public float getSpeedFraction() { return m_SpeedFraction; }
 	
+//	int WIDTH, HEIGHT;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see processing.core.PApplet#setup()
 	 */
 	public void setup() 
-	{	
-		m_Width 	= 640;
-		m_Height 	= 480;
-		
-		m_FullScreen = true;
-		
-		// For OSC
-		m_IP = "127.0.0.1";
-		m_osc_receive_port 		= 7005;
-		m_osc_send_port			= 5432;
-		m_Synth_Folder 			= "X:\\Lumia Synths";
-		
-		// Loading setup values from .ini file
-		loadIniFile(sketchPath("mother"+".ini"));
-		
+	{				
 		ImageIcon titlebaricon = new ImageIcon(loadBytes("mother_icon.jpg"));
 		frame.setIconImage(titlebaricon.getImage());
-
 		
-		if(m_FullScreen)
+	
+	/*	if (m_FullScreen)
 		{
-			m_Width  = screen.width;
-			m_Height = screen.height;
-			
-			// Create the fullscreen object
-//			fs = new SoftFullScreen(this);
+			GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			GraphicsDevice devices[] = environment.getScreenDevices();
+			// System.out.println(Arrays.toString(devices));
 
-			// enter fullscreen mode
-//			fs.enter(); 
-		}
+			if (devices.length > 1)
+			{ // we have a 2nd display/projector
+				// learn the true dimensions of the secondary display
+				WIDTH = devices[1].getDisplayMode().getWidth();
+				HEIGHT = devices[1].getDisplayMode().getHeight();
+				println("Adjusting animation size to " + WIDTH + "x" + HEIGHT + " b/c of 2ndary display");
+			}
+			else
+			{ // no 2nd screen but make it fullscreen anyway
+				WIDTH = devices[0].getDisplayMode().getWidth();
+				HEIGHT = devices[0].getDisplayMode().getHeight();
+				println("Adjusting animation size to " + WIDTH + "x" + HEIGHT + " to fit primary display");
+			}
+		}*/
+		
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 			
@@ -185,7 +191,6 @@ public class Mother extends PApplet // implements OSCListener
 				}
 			};
 			
-//			receiver.addListener("/Mother/Add_synth", listener);
 			receiver.addListener("/Mother/*", listener);
 			receiver.startListening();
 		}
@@ -232,6 +237,7 @@ public class Mother extends PApplet // implements OSCListener
             m_osc_receive_port 	= fp.getIntValue("osc_receive_port");
             m_osc_send_port 	= fp.getIntValue("osc_send_port");
             int[] localDim 		= fp.getIntValues("screenSize");
+            m_OutputScreen		= fp.getIntValue("outputScreen");
             
             m_Width = localDim[0];
             m_Height = localDim[1];
@@ -249,7 +255,7 @@ public class Mother extends PApplet // implements OSCListener
             
             String frameRateString = fp.getStringValue("frameRate"); 
             
-            m_FrameRate 	= Float.parseFloat(frameRateString); 
+            m_FrameRate 	= Float.parseFloat(frameRateString);
             m_ImageFolder 	= fp.getStringValue("imagePath");
             
             String speedFractionString = fp.getStringValue("speedFraction");
@@ -281,7 +287,7 @@ public class Mother extends PApplet // implements OSCListener
 		// From ProcessingHacks, for fullscreen without problems 
 		// where window minimizes when focus is lost.
 		if(m_FullScreen)
-			frame.setLocation(0,0);
+			frame.setLocation(pos_X,pos_Y);
 		
 		// If minimized, expand again
 		if (frame.getExtendedState()==1)
@@ -382,7 +388,7 @@ public class Mother extends PApplet // implements OSCListener
 				numDrawElementsCalls = 0;
 				startTimeMillis = System.currentTimeMillis();
 				
-	//			System.out.println(fps);
+				System.out.println(fps);
 			}
 		}
 		else
@@ -453,26 +459,6 @@ public class Mother extends PApplet // implements OSCListener
 				m_MessageStack.clear();
 			}
 		}
-		
-		/*for(int i = 0; i < args.length; i++)
-		{
-			
-			if(args[i].getClass() == Double.class)
-			{
-				theOscMessage.add((Double)args[i]);	
-			}
-			else if(args[i].getClass() == Integer.class)
-			{
-				theOscMessage.add((Integer)args[i]);	
-			}
-			else if(args[i].getClass() == String.class)
-			{
-				theOscMessage.add(new String((String)args[i]));	
-			}
-			
-			theOscMessage.add("Sven");
-		}*/
-				
 	
 		// This will be called in Draw instead, for all messages in message stack.
 		// Object[] args = message.getArguments();
@@ -493,17 +479,7 @@ public class Mother extends PApplet // implements OSCListener
 		String[] 	splits 		= addrPattern.split("/");
 		
 //		logger.info("Got message: " + theOscMessage.toString());
-		
-//		System.err.println("Mother received an osc message with address pattern " + addrPattern + ", typetag: " + typetag + " and values: ");		
-		
-//		System.err.println(theOscMessage.toString());
-		
-	/*	for(int i  = 0; i <   theOscMessage.arguments().length; i++)
-		{
-			System.err.println( "	" + theOscMessage.get(i) );
-		}
-		*/
-		
+				
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
 		{
@@ -763,6 +739,35 @@ public class Mother extends PApplet // implements OSCListener
 	
 	// For remote debugging, haven't gotten it right yet though: -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,suspend=n,server=y
 	
+	public void init()
+	{
+		// Useless initializations, unless the program doesn't fint the .ini file at all...
+		m_Width 	= 640;
+		m_Height 	= 480;
+		
+		m_FullScreen = true;
+		
+		// For OSC
+		m_IP = "127.0.0.1";
+		m_osc_receive_port 		= 7005;
+		m_osc_send_port			= 5432;
+		m_Synth_Folder 			= "X:\\Lumia Synths";
+	
+		// Loading setup values from .ini file
+		loadIniFile(sketchPath("mother"+".ini"));
+	
+		if (frame != null && m_FullScreen==true)
+		{
+			frame.removeNotify();// make the frame not displayable
+			frame.setResizable(false);
+			frame.setUndecorated(true);
+			println("frame is at " + frame.getLocation());
+			frame.addNotify();
+		}
+		
+		super.init();
+	}
+
 	
 	static public void main(String args[]) 
 	{	
@@ -771,18 +776,55 @@ public class Mother extends PApplet // implements OSCListener
         //parse ini file if it exists
         if (fp.fileExists()) 
         {    		
-           
             if(fp.getIntValue("FullScreen")==1)
-            {
-            	PApplet.main(new String[] { "--present", "Mother"} );
+            {            	
+            	int outputScreen = fp.getIntValue("outputScreen");
+            	
+        		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        		GraphicsDevice 		devices[] 	= environment.getScreenDevices();
+        		String location;
+        		
+        		Rectangle virtualBounds = new Rectangle();
+        		
+        		String display;
+        		
+        		if (devices.length > outputScreen)
+        		{ // we have a 2nd display/projector
+
+        			GraphicsConfiguration[] gc = devices[outputScreen].getConfigurations();
+    				
+        			if(gc.length>0);
+        			{
+        				virtualBounds = gc[0].getBounds();//virtualBounds.union(gc[0].getBounds());
+        			}
+    				        			
+        			location = "--location=" + virtualBounds.x + "," + virtualBounds.y;
+        			
+        			display = "--display=" + (outputScreen + 1); // processing considers the first display to be # 1
+        			
+        			pos_X = virtualBounds.x;
+            		pos_Y = virtualBounds.y;
+        		}
+           		else
+           		{// leave on primary display
+        			location = "--location=0,0";
+
+        			display = "--display=" + 1; // processing considers the first display to be # 1
+        			
+        			pos_X = 0;
+            		pos_Y = 0;
+        		}
+        		
+        		PApplet.main(new String[] { location, "--hide-stop", /*display,*/ "Mother" });
+        		
+//            	PApplet.main(new String[] { "--present", "--display=3", "Mother"} );
             }
             else
             {
-            	PApplet.main(new String[] { "Mother"} );
+             	PApplet.main(new String[] { "Mother"} );
             }
-   
         }
-	        
+        
 //		PApplet.main(new String[] { "--present", "Mother"} );	
 //		PApplet.main(new String[] { "Mother"} );
 	}
