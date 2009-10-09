@@ -202,7 +202,7 @@ public class Foetus
 		if (standalone)
 			parent.background(m_BGColor[0],m_BGColor[1],m_BGColor[2]);
 		
-		System.out.println("Pre: " + parent.toString());
+		//System.out.println("Pre: " + parent.toString());
 	}
 	
 	/**
@@ -212,7 +212,7 @@ public class Foetus
 	public void post()
 	{
 		
-		System.out.println("Post: " + parent.toString());
+		//System.out.println("Post: " + parent.toString());
 	}
 	
 	
