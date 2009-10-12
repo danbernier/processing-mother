@@ -195,7 +195,8 @@ public class ChildWrapper
         } 
         catch (Exception ex)
         {
-            System.out.println(ex.toString() +  ex.getMessage());
+            System.out.println("Crash: while loading sketch: " +  ex.getMessage());
+            ex.printStackTrace();
         }
         
         return new PApplet();

@@ -82,35 +82,26 @@ public class SynthContainer
 	private void PopulateLibraryURLS()
 	{
 		String[] fileName;
-		
 		File oooClassPath 		= new File(m_Synth_Folder + "//" + "libraries");
 		File[] files 			= oooClassPath.listFiles();
+		
+		ArrayList<URL> temp_Library_file_URLS = new ArrayList<URL>();
 		
 		// Check if Libraries folder exists. If not, create empty list.
 		if(files != null)
 		{
 			try
-			{
-				if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
+			{	        	
+				for (int i = 0; i < files.length; i++)
 				{
-					m_Library_file_URLS		= new URL[] {oooClassPath.toURI().toURL()};
-				}
-		        else 
-		        {
-		        	m_Library_file_URLS	= new URL[files.length];
-		        }
-		        	
-					for (int i = 0; i < files.length; i++)
+					fileName = files[i].getName().split("\\.");
+					
+					if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
 					{
-						fileName = files[i].getName().split("\\.");
-						
-						if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
-						{
-							m_Library_file_URLS[i] = files[i].toURI().toURL();
-							System.out.println("Found library: " + fileName[0]);
-						}
+						temp_Library_file_URLS.add(files[i].toURI().toURL());
+						System.out.println("Found library: " + fileName[0]);
 					}
-		  
+				}
 			} 
 			catch (MalformedURLException ex)
 			{
@@ -120,6 +111,13 @@ public class SynthContainer
 			{
 				System.out.println(e.getMessage());
 				e.printStackTrace();
+			}
+			
+			m_Library_file_URLS	= new URL[temp_Library_file_URLS.size()];
+			
+			for(int i = 0; i < temp_Library_file_URLS.size(); i++)
+			{
+				m_Library_file_URLS[i]	= temp_Library_file_URLS.get(i);
 			}
 		}
 		else
@@ -379,7 +377,8 @@ public class SynthContainer
 		}
 		catch(Exception e)
 		{
-			System.out.println("CRASH standalone: " + e.getMessage());
+			System.out.println("CRASH while initializing synth. Message: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
