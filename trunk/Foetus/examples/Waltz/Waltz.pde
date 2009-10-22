@@ -57,20 +57,6 @@ void setup()
   
   initializeFoetus();
 }
-
-// Uncomment this before exporting Gradient.jar for use with Mother!
-
-void init()
-{
-  sizeMethods 		= new RegisteredMethods();
-  preMethods 		= new RegisteredMethods();
-  drawMethods 		= new RegisteredMethods();
-  postMethods 		= new RegisteredMethods();
-  mouseEventMethods 	= new RegisteredMethods();
-  keyEventMethods 	= new RegisteredMethods();
-  disposeMethods 	= new RegisteredMethods();
-}
-
 	
 void initializeFoetus()
 {
