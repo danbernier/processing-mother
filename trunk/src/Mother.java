@@ -136,7 +136,10 @@ public class Mother extends PApplet // implements OSCListener
 		ImageIcon titlebaricon = new ImageIcon(loadBytes("mother_icon.jpg"));
 		frame.setIconImage(titlebaricon.getImage());
 		
-	
+		registerDispose(this);
+		registerPre(this);
+		registerPost(this);
+				
 	/*	if (m_FullScreen)
 		{
 			GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -223,6 +226,22 @@ public class Mother extends PApplet // implements OSCListener
 		//BasicConfigurator.configure();
 	}
 	
+	public void pre()
+	{
+//		System.out.println("Pre");
+	}
+	
+	public void post()
+	{
+//		System.out.println("Post");
+	}
+	
+	public void dispose()
+	{
+		System.out.println("Disposed of.");
+	}
+	
+	
 	/**
      * Loads the Settings from the Client INI file
      */
@@ -283,7 +302,7 @@ public class Mother extends PApplet // implements OSCListener
 	public void draw() 
 	{
 		ChildWrapper current;
-		
+			
 		// From ProcessingHacks, for fullscreen without problems 
 		// where window minimizes when focus is lost.
 		if(m_FullScreen)
@@ -321,9 +340,11 @@ public class Mother extends PApplet // implements OSCListener
 			for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 			{
 				current = (ChildWrapper)m_SynthContainer.Synths().get(i);
-				
+								
 				PreDrawChildUpdate(current.Child());
 			
+				CallRegisteredMethods(current, "preMethods");
+				
 				opengl.glEnable(GL.GL_BLEND);
 	//			opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
 							
@@ -344,11 +365,14 @@ public class Mother extends PApplet // implements OSCListener
 					pushStyle();
 					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
 					current.draw(i);
+					
+					CallRegisteredMethods(current, "drawMethods");
+					
 					opengl.glPopAttrib();
 					popStyle();
 //					logger.info("Ending drawing");
 				}
-	/*			catch(Exception e)
+				/* catch(Exception e)
 				{
 					e.printStackTrace();
 					//if(output == null)
@@ -363,6 +387,8 @@ public class Mother extends PApplet // implements OSCListener
 				opengl.glPopMatrix();
 			
 				opengl.glDisable(GL.GL_BLEND);
+				
+				CallRegisteredMethods(current, "postMethods");
 			}
 		}
 	//	float m = millis();
@@ -388,7 +414,7 @@ public class Mother extends PApplet // implements OSCListener
 				numDrawElementsCalls = 0;
 				startTimeMillis = System.currentTimeMillis();
 				
-				System.out.println(fps);
+//				System.out.println(fps);
 			}
 		}
 		else
@@ -563,7 +589,9 @@ public class Mother extends PApplet // implements OSCListener
 				{
 					if (theOscMessage.checkTypetag("s"))
 					{				
-						m_SynthContainer.Remove( theOscMessage.get(0).stringValue() );
+						ChildWrapper w = m_SynthContainer.Remove( theOscMessage.get(0).stringValue() );
+						
+						CallRegisteredMethods(w, "disposeMethods");
 					}
 				}
 				else if ( splits[2].compareTo("Move_synth") == 0 )
@@ -827,5 +855,25 @@ public class Mother extends PApplet // implements OSCListener
         
 //		PApplet.main(new String[] { "--present", "Mother"} );	
 //		PApplet.main(new String[] { "Mother"} );
+	}
+	
+	private void CallRegisteredMethods(ChildWrapper w, String fieldName)
+	{
+		try
+		{
+			Field sven;
+			
+			sven = (Field)((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass()).getDeclaredField(fieldName);
+
+			sven.setAccessible(true);
+			
+			RegisteredMethods regMethods = (RegisteredMethods)sven.get(w.Child());
+			
+			regMethods.handle();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

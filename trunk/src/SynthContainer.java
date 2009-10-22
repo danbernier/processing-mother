@@ -1,6 +1,7 @@
 
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import processing.core.PApplet;
+import processing.core.PApplet.RegisteredMethods;
 
 import foetus.*;
 
@@ -192,15 +194,20 @@ public class SynthContainer
 		return toReturn;
 	}
 	
-	public boolean Remove(String key)
+	public ChildWrapper Remove(String key)
 	{
+		ChildWrapper toReturn = null;
+		
 		if(m_Visual_Synth_Keys.containsKey(key))
 		{
 			for(int i = 0; i < m_VisualSynths.size(); i++)
 			{
 				if( ((ChildWrapper)m_VisualSynths.get(i)).GetName().compareTo(key) == 0)
 				{
+					toReturn = ((ChildWrapper)m_VisualSynths.get(i));
+					
 					((ChildWrapper)m_VisualSynths.get(i)).Child().stop();
+					
 					m_VisualSynths.remove(i);
 					break;
 				}
@@ -208,11 +215,11 @@ public class SynthContainer
 			
 			m_Visual_Synth_Keys.remove(key);
 			
-			return true;
+			return toReturn;
 		}	
 		else
 		{
-			return false;
+			return toReturn;
 		}
 	}
 	
@@ -302,6 +309,25 @@ public class SynthContainer
 		}		
 	}
 	
+	private void InitializeRegisteredMethodsField(ChildWrapper w, String fieldName)
+	{
+		try
+		{
+			Field sven;
+			
+			sven = (Field)((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass()).getDeclaredField(fieldName);
+
+			sven.setAccessible(true);
+					
+			sven.set(w.Child(), w.Child().new RegisteredMethods());
+	
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * 
 	 */
@@ -321,7 +347,7 @@ public class SynthContainer
 		 */
 		child.noLoop();
 		
-		try
+		/*try
 		{	
 			for(int i = 0; i < methods.length; i++)
 			{
@@ -335,8 +361,16 @@ public class SynthContainer
 		catch(Exception e)
 		{
 			System.out.println("CRASH PApplet.init: " + e.getMessage());
-		}
+		}*/
 
+		InitializeRegisteredMethodsField(cw, "sizeMethods");
+		InitializeRegisteredMethodsField(cw, "preMethods");
+		InitializeRegisteredMethodsField(cw, "drawMethods");
+		InitializeRegisteredMethodsField(cw, "postMethods");
+		InitializeRegisteredMethodsField(cw, "mouseEventMethods");
+		InitializeRegisteredMethodsField(cw, "keyEventMethods");
+		InitializeRegisteredMethodsField(cw, "disposeMethods");
+		
 		child.frameCount	= parent.frameCount;
 		child.frameRate		= parent.frameRate;		  
 		child.frame			= parent.frame;		  
