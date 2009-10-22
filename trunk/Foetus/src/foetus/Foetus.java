@@ -23,6 +23,7 @@ onar3d@hotmail.com, www.onar3d.com
 package foetus;
 
 import processing.core.*;
+import processing.core.PApplet.RegisteredMethods;
 
 import java.util.*;
 
@@ -66,6 +67,7 @@ public class Foetus
 		parent.registerDispose(this);
 		parent.registerPre(this);
 		parent.registerPost(this);
+		parent.registerDraw(this);
 		
 		m_BGColor = new int[] {128, 128, 128};
 	}
@@ -128,7 +130,12 @@ public class Foetus
 	
 	public void dispose()
 	{
+//		System.out.println("Dispose: " + parent.toString());
+	}
 
+	public void draw()
+	{
+//		System.out.println("draw: " + parent.toString());
 	}
 	
 	/**
@@ -202,7 +209,7 @@ public class Foetus
 		if (standalone)
 			parent.background(m_BGColor[0],m_BGColor[1],m_BGColor[2]);
 		
-		//System.out.println("Pre: " + parent.toString());
+//		System.out.println("Pre: " + parent.toString());
 	}
 	
 	/**
@@ -211,8 +218,7 @@ public class Foetus
 	 */
 	public void post()
 	{
-		
-		//System.out.println("Post: " + parent.toString());
+//		System.out.println("Post: " + parent.toString());
 	}
 	
 	
