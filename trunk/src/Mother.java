@@ -69,16 +69,11 @@ import org.apache.log4j.Logger;
 "-XX:+PrintClassHistogram"
 */
 
-public class Mother extends PApplet // implements OSCListener
-{
-//	SoftFullScreen fs;
-	
+public class Mother extends PApplet
+{	
 	PGraphicsOpenGL pgl;
 	GL opengl;
 	GLU glu;
-	
-	// For OSC
-//	OscP5 oscP5;
 	
 	/* a NetAddress contains the ip address and port number of a remote location in the network. */
 	NetAddress oscBroadcastLocation; 
@@ -122,10 +117,7 @@ public class Mother extends PApplet // implements OSCListener
 	
 	ArrayList<Message> m_MessageStack;
 	
-	
 	public float getSpeedFraction() { return m_SpeedFraction; }
-	
-//	int WIDTH, HEIGHT;
 	
 	/*
 	 * (non-Javadoc)
@@ -138,29 +130,7 @@ public class Mother extends PApplet // implements OSCListener
 		
 		registerDispose(this);
 		registerPre(this);
-		registerPost(this);
-				
-	/*	if (m_FullScreen)
-		{
-			GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice devices[] = environment.getScreenDevices();
-			// System.out.println(Arrays.toString(devices));
-
-			if (devices.length > 1)
-			{ // we have a 2nd display/projector
-				// learn the true dimensions of the secondary display
-				WIDTH = devices[1].getDisplayMode().getWidth();
-				HEIGHT = devices[1].getDisplayMode().getHeight();
-				println("Adjusting animation size to " + WIDTH + "x" + HEIGHT + " b/c of 2ndary display");
-			}
-			else
-			{ // no 2nd screen but make it fullscreen anyway
-				WIDTH = devices[0].getDisplayMode().getWidth();
-				HEIGHT = devices[0].getDisplayMode().getHeight();
-				println("Adjusting animation size to " + WIDTH + "x" + HEIGHT + " to fit primary display");
-			}
-		}*/
-		
+		registerPost(this);	
 		
 		size(m_Width, m_Height, GLConstants.MOTHERGRAPHICS);
 			
@@ -174,10 +144,6 @@ public class Mother extends PApplet // implements OSCListener
 		
 		m_SynthContainer = new SynthContainer(m_Synth_Folder);
 				
-		// start oscP5
-//		oscP5 					= new OscP5(this, m_osc_receive_port);
-//		oscBroadcastLocation 	= new NetAddress(m_IP, m_osc_send_port);
-		
 		m_MessageStack = new ArrayList<Message>();
 		
 		try
@@ -188,8 +154,6 @@ public class Mother extends PApplet // implements OSCListener
 			{
 				public void acceptMessage(java.util.Date time, OSCMessage message) 
 				{
-					
-				//	System.out.println("Message received!");
 					motherAcceptMessage(time, message);
 				}
 			};
@@ -199,7 +163,8 @@ public class Mother extends PApplet // implements OSCListener
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			println("Address already in use: Cannot bind");
+			System.exit(0);
 		}
 		
 		pgl.beginGL();
@@ -212,7 +177,8 @@ public class Mother extends PApplet // implements OSCListener
 		        {
 		        	try
 					{
-						this.finalize();
+		        		this.finalize();
+		        		System.exit(0);
 					}
 					catch (Throwable e1)
 					{
@@ -228,12 +194,10 @@ public class Mother extends PApplet // implements OSCListener
 	
 	public void pre()
 	{
-//		System.out.println("Pre");
 	}
 	
 	public void post()
 	{
-//		System.out.println("Post");
 	}
 	
 	public void dispose()
@@ -306,12 +270,12 @@ public class Mother extends PApplet // implements OSCListener
 		// From ProcessingHacks, for fullscreen without problems 
 		// where window minimizes when focus is lost.
 		if(m_FullScreen)
-			frame.setLocation(pos_X,pos_Y);
+			frame.setLocation(pos_X, pos_Y);
 		
 		// If minimized, expand again
 		if (frame.getExtendedState()==1)
 			frame.setExtendedState(0);  
-		
+			
 		// Dealing with message stack
 		synchronized(m_MessageStack)
 		{
@@ -359,8 +323,6 @@ public class Mother extends PApplet // implements OSCListener
 						
 				opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 				
-	//			try
-				{
 //					logger.info("Starting drawing");
 					pushStyle();
 					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
@@ -371,19 +333,7 @@ public class Mother extends PApplet // implements OSCListener
 					opengl.glPopAttrib();
 					popStyle();
 //					logger.info("Ending drawing");
-				}
-				/* catch(Exception e)
-				{
-					e.printStackTrace();
-					//if(output == null)
-						 output = createWriter("C:\\MotherErrors.txt");
-													
-					output.println(e.getMessage());
-					println("Drawing kid crashed!: " + current.GetName());
-					
-					output.flush(); // Write the remaining data
-					output.close(); // Finish the file
-				}*/
+				
 				opengl.glPopMatrix();
 			
 				opengl.glDisable(GL.GL_BLEND);
@@ -391,11 +341,18 @@ public class Mother extends PApplet // implements OSCListener
 				CallRegisteredMethods(current, "postMethods");
 			}
 		}
-	//	float m = millis();
-			
-		if(m_WriteImage)
-			saveFrame(m_ImageFolder + "Mother-#####.png");
 		
+	//	float m = millis();
+		
+		if(m_WriteImage)
+		{
+//			sendPicWritingStartedMessage();
+//			noLoop();
+			saveFrame(m_ImageFolder + "Mother-#####.png");
+//			loop();
+//			sendNextFrameMessage();
+		}
+	
 //		System.out.println(millis()-m);
 		
 		if (!firstProfiledFrame)
@@ -445,7 +402,10 @@ public class Mother extends PApplet // implements OSCListener
 			break;
 		}
 		
-		/*for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
+		// For forwarding keyPressed messages to synths. Not really necessary though as all 
+		// communication is supposed to be over OSC.
+		
+		for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 		{
 			child = ((ChildWrapper)m_SynthContainer.Synths().get(i)).Child();
 
@@ -463,7 +423,7 @@ public class Mother extends PApplet // implements OSCListener
 			{
 				println("CRASH keyPressed" + e.getMessage());
 			}
-		} */
+		}
 	}
 	
 	
@@ -485,11 +445,6 @@ public class Mother extends PApplet // implements OSCListener
 				m_MessageStack.clear();
 			}
 		}
-	
-		// This will be called in Draw instead, for all messages in message stack.
-		// Object[] args = message.getArguments();
-		// OscMessage theOscMessage = new OscMessage(message.getAddress(), args);
-		// oscEvent(theOscMessage);
 	}
 	
 	/*
@@ -513,19 +468,9 @@ public class Mother extends PApplet // implements OSCListener
 			{
 				if( splits[2].compareTo("Get_synth_names") == 0 )
 				{				
-				/*	OscMessage oscMessage = new OscMessage("/Synth_names");
-								
-					for (Enumeration<String> e = m_SynthContainer.get_Synth_Names().keys(); e.hasMoreElements();)
-					{
-						oscMessage.add( e.nextElement() );
-				    }		
-					
-					oscP5.send(oscMessage, oscBroadcastLocation);*/
-					
 					OSCPortOut sender;
 					try
 					{
-						//(m_IP, m_osc_send_port)
 						InetAddress ip = InetAddress.getByName(m_IP);
 						sender = new OSCPortOut(ip, m_osc_send_port);
 						
@@ -611,9 +556,7 @@ public class Mother extends PApplet // implements OSCListener
 					}
 				}
 				else if ( splits[2].compareTo("Child") == 0 && splits.length >= 4)
-				{
-	//				System.out.println(theOscMessage.addrPattern());
-					
+				{					
 					StringBuffer newAddrPattern = new StringBuffer();
 					String childName;
 					
@@ -628,9 +571,7 @@ public class Mother extends PApplet // implements OSCListener
 						childName 	= ((ChildWrapper)m_SynthContainer.Synths().get(i)).GetName(); 
 						
 						if( childName.compareTo(splits[3]) == 0)
-						{
-							//System.err.println(childName);
-							
+						{							
 							if(splits[4].compareTo("Get_Supported_Messages") == 0)
 							{
 								sendSupportedMessages((ChildWrapper)m_SynthContainer.Synths().get(i));
@@ -672,6 +613,7 @@ public class Mother extends PApplet // implements OSCListener
 						{
 							m_WriteImage = false;
 							System.out.println("Stopped Recording!");
+							//loop();
 						}
 					}
 				}
@@ -686,13 +628,91 @@ public class Mother extends PApplet // implements OSCListener
 //		logger.info("Finished with message: " + theOscMessage.toString());
 	}
 	
+	protected void sendPicWritingStartedMessage()
+	{
+		OSCPortOut sender;
+		try
+		{
+			//(m_IP, m_osc_send_port)
+			InetAddress ip = InetAddress.getByName(m_IP);
+			sender = new OSCPortOut(ip, m_osc_send_port);
+			
+			ArrayList list = new ArrayList();
+			
+			list.add( (float)m_FrameRate );
+			
+			Object args[] = new Object[list.size()];
+
+			for(int i = 0; i < list.size(); i++)
+			{
+				args[i] = list.get(i);
+			}
+
+			OSCMessage msg = new OSCMessage("/Mother_Pic_Writing_Started/", args);
+		
+			sender.send(msg);
+		}
+		catch (UnknownHostException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (SocketException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		redraw();
+	}
+	
+	protected void sendNextFrameMessage()
+	{
+		OSCPortOut sender;
+		try
+		{
+			//(m_IP, m_osc_send_port)
+			InetAddress ip = InetAddress.getByName(m_IP);
+			sender = new OSCPortOut(ip, m_osc_send_port);
+			
+			ArrayList list = new ArrayList();
+			
+			list.add( (float)m_FrameRate );
+			
+			Object args[] = new Object[list.size()];
+
+			for(int i = 0; i < list.size(); i++)
+			{
+				args[i] = list.get(i);
+			}
+
+			OSCMessage msg = new OSCMessage("/Mother_Next_Frame/", args);
+		
+			sender.send(msg);
+		}
+		catch (UnknownHostException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (SocketException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		redraw();
+	}
+	
 	protected void sendSupportedMessages(ChildWrapper wrapper)
 	{
 		PApplet child 		= wrapper.Child();
 		String childName 	= wrapper.GetName(); 
 		
-//		try
-		{
 			Foetus	f = null;
 			
 			try
@@ -706,19 +726,7 @@ public class Mother extends PApplet // implements OSCListener
 						
 			Hashtable<String,String> supportedMessages = f.getSupportedMessages();
 			Enumeration<String> e = supportedMessages.elements();												
-			
-			/*OscMessage oscMessage = new OscMessage("/Synth_supported_messages/" + childName);
 						
-			for (Enumeration<String> ek = supportedMessages.keys(); ek.hasMoreElements();)
-			{
-				oscMessage.add( (String)ek.nextElement() );
-				oscMessage.add( (String)e.nextElement() );
-		    }		
-			
-			oscP5.send(oscMessage, oscBroadcastLocation);
-			
-			*/
-			
 			OSCPortOut sender;
 			try
 			{
@@ -756,11 +764,6 @@ public class Mother extends PApplet // implements OSCListener
 			{
 				ex.printStackTrace();
 			}
-		}
-	/*	catch(Exception e)
-		{
-			println("CRASH Child getSupportedMessages" + e.getMessage());
-		}*/
 	}
 	
 	// -Djava.library.path=src/processing/opengl/library  
