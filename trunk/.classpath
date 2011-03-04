@@ -2,16 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/oscP5/library/oscP5.jar" sourcepath="/oscP5"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar" sourcepath="/oscP5"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/jogl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar" sourcepath="/processing-head-1.0.1/opengl/src/processing/opengl"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar" sourcepath="/processing-head-1.0.1"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/fullscreen/library/fullscreen.jar"/>
-	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/fullscreen/library/fullscreen_GLsupport.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/libraries/opengl/library/jogl.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/libraries/opengl/library/opengl.jar" sourcepath="/processing-head-1.0.1/opengl/src/processing/opengl"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/lib/core.jar" sourcepath="/processing-head-1.0.1"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/libraries/opengl/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/fullscreen/library/fullscreen.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javaosc"/>
-	<classpathentry kind="lib" path="D:/Documents/Processing/libraries/glgraphics/library/glgraphics.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/GLGraphics/library/GLGraphics.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother Synths"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/toxiclibscore/library/toxiclibscore.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

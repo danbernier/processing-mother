@@ -299,7 +299,7 @@ public class Mother extends PApplet
 		opengl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
 		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		
-	//	synchronized(m_SynthContainer)
+		synchronized(m_SynthContainer)
 		{
 			for(int i = 0; i < m_SynthContainer.Synths().size(); i++)
 			{
@@ -371,7 +371,7 @@ public class Mother extends PApplet
 				numDrawElementsCalls = 0;
 				startTimeMillis = System.currentTimeMillis();
 				
-//				System.out.println(fps);
+				System.out.println(fps);
 			}
 		}
 		else
@@ -464,7 +464,7 @@ public class Mother extends PApplet
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if ( splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
 		{
-		//	synchronized(m_SynthContainer)
+			synchronized(m_SynthContainer)
 			{
 				if( splits[2].compareTo("Get_synth_names") == 0 )
 				{				
