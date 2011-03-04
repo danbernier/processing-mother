@@ -44,7 +44,7 @@ public class FoetusParameter
 
 		timeStarted = System.currentTimeMillis();
 		
-		ani = new Tween(null/*r_f.parent*/, r_f.getSpeedFraction(), Tween.SECONDS, Shaper.COSINE);
+		ani = new Tween(null/*r_f.parent*/, 0f, Tween.FRAMES, Shaper.COSINE);
 	}
 
 	
@@ -72,7 +72,6 @@ public class FoetusParameter
 		if(m_Splerp)
 		{
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, ani.position());
-			//System.out.println(m_Value + ", " + ani.position());
 		}
 		
 		if(ani.position()>=1.0f)
@@ -125,9 +124,9 @@ public class FoetusParameter
 	    	if(elapsed>(3000/r_f.getSpeedFraction()))
 	    		elapsed = (long)(3000/r_f.getSpeedFraction());
 	  	    	
-	    	ani.setDuration(elapsed/1000f * r_f.parent.frameRate*r_f.getSpeedFraction(), Tween.FRAMES);
+	    	ani = new Tween(null, elapsed/1000f * r_f.parent.frameRate * r_f.getSpeedFraction(), Tween.FRAMES, Shaper.COSINE);
+	    	//ani.setDuration(elapsed/1000f * r_f.parent.frameRate, Tween.FRAMES);
 	    //	ani.setDuration(elapsed/1000f , Tween.SECONDS);
-	    	
 	    	ani.start();
 	    	
 	    	timeStarted = System.currentTimeMillis();
@@ -139,7 +138,7 @@ public class FoetusParameter
 		if(ani.isTweening())
 		{
 			ani.tick();
+//			System.out.println("tick " + ani.position());
 		}
- 		//System.out.println("tick " + ani.position());
 	}
 }

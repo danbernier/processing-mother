@@ -27,6 +27,8 @@ import processing.core.PApplet.RegisteredMethods;
 
 import java.util.*;
 
+import megamu.shapetween.Tween;
+
 public class Foetus
 {
 	PApplet parent;
@@ -89,6 +91,7 @@ public class Foetus
 	public void setSpeedFraction(float inSF) 
 	{
 		m_SpeedFraction = inSF; 
+		Tween.timeScale = 1f/m_SpeedFraction;
 	}
 	
 	/**
