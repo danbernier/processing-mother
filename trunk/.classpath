@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/libraries/opengl/library/opengl.jar" sourcepath="/processing-head-1.0.1/opengl/src/processing/opengl"/>
 	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/lib/core.jar" sourcepath="/processing-head-1.0.1"/>
 	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/libraries/opengl/library/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/fullscreen/library/fullscreen.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javaosc"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/GLGraphics/library/GLGraphics.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother Synths"/>
