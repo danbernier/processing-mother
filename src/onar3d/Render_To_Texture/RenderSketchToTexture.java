@@ -16,11 +16,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Mother.  If not, see <http://www.gnu.org/licenses/>.
  
-onar3d@hotmail.com, www.onar3d.com
+www.onar3d.com
  
 */
 
 package onar3d.Render_To_Texture;
+
+import javax.media.opengl.GL;
+
+import codeanticode.glgraphics.*;
 
 import processing.core.*; 
 import processing.opengl.PGraphicsOpenGL;
@@ -31,33 +35,50 @@ import processing.opengl.PGraphicsOpenGL;
  */
 public class RenderSketchToTexture extends RenderToTexture
 {
-
-	PApplet m_Sketch;
-	
+	protected PApplet m_Sketch;
+		
 	/**
 	 * @param w
 	 * @param h
 	 * @param pgl
 	 */
-	public RenderSketchToTexture(int w, int h, PApplet sketch)
-	{		
-		super(w, h, (PGraphicsOpenGL)sketch.g);
+	public RenderSketchToTexture(int w, int h, PApplet sketch, PApplet mother)
+	{
+		super(w, h, (PGraphicsOpenGL)mother.g, mother);
 		
 		m_Sketch = sketch;
+		
+		r_Mother.noStroke();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see onar3d.Render_To_Texture.RenderToTexture#drawGeometry()
 	 */
 	protected void drawGeometry()
 	{
-//		m_Gl.glPushMatrix();
-//		m_Gl.glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-//    	m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
-//    	m_Pgl.box(100);
-//    	m_Gl.glPopMatrix();
-    	
- 		m_Sketch.draw();
-	}
+		/*m_Gl.glPushMatrix();
+		m_Gl.glColor4f(0, 1.0f, 0, 1.0f);
+    	m_Gl.glTranslatef((m_Width/2.0f),(m_Height/2.0f) , 0f);
+    	m_Pgl.box(100);
+    	m_Gl.glPopMatrix();*/
+   	
+		if(!glinited)
+			initGL();
 
+	//	m_Sketch.pushMatrix();
+	//	m_Gl.glEnable(GL.GL_LIGHTING);
+ 		m_Sketch.draw();
+ 	//	m_Sketch.popMatrix();
+	}
+	
+	boolean glinited = false;
+	
+	/***
+	 * 
+	 */
+	void initGL()
+	{
+		
+		glinited = true; 
+	}
 }

@@ -70,7 +70,7 @@ public class Tester extends PApplet
 		
 		if(!m_TexturesDone)
 		{
-			m_RenderBlurredBox = new RenderBlurredBox(m_Width, m_Height, m_Pgl);
+			m_RenderBlurredBox = new RenderBlurredBox(m_Width, m_Height, m_Pgl, this);
 			m_TexturesDone = true;
 		}
 		m_RenderBlurredBox.draw();		

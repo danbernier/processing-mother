@@ -22,6 +22,7 @@ onar3d@hotmail.com, www.onar3d.com
 
 package onar3d.Render_To_Texture;
 
+import processing.core.*;
 import processing.opengl.PGraphicsOpenGL;
 
 /**
@@ -36,9 +37,9 @@ public class RenderBlurredBox extends RenderToTexture
 	 * @param h
 	 * @param pgl
 	 */
-	public RenderBlurredBox(int w, int h, PGraphicsOpenGL pgl)
+	public RenderBlurredBox(int w, int h, PGraphicsOpenGL pgl, PApplet mother)
 	{
-		super(w, h, pgl);
+		super(w, h, pgl, mother);
 
 	}
 
@@ -52,5 +53,6 @@ public class RenderBlurredBox extends RenderToTexture
     	m_Pgl.box(100);
     	m_Gl.glPopMatrix();
 	}
+
 
 }
