@@ -24,8 +24,8 @@ import processing.core.*;
 
 import processing.opengl.*;
 
-//import processing.app.Editor;
-//import processing.app.tools.*;
+import processing.app.Editor;
+import processing.app.tools.*;
 
 import oscP5.*;
 import mpe.config.FileParser;
