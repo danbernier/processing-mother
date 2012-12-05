@@ -21,11 +21,7 @@ onar3d@hotmail.com, www.onar3d.com
  */
 
 import processing.core.*;
-
 import processing.opengl.*;
-
-//import processing.app.Editor;
-//import processing.app.tools.*;
 
 import oscP5.*;
 import mpe.config.FileParser;
@@ -42,6 +38,7 @@ import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.illposed.osc.OSCPortOut;
 
+import java.text.NumberFormat;
 import java.util.*;
 
 import java.awt.GraphicsConfiguration;
@@ -77,66 +74,55 @@ import foetus.*;
 public class Mother extends PApplet // implements Tool
 {
 	PGraphicsOpenGL pgl;
-
 	GL opengl;
-
 	GLU glu;
 
 	/* a NetAddress contains the ip address and port number of a remote location in the network. */
-	NetAddress oscBroadcastLocation;
-
-	int m_osc_send_port;
-
-	int m_osc_receive_port;
-
-	String m_IP;
-
-	SynthContainer m_SynthContainer;
-
-	String m_Synth_Folder;
-
-	int m_Width;
-
-	int m_Height;
-
-	static int pos_X;
-
-	static int pos_Y;
-
-	FileParser fp;
-
-	PrintWriter output;
-
-	boolean m_FullScreen;
-
-	int m_OutputScreen;
-
-	boolean m_WriteImage = false;
-
-	float m_FrameRate = 30f;
-
-	String m_ImageFolder;
-
-	float m_SpeedFraction;
-
-	// Frames-per-second computation
-	private boolean firstProfiledFrame;
-
-	private int profiledFrameCount;
-
-	private int numDrawElementsCalls;
-
-	private long startTimeMillis;
-
+	private NetAddress 		oscBroadcastLocation;
+	private int 			m_osc_send_port;
+	private int 			m_osc_receive_port;
+	private String 			m_IP;
+	private SynthContainer 	m_SynthContainer;
+	private String 			m_Synth_Folder;
+	private int 			m_Width;
+	private int 			m_Height;
+	private FileParser 		fp;
+	private PrintWriter 	output;
+	private boolean 		m_FullScreen;
+	private int 			m_OutputScreen;
+	private boolean 		m_WriteImage = false;
+	private float 			m_FrameRate = 30f;
+	private String 			m_ImageFolder;
+	private float 			m_SpeedFraction;
+	private boolean 		firstProfiledFrame; // Frames-per-second computation
+	private int 			profiledFrameCount;
+	private int 			numDrawElementsCalls;
+	private long 			startTimeMillis;
+	private boolean 		m_Stereo;
+	private boolean 		m_Billboard;
+	static int 				pos_X;
+	static int 				pos_Y;
+	
 	// private Logger logger = null;
 
 	ArrayList<Message> m_MessageStack;
 
-	public float getSpeedFraction()
-	{
-		return m_SpeedFraction;
-	}
+	public float 	getSpeedFraction()	{	return m_SpeedFraction;	}
+	public boolean	getBillboardFlag()	{	return m_Billboard; }
 
+	public int getChildWidth()
+	{
+		if(m_Stereo)
+			return m_Width/2;
+		else
+			return m_Width;
+	}
+	
+	public int getChildHeight()
+	{
+		return m_Height;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -157,34 +143,21 @@ public class Mother extends PApplet // implements Tool
 
 		hint(ENABLE_OPENGL_4X_SMOOTH); // Just to trigger renderer change.
 
-		pgl = (PGraphicsOpenGL) g;
-		opengl = pgl.gl;
-		glu = ((PGraphicsOpenGL) g).glu;
+		pgl 	= (PGraphicsOpenGL) g;
+		opengl 	= pgl.gl;
+		glu 	= ((PGraphicsOpenGL) g).glu;
 
+		if(m_Stereo)
+		{
+//			perspective(PI/3.0f,1f,0.1f,1000f); //this is needed ot stop the images being squashed	
+			noStroke();
+		}
+		
 		m_SynthContainer = new SynthContainer(m_Synth_Folder);
 
 		m_MessageStack = new ArrayList<Message>();
 
-		try
-		{
-			OSCPortIn receiver = new OSCPortIn(m_osc_receive_port);
-
-			OSCListener listener = new OSCListener()
-			{
-				public void acceptMessage(java.util.Date time, OSCMessage message)
-				{
-					motherAcceptMessage(time, message);
-				}
-			};
-
-			receiver.addListener("/Mother/*", listener);
-			receiver.startListening();
-		}
-		catch (Exception e)
-		{
-			println("Address already in use: Cannot bind");
-			System.exit(0);
-		}
+		listenToOSC();
 
 		pgl.beginGL();
 		opengl.setSwapInterval(1); // set vertical sync on
@@ -211,70 +184,22 @@ public class Mother extends PApplet // implements Tool
 		// BasicConfigurator.configure();
 	}
 
-	public void pre()
-	{
-	}
+	public void pre() 	{}
 
-	public void post()
-	{
-	}
+	public void post()	{}
 
-	public void dispose()
-	{
-		System.out.println("Disposed of.");
-	}
-
-	/**
-	 * Loads the Settings from the Client INI file
-	 */
-	private void loadIniFile(String fileString)
-	{
-		fp = new FileParser(fileString);
-
-		// parse ini file if it exists
-		if (fp.fileExists())
-		{
-			m_IP = fp.getStringValue("IP");
-			m_osc_receive_port = fp.getIntValue("osc_receive_port");
-			m_osc_send_port = fp.getIntValue("osc_send_port");
-			int[] localDim = fp.getIntValues("screenSize");
-			m_OutputScreen = fp.getIntValue("outputScreen");
-
-			m_Width = localDim[0];
-			m_Height = localDim[1];
-
-			m_Synth_Folder = fp.getStringValue("SynthFolder");
-
-			if (fp.getIntValue("FullScreen") == 1)
-			{
-				m_FullScreen = true;
-			}
-			else
-			{
-				m_FullScreen = false;
-			}
-
-			String frameRateString = fp.getStringValue("frameRate");
-
-			m_FrameRate = Float.parseFloat(frameRateString);
-			m_ImageFolder = fp.getStringValue("imagePath");
-
-			String speedFractionString = fp.getStringValue("speedFraction");
-
-			m_SpeedFraction = Float.parseFloat(speedFractionString);
-		}
-	}
+	public void dispose()	{ System.out.println("Disposed of."); }
 
 	/*
 	 * 
 	 */
 	private void PreDrawChildUpdate(PApplet child)
 	{
-		child.mouseX = this.mouseX;
-		child.mouseY = this.mouseY;
-		child.mousePressed = this.mousePressed;
-		child.keyPressed = this.keyPressed;
-		child.key = this.key;
+		child.mouseX 		= this.mouseX;
+		child.mouseY 		= this.mouseY;
+		child.mousePressed 	= this.mousePressed;
+		child.keyPressed 	= this.keyPressed;
+		child.key 			= this.key;
 	}
 
 	/*
@@ -291,29 +216,10 @@ public class Mother extends PApplet // implements Tool
 		if (m_FullScreen)
 			frame.setLocation(pos_X, pos_Y);
 
-		// If minimized, expand again
-		if (frame.getExtendedState() == 1)
+		if (frame.getExtendedState() == 1) // If minimized, expand again
 			frame.setExtendedState(0);
 
-		// Dealing with message stack
-		synchronized (m_MessageStack)
-		{
-			Object[] args;
-			OscMessage theOscMessage;
-			OSCMessage m;
-			for (int i = 0; i < m_MessageStack.size(); i++)
-			{
-				m = m_MessageStack.get(i).message;
-				args = m.getArguments();
-
-				theOscMessage = new OscMessage(m.getAddress(), args);
-
-				oscEvent(theOscMessage);
-			}
-
-			// System.out.println("Message stack size: " + m_MessageStack.size());
-			m_MessageStack.clear();
-		}
+		dealWithMessageStack(); // Dealing with message stack
 
 		opengl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
 		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -338,22 +244,86 @@ public class Mother extends PApplet // implements Tool
 
 				pgl.colorMode(RGB, 255);
 
-				opengl.glPushMatrix();
+//				if (m_Stereo)
+//				{
+//					pushStyle();
+//					
+//					// Left Eye
+//					// This means anything we draw will be limited to the left half of the screen 
+//					camera(m_Width/4.0f, m_Height/2.0f, (m_Height/2.0f) / tan(PI*60.0f / 360.0f), m_Width/4.0f, m_Height/2.0f, 0, 0, 1, 0);
+//					
+//					opengl.glPushMatrix();
+//										
+//					opengl.glViewport(0, 0, m_Width/2, m_Height);
+//					
+//					opengl.glPushMatrix();
+//
+//					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+//
+//					// logger.info("Starting drawing");
+//					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
+//					
+//					current.draw();
+//					
+//					CallRegisteredMethods(current, "drawMethods");
+//
+//					opengl.glPopAttrib();
+//					// logger.info("Ending drawing");
+//
+//					opengl.glPopMatrix();
+//					opengl.glPopMatrix();
+//					
+//					popStyle();
+//					
+//					pushStyle();
+//					
+//					// Right Eye					
+//					// This means anything we draw will be limited to the left half of the screen  
+//					camera(m_Width/4.0f, m_Height/2.0f, (m_Height/2.0f) / tan(PI*60.0f / 360.0f), m_Width/4.0f, m_Height/2.0f, 0, 0, 1, 0);
+//
+//					opengl.glPushMatrix();
+//
+//					opengl.glViewport(m_Width/2, 0, m_Width/2, m_Height);
+//					
+//					opengl.glPushMatrix();
+//
+//					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+//
+//					// logger.info("Starting drawing");
+//					
+//					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
+//					
+//					current.draw();
+//
+//					CallRegisteredMethods(current, "drawMethods");
+//
+//					opengl.glPopAttrib();
+//					// logger.info("Ending drawing");
+//
+//					opengl.glPopMatrix();
+//					opengl.glPopMatrix();
+//					
+//					popStyle();
+//				}
+//				else
+//				{
+					opengl.glPushMatrix();
 
-				opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 
-				// logger.info("Starting drawing");
-				pushStyle();
-				opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
-				current.draw(i);
+					// logger.info("Starting drawing");
+					pushStyle();
+					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
+					current.draw(m_Stereo);
 
-				CallRegisteredMethods(current, "drawMethods");
+					CallRegisteredMethods(current, "drawMethods");
 
-				opengl.glPopAttrib();
-				popStyle();
-				// logger.info("Ending drawing");
+					opengl.glPopAttrib();
+					popStyle();
+					// logger.info("Ending drawing");
 
-				opengl.glPopMatrix();
+					opengl.glPopMatrix();
+//				}
 
 				opengl.glDisable(GL.GL_BLEND);
 
@@ -361,45 +331,11 @@ public class Mother extends PApplet // implements Tool
 			}
 		}
 
-		// float m = millis();
-
-		if (m_WriteImage)
-		{
-			// sendPicWritingStartedMessage();
-			// noLoop();
-			saveFrame(m_ImageFolder + "Mother-#####.png");
-			// loop();
-			// sendNextFrameMessage();
-		}
-
+		// float m = millis(); // For timing image recording
+		handleImageRecording();
 		// System.out.println(millis()-m);
 
-		if (!firstProfiledFrame)
-		{
-			if (++profiledFrameCount == 30)
-			{
-				long endTimeMillis = System.currentTimeMillis();
-				double secs = (endTimeMillis - startTimeMillis) / 1000.0;
-				double fps = 30.0 / secs;
-				// double ppf = tileSize * tileSize * 2;
-				// double mpps = ppf * fps / 1000000.0;
-				/*
-				 * System.err.println("fps: " + fps + " polys/frame: " + ppf + " million polys/sec: " + mpps +
-				 * " DrawElements calls/frame: " + (numDrawElementsCalls / 30));
-				 */
-				// System.err.println(vboEnabled);
-				profiledFrameCount = 0;
-				numDrawElementsCalls = 0;
-				startTimeMillis = System.currentTimeMillis();
-
-				System.out.println(fps);
-			}
-		}
-		else
-		{
-			startTimeMillis = System.currentTimeMillis();
-			firstProfiledFrame = false;
-		}
+		printFrameRate();
 	}
 
 	protected void finalize()
@@ -531,10 +467,11 @@ public class Mother extends PApplet // implements Tool
 							this.redraw = false;
 							noLoop();
 
-							ChildWrapper w = m_SynthContainer.Add(theOscMessage.get(1).stringValue(), theOscMessage
-									.get(0).stringValue(), m_Width, m_Height, this);
+							ChildWrapper wrapper = m_SynthContainer.Add(	theOscMessage.get(1).stringValue(), 
+																			theOscMessage.get(0).stringValue(), 
+																			this);
 
-							sendSupportedMessages(w);
+							sendSupportedMessages(wrapper);
 
 							loop();
 							this.redraw = true;
@@ -899,20 +836,167 @@ public class Mother extends PApplet // implements Tool
 		}
 	}
 
-	/*
-	public String getMenuTitle()
+	private void dealWithMessageStack()
 	{
-		return "Mother 0.7";
+		synchronized (m_MessageStack)
+		{
+			Object[] args;
+			OscMessage theOscMessage;
+			OSCMessage m;
+			for (int i = 0; i < m_MessageStack.size(); i++)
+			{
+				m = m_MessageStack.get(i).message;
+				args = m.getArguments();
+
+				theOscMessage = new OscMessage(m.getAddress(), args);
+
+				oscEvent(theOscMessage);
+			}
+
+			// System.out.println("Message stack size: " + m_MessageStack.size());
+			m_MessageStack.clear();
+		}
 	}
 
-	public void init(Editor arg0)
+	private void printFrameRate()
 	{
-		// TODO Auto-generated method stub
+		if (!firstProfiledFrame)
+		{
+			if (++profiledFrameCount == 30)
+			{
+				long endTimeMillis = System.currentTimeMillis();
+				double secs = (endTimeMillis - startTimeMillis) / 1000.0;
+				double fps = 30.0 / secs;
+				// double ppf = tileSize * tileSize * 2;
+				// double mpps = ppf * fps / 1000000.0;
+				/*
+				 * System.err.println("fps: " + fps + " polys/frame: " + ppf + " million polys/sec: " + mpps +
+				 * " DrawElements calls/frame: " + (numDrawElementsCalls / 30));
+				 */
+				// System.err.println(vboEnabled);
+				profiledFrameCount = 0;
+				numDrawElementsCalls = 0;
+				startTimeMillis = System.currentTimeMillis();
 
+				NumberFormat nf = NumberFormat.getInstance();
+
+				nf.setMaximumFractionDigits(3);
+
+				String number = nf.format(fps);
+
+				System.out.println(number);
+			}
+		}
+		else
+		{
+			startTimeMillis = System.currentTimeMillis();
+			firstProfiledFrame = false;
+		}
 	}
+
+	private void handleImageRecording()
+	{
+		if (m_WriteImage)
+		{
+			// sendPicWritingStartedMessage();
+			// noLoop();
+			saveFrame(m_ImageFolder + "Mother-#####.png");
+			// loop();
+			// sendNextFrameMessage();
+		}
+	}
+
+	private void listenToOSC()
+	{
+		try
+		{
+			OSCPortIn receiver = new OSCPortIn(m_osc_receive_port);
+
+			OSCListener listener = new OSCListener()
+			{
+				public void acceptMessage(java.util.Date time, OSCMessage message)
+				{
+					motherAcceptMessage(time, message);
+				}
+			};
+
+			receiver.addListener("/Mother/*", listener);
+			receiver.startListening();
+		}
+		catch (Exception e)
+		{
+			println("Address already in use: Cannot bind");
+			System.exit(0);
+		}
+	}
+
+	/**
+	 * Loads the Settings from the Client INI file
 	 */
-	/*public void run()
+	private void loadIniFile(String fileString)
 	{
-		main(null);
-	}*/
+		fp = new FileParser(fileString);
+
+		// parse ini file if it exists
+		if (fp.fileExists())
+		{
+			m_IP = fp.getStringValue("IP");
+			m_osc_receive_port = fp.getIntValue("osc_receive_port");
+			m_osc_send_port = fp.getIntValue("osc_send_port");
+			int[] localDim = fp.getIntValues("screenSize");
+			m_OutputScreen = fp.getIntValue("outputScreen");
+
+			m_Width = localDim[0];
+			m_Height = localDim[1];
+
+			m_Synth_Folder = fp.getStringValue("SynthFolder");
+
+			if (fp.getIntValue("FullScreen") == 1)
+			{
+				m_FullScreen = true;
+			}
+			else
+			{
+				m_FullScreen = false;
+			}
+
+			String frameRateString = fp.getStringValue("frameRate");
+
+			m_FrameRate = Float.parseFloat(frameRateString);
+			m_ImageFolder = fp.getStringValue("imagePath");
+
+			String speedFractionString = fp.getStringValue("speedFraction");
+
+			m_SpeedFraction = Float.parseFloat(speedFractionString);
+
+			if (fp.getIntValue("stereo") == 1)
+			{
+				m_Stereo = true;
+			}
+			else
+			{
+				m_Stereo = false;
+			}
+			
+			if (fp.getIntValue("billboard") == 1)
+			{
+				m_Billboard = true;
+			}
+			else
+			{
+				m_Billboard = false;
+			}
+		}
+	}
+
+	/*
+	 * public String getMenuTitle() { return "Mother 0.7"; }
+	 * 
+	 * public void init(Editor arg0) { // TODO Auto-generated method stub
+	 * 
+	 * }
+	 */
+	/*
+	 * public void run() { main(null); }
+	 */
 }

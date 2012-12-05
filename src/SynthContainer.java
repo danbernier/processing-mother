@@ -141,7 +141,7 @@ public class SynthContainer
 	/*
 	 * Create a new synth layer
 	 */
-	public ChildWrapper Add(String key, String sketchName, int w, int h, Mother mother)
+	public ChildWrapper Add(String key, String sketchName, Mother mother)
 	{
 		ChildWrapper new_Wrapper = null;
 		
@@ -149,14 +149,11 @@ public class SynthContainer
 		{			
 //			try
 			{
-				new_Wrapper = new ChildWrapper(
-													w, 
-													h, 
-													m_Synth_Folder, 
+				new_Wrapper = new ChildWrapper(		m_Synth_Folder, 
 													m_Library_file_URLS,
 													sketchName, 
 													key, 
-													false, // Render Billboard
+													mother.getBillboardFlag(), // Render Billboard
 													mother);
 				m_VisualSynths.add( new_Wrapper );
 				
@@ -340,7 +337,8 @@ public class SynthContainer
 	
 		child.g = parent.g;
 		
-		child.setSize(parent.width, parent.height);
+		child.setSize	(	parent.getChildWidth(), 
+							parent.getChildHeight());
 		
 		/* With this, I'm hoping the child will run in a separate thread, but its timer will not call the draw method.
 		 * Instead, ony one timer is running, the one in Mother.
@@ -382,8 +380,8 @@ public class SynthContainer
 			
 		child.pixels		= parent.pixels;
 		  
-		child.width 		= parent.width;
-		child.height 		= parent.height;
+		child.width 		= parent.getChildWidth();
+		child.height 		= parent.getChildHeight();
 		
 		child.noLoop();
 		

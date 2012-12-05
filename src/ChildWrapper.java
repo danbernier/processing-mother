@@ -22,14 +22,15 @@ public class ChildWrapper
 {
 //	private Logger logger = null;
 	
-	PApplet m_Child, r_Mother;
+	PApplet m_Child; 
+	Mother  r_Mother;
 	
 	RenderSketchToTexture m_RenderToTexture;
 		
 	boolean m_RenderBillboard = true;
 	
-	int m_Width;
-	int m_Height;
+	// int m_Width;
+	// int m_Height;
 	
 	int m_Blending_Source;
 	int m_Blending_Destination;
@@ -37,7 +38,6 @@ public class ChildWrapper
 	String m_Name;
 	
 	public PApplet Child()	{ return m_Child;	}
-	
 	public PApplet Mother()	{ return r_Mother;	}
 	
 	public boolean GetRenderBillboard()							{ return m_RenderBillboard; }
@@ -53,26 +53,15 @@ public class ChildWrapper
 		
 	Foetus foetusField;
 		
-	public Foetus getFoetusField()
-	{
-		return foetusField;
-	}
-
-	public void setFoetusField(Foetus foetusField)
-	{
-		this.foetusField = foetusField;
-	}
+	public Foetus 	getFoetusField()					{ return foetusField; }
+	public void 	setFoetusField(Foetus foetusField)	{ this.foetusField = foetusField; }
 
 	/**
-	 * CONSTRUCTORRenderToTexture
+	 *  ChildWrapper CONSTRUCTOR
 	 */
-	
-
-	public ChildWrapper(int w, int h, String classPath, URL[] libraryULS, String className, String name, boolean billboard, PApplet mother)
+	public ChildWrapper(String classPath, URL[] libraryULS, String className, String name, boolean billboard, Mother mother)
 	{	
 		r_Mother			= mother;
-		m_Width 			= w;
-		m_Height 			= h;
 		m_Name 				= name;
 		m_RenderBillboard 	= billboard;
 		
@@ -101,17 +90,21 @@ public class ChildWrapper
 	 * METHODS
 	 */
 	
-	public void draw(int i)
+	public void draw(boolean stereo)
 	{		
-		// Checking whether applet thread has been properly initialized
-		if( (m_Child.g != null) && (((PGraphicsOpenGL)m_Child.g).gl != null) )
+		if( (m_Child.g != null) && (((PGraphicsOpenGL)m_Child.g).gl != null) )	// Checking whether applet thread has been properly initialized
 		{
 			if(m_RenderBillboard)
 			{
 				if( m_RenderToTexture == null)
 				{
-					m_RenderToTexture = new RenderSketchToTexture(m_Width, m_Height, m_Child, r_Mother);
+					m_RenderToTexture = new RenderSketchToTexture(	r_Mother.getChildWidth(), 
+																	r_Mother.getChildHeight(), 
+																	m_Child, 
+																	r_Mother,
+																	stereo);
 				}
+				
 				
 				m_RenderToTexture.draw();				
 			}
@@ -121,9 +114,6 @@ public class ChildWrapper
 				
 				m_Child.frameCount	= r_Mother.frameCount;
 				
-				((PGraphicsOpenGL)m_Child.g).gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-				((PGraphicsOpenGL)m_Child.g).pushMatrix();
-
 				ArrayList<FoetusParameter> params = this.foetusField.getParameters();
 				
 				for(int pi = 0; pi < params.size(); pi++)
@@ -131,6 +121,8 @@ public class ChildWrapper
 					params.get(pi).tick();
 				}
 				
+				((PGraphicsOpenGL)m_Child.g).gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+				((PGraphicsOpenGL)m_Child.g).pushMatrix();				
 				m_Child.draw();
 				((PGraphicsOpenGL)m_Child.g).popMatrix();
 				

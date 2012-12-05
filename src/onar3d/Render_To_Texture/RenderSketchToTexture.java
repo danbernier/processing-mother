@@ -37,16 +37,19 @@ public class RenderSketchToTexture extends RenderToTexture
 {
 	protected PApplet m_Sketch;
 		
+	boolean m_Stereo;
+	
 	/**
 	 * @param w
 	 * @param h
 	 * @param pgl
 	 */
-	public RenderSketchToTexture(int w, int h, PApplet sketch, PApplet mother)
+	public RenderSketchToTexture(int w, int h, PApplet sketch, PApplet mother, boolean stereo)
 	{
 		super(w, h, (PGraphicsOpenGL)mother.g, mother);
 		
 		m_Sketch = sketch;
+		m_Stereo = stereo;
 		
 		r_Mother.noStroke();
 	}
@@ -67,7 +70,24 @@ public class RenderSketchToTexture extends RenderToTexture
 
 	//	m_Sketch.pushMatrix();
 	//	m_Gl.glEnable(GL.GL_LIGHTING);
- 		m_Sketch.draw();
+ 		
+//		m_Gl.glPushMatrix();
+//		m_Sketch.perspective(m_Sketch.PI/3.0f,1f,0.1f,1000f); //this is needed ot stop the images being squashed
+//		m_Sketch.camera(m_Width/2.0f, m_Height/2.0f, (m_Height/2.0f) / m_Sketch.tan(m_Sketch.PI*60.0f / 360.0f), m_Width/2.0f, m_Height/2.0f, 0, 0, 1, 0);
+//		m_Gl.glViewport(0, 0, m_Width/2, m_Height);
+	
+		m_Sketch.draw();
+		
+//		m_Gl.glPopMatrix();
+//		
+//		m_Gl.glPushMatrix();
+//		m_Sketch.perspective(m_Sketch.PI/3.0f,1f,0.1f,1000f); //this is needed ot stop the images being squashed
+//		m_Sketch.camera(m_Width/2.0f, m_Height/2.0f, (m_Height/2.0f) / m_Sketch.tan(m_Sketch.PI*60.0f / 360.0f), m_Width/2.0f, m_Height/2.0f, 0, 0, 1, 0);
+//		m_Gl.glViewport(m_Width/2, 0, m_Width/2, m_Height);
+//	
+//		m_Sketch.draw();
+//		m_Gl.glPopMatrix();
+		
  	//	m_Sketch.popMatrix();
 	}
 	
