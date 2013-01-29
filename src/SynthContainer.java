@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import processing.core.PApplet;
-import processing.core.PApplet.RegisteredMethods;
+
+//import processing.core.PApplet.RegisteredMethods;
 
 import foetus.*;
 
@@ -306,25 +307,25 @@ public class SynthContainer
 		}		
 	}
 	
-	private void InitializeRegisteredMethodsField(ChildWrapper w, String fieldName)
-	{
-		try
-		{
-			Field sven;
-			
-			sven = (Field)((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass()).getDeclaredField(fieldName);
-
-			sven.setAccessible(true);
-					
-			sven.set(w.Child(), w.Child().new RegisteredMethods());
-	
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
+//	private void initializeRegisteredMapField(ChildWrapper w)
+//	{
+//		try
+//		{
+//			Field sven;
+//			
+//			sven = (Field)((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass()).getDeclaredField("registerMap");
+//
+//			sven.setAccessible(true);
+//					
+//			sven.set(w.Child(), w.Child().new HashMap<String, PApplet.RegisteredMethods>());
+//	
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//	}
+//	
 	/*
 	 * 
 	 */
@@ -361,20 +362,14 @@ public class SynthContainer
 			System.out.println("CRASH PApplet.init: " + e.getMessage());
 		}*/
 
-		InitializeRegisteredMethodsField(cw, "sizeMethods");
-		InitializeRegisteredMethodsField(cw, "preMethods");
-		InitializeRegisteredMethodsField(cw, "drawMethods");
-		InitializeRegisteredMethodsField(cw, "postMethods");
-		InitializeRegisteredMethodsField(cw, "mouseEventMethods");
-		InitializeRegisteredMethodsField(cw, "keyEventMethods");
-		InitializeRegisteredMethodsField(cw, "disposeMethods");
-		
+
+//		initializeRegisteredMapField(cw);
+			
 		child.frameCount	= parent.frameCount;
 		child.frameRate		= parent.frameRate;		  
 		child.frame			= parent.frame;		  
-		child.screen		= parent.screen;
+//		child.screen		= parent.screen;
 		child.recorder		= parent.recorder;
-//		child.sketchPath	= parent.sketchPath;
 		
 		child.sketchPath	=  m_Synth_Folder;
 			

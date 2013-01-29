@@ -25,13 +25,13 @@ import processing.opengl.*;
 
 import oscP5.*;
 import mpe.config.FileParser;
-import netP5.*;
+//import netP5.*;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import javax.swing.ImageIcon;
 
-import codeanticode.glgraphics.GLConstants;
+//import codeanticode.glgraphics.GLConstants;
 
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
@@ -56,14 +56,6 @@ import java.net.UnknownHostException;
 
 import foetus.*;
 
-//import fullscreen.*;  
-
-//import onar3d.mothergraphics.*;
-/*
- import org.apache.log4j.*;
- import org.apache.log4j.Logger;
- */
-
 /*
  "-Djava.library.path=C:\Program Files\Processing\libraries\opengl\library"
  "-XX:-PrintConcurrentLocks"
@@ -71,14 +63,10 @@ import foetus.*;
  "-XX:+PrintClassHistogram"
  */
 
-public class Mother extends PApplet // implements Tool
+public class Mother extends PApplet
 {
-	PGraphicsOpenGL pgl;
-	GL opengl;
-	GLU glu;
-
 	/* a NetAddress contains the ip address and port number of a remote location in the network. */
-	private NetAddress 		oscBroadcastLocation;
+//	private NetAddress 		oscBroadcastLocation;
 	private int 			m_osc_send_port;
 	private int 			m_osc_receive_port;
 	private String 			m_IP;
@@ -89,22 +77,23 @@ public class Mother extends PApplet // implements Tool
 	private FileParser 		fp;
 	private PrintWriter 	output;
 	private boolean 		m_FullScreen;
-	private int 			m_OutputScreen;
+//	private int 			m_OutputScreen;
 	private boolean 		m_WriteImage = false;
 	private float 			m_FrameRate = 30f;
 	private String 			m_ImageFolder;
 	private float 			m_SpeedFraction;
 	private boolean 		firstProfiledFrame; // Frames-per-second computation
 	private int 			profiledFrameCount;
-	private int 			numDrawElementsCalls;
+//	private int 			numDrawElementsCalls;
 	private long 			startTimeMillis;
 	private boolean 		m_Stereo;
 	private boolean 		m_Billboard;
 	static int 				pos_X;
 	static int 				pos_Y;
 	
-	// private Logger logger = null;
-
+	// For debugging crash with registered methods.
+	static boolean 			first_run = true;
+	
 	ArrayList<Message> m_MessageStack;
 
 	public float 	getSpeedFraction()	{	return m_SpeedFraction;	}
@@ -133,23 +122,23 @@ public class Mother extends PApplet // implements Tool
 		ImageIcon titlebaricon = new ImageIcon(loadBytes("mother_icon.jpg"));
 		frame.setIconImage(titlebaricon.getImage());
 
-		registerDispose(this);
-		registerPre(this);
-		registerPost(this);
+		if(first_run)
+		{
+			registerMethod("dispose", this);
+			registerMethod("pre", this);
+			registerMethod("post", this);
+			first_run=false;
+		}
 
-		size(m_Width, m_Height, GLConstants.GLGRAPHICS);
-
+		size(m_Width, m_Height, P3D);
+		
 		frameRate(m_FrameRate / m_SpeedFraction);
 
-		hint(ENABLE_OPENGL_4X_SMOOTH); // Just to trigger renderer change.
-
-		pgl 	= (PGraphicsOpenGL) g;
-		opengl 	= pgl.gl;
-		glu 	= ((PGraphicsOpenGL) g).glu;
-
+//		hint(ENABLE_OPENGL_4X_SMOOTH); // Just to trigger renderer change.
+		
 		if(m_Stereo)
 		{
-//			perspective(PI/3.0f,1f,0.1f,1000f); //this is needed ot stop the images being squashed	
+//			perspective(PI/3.0f,1f,0.1f,1000f); //this is needed (for stereo) to stop the images being squashed	
 			noStroke();
 		}
 		
@@ -159,9 +148,12 @@ public class Mother extends PApplet // implements Tool
 
 		listenToOSC();
 
-		pgl.beginGL();
-		opengl.setSwapInterval(1); // set vertical sync on
-		pgl.endGL();
+		PGraphicsOpenGL pgl = (PGraphicsOpenGL) g;
+		PGL opengl 			= pgl.beginPGL();
+		
+		opengl.gl.setSwapInterval(1); // set vertical sync on
+		
+		pgl.endPGL();
 
 		this.frame.addWindowListener(new WindowAdapter()
 		{
@@ -178,17 +170,22 @@ public class Mother extends PApplet // implements Tool
 				}
 			}
 		});
-
-		// System.setProperty("log4j.configuration", "log4j.properties");
-		// logger = Logger.getLogger(this.getName());
-		// BasicConfigurator.configure();
 	}
 
-	public void pre() 	{}
+	public void pre() 	
+	{
+		
+	}
 
-	public void post()	{}
+	public void post()	
+	{
+		
+	}
 
-	public void dispose()	{ System.out.println("Disposed of."); }
+	public void dispose()	
+	{
+		System.out.println("Disposed of."); 
+	}
 
 	/*
 	 * 
@@ -208,7 +205,7 @@ public class Mother extends PApplet // implements Tool
 	 * @see processing.core.PApplet#draw()
 	 */
 	public void draw()
-	{
+	{		
 		ChildWrapper current;
 
 		// From ProcessingHacks, for fullscreen without problems
@@ -221,8 +218,11 @@ public class Mother extends PApplet // implements Tool
 
 		dealWithMessageStack(); // Dealing with message stack
 
-		opengl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
-		opengl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		PGraphicsOpenGL pgl = (PGraphicsOpenGL) g;
+		PGL opengl 			= pgl.beginPGL();
+		
+		opengl.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
+		opengl.gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
 		synchronized (m_SynthContainer)
 		{
@@ -232,9 +232,9 @@ public class Mother extends PApplet // implements Tool
 
 				PreDrawChildUpdate(current.Child());
 
-				CallRegisteredMethods(current, "preMethods");
+				callRegisteredMethod(current, "pre");
 
-				opengl.glEnable(GL.GL_BLEND);
+				opengl.gl.glEnable(GL.GL_BLEND);
 				// opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
 
 				// //For testing (getting opengl state)
@@ -260,7 +260,6 @@ public class Mother extends PApplet // implements Tool
 //
 //					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 //
-//					// logger.info("Starting drawing");
 //					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
 //					
 //					current.draw();
@@ -268,7 +267,6 @@ public class Mother extends PApplet // implements Tool
 //					CallRegisteredMethods(current, "drawMethods");
 //
 //					opengl.glPopAttrib();
-//					// logger.info("Ending drawing");
 //
 //					opengl.glPopMatrix();
 //					opengl.glPopMatrix();
@@ -288,8 +286,6 @@ public class Mother extends PApplet // implements Tool
 //					opengl.glPushMatrix();
 //
 //					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
-//
-//					// logger.info("Starting drawing");
 //					
 //					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
 //					
@@ -298,7 +294,6 @@ public class Mother extends PApplet // implements Tool
 //					CallRegisteredMethods(current, "drawMethods");
 //
 //					opengl.glPopAttrib();
-//					// logger.info("Ending drawing");
 //
 //					opengl.glPopMatrix();
 //					opengl.glPopMatrix();
@@ -307,27 +302,28 @@ public class Mother extends PApplet // implements Tool
 //				}
 //				else
 //				{
-					opengl.glPushMatrix();
+					pushMatrix();
 
-					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+					opengl.gl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 
-					// logger.info("Starting drawing");
 					pushStyle();
-					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
+					
+					((GL2)opengl.gl).glPushAttrib(GL2.GL_ALL_ATTRIB_BITS);
+					
 					current.draw(m_Stereo);
 
-					CallRegisteredMethods(current, "drawMethods");
+					callRegisteredMethod(current, "draw");
 
-					opengl.glPopAttrib();
+					((GL2)opengl.gl).glPopAttrib();
+					
 					popStyle();
-					// logger.info("Ending drawing");
 
-					opengl.glPopMatrix();
+					popMatrix();
 //				}
 
-				opengl.glDisable(GL.GL_BLEND);
+				opengl.gl.glDisable(GL.GL_BLEND);
 
-				CallRegisteredMethods(current, "postMethods");
+				callRegisteredMethod(current, "post");
 			}
 		}
 
@@ -335,6 +331,8 @@ public class Mother extends PApplet // implements Tool
 		handleImageRecording();
 		// System.out.println(millis()-m);
 
+		pgl.endPGL();
+		
 		printFrameRate();
 	}
 
@@ -367,9 +365,9 @@ public class Mother extends PApplet // implements Tool
 			// Handling messages to synths
 			try
 			{
-				child.keyEvent = this.keyEvent;
-				child.key = this.key;
-				child.keyCode = this.keyCode;
+				child.keyEvent 	= this.keyEvent;
+				child.key 		= this.key;
+				child.keyCode 	= this.keyCode;
 
 				keyMethod = child.getClass().getMethod("keyPressed", new Class[] {});
 				keyMethod.invoke(child, new Object[] {});
@@ -387,9 +385,9 @@ public class Mother extends PApplet // implements Tool
 
 		synchronized (m_MessageStack)
 		{
-			m = new Message();
-			m.time = time;
-			m.message = message;
+			m 			= new Message();
+			m.time 		= time;
+			m.message 	= message;
 
 			m_MessageStack.add(m);
 
@@ -409,11 +407,9 @@ public class Mother extends PApplet // implements Tool
 		PApplet child;
 		Method oscEventMethod;
 
-		String addrPattern = theOscMessage.addrPattern();
-		String typetag = theOscMessage.typetag();
-		String[] splits = addrPattern.split("/");
-
-		// logger.info("Got message: " + theOscMessage.toString());
+		String addrPattern 	= theOscMessage.addrPattern();
+//		String typetag 		= theOscMessage.typetag();
+		String[] splits 	= addrPattern.split("/");
 
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if (splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
@@ -428,7 +424,7 @@ public class Mother extends PApplet // implements Tool
 						InetAddress ip = InetAddress.getByName(m_IP);
 						sender = new OSCPortOut(ip, m_osc_send_port);
 
-						ArrayList list = new ArrayList();
+						ArrayList<String> list = new ArrayList<String>();
 						for (Enumeration<String> e = m_SynthContainer.get_Synth_Names().keys(); e.hasMoreElements();)
 						{
 							list.add(e.nextElement());
@@ -488,7 +484,7 @@ public class Mother extends PApplet // implements Tool
 					{
 						ChildWrapper w = m_SynthContainer.Remove(theOscMessage.get(0).stringValue());
 
-						CallRegisteredMethods(w, "disposeMethods");
+						callRegisteredMethod(w, "dispose");
 					}
 				}
 				else if (splits[2].compareTo("Move_synth") == 0)
@@ -578,8 +574,6 @@ public class Mother extends PApplet // implements Tool
 		{
 			// println("Unhandled OSC message: " + theOscMessage.addrPattern());
 		}
-
-		// logger.info("Finished with message: " + theOscMessage.toString());
 	}
 
 	protected void sendPicWritingStartedMessage()
@@ -591,9 +585,9 @@ public class Mother extends PApplet // implements Tool
 			InetAddress ip = InetAddress.getByName(m_IP);
 			sender = new OSCPortOut(ip, m_osc_send_port);
 
-			ArrayList list = new ArrayList();
+			ArrayList<Float> list = new ArrayList<Float>();
 
-			list.add((float) m_FrameRate);
+			list.add(m_FrameRate);
 
 			Object args[] = new Object[list.size()];
 
@@ -631,9 +625,9 @@ public class Mother extends PApplet // implements Tool
 			InetAddress ip = InetAddress.getByName(m_IP);
 			sender = new OSCPortOut(ip, m_osc_send_port);
 
-			ArrayList list = new ArrayList();
+			ArrayList<Float> list = new ArrayList<Float>();
 
-			list.add((float) m_FrameRate);
+			list.add(m_FrameRate);
 
 			Object args[] = new Object[list.size()];
 
@@ -688,11 +682,11 @@ public class Mother extends PApplet // implements Tool
 			InetAddress ip = InetAddress.getByName(m_IP);
 			sender = new OSCPortOut(ip, m_osc_send_port);
 
-			ArrayList list = new ArrayList();
+			ArrayList<String> list = new ArrayList<String>();
 			for (Enumeration<String> ek = supportedMessages.keys(); ek.hasMoreElements();)
 			{
-				list.add((String) ek.nextElement());
-				list.add((String) e.nextElement());
+				list.add(ek.nextElement());
+				list.add(e.nextElement());
 			}
 
 			Object args[] = new Object[list.size()];
@@ -728,16 +722,16 @@ public class Mother extends PApplet // implements Tool
 	public void init()
 	{
 		// Useless initializations, unless the program doesn't fint the .ini file at all...
-		m_Width = 640;
-		m_Height = 480;
-
-		m_FullScreen = true;
+		m_Width 		= 640;
+		m_Height 		= 480;
+		m_FullScreen 	= true;
 
 		// For OSC
-		m_IP = "127.0.0.1";
-		m_osc_receive_port = 7005;
-		m_osc_send_port = 5432;
-		m_Synth_Folder = "X:\\Lumia Synths";
+		m_IP 				= "127.0.0.1";
+		m_osc_receive_port 	= 7005;
+		m_osc_send_port 	= 5432;
+		
+		m_Synth_Folder 		= "X:\\Lumia Synths";
 
 		// Loading setup values from .ini file
 		loadIniFile(sketchPath("mother" + ".ini"));
@@ -771,7 +765,7 @@ public class Mother extends PApplet // implements Tool
 
 				Rectangle virtualBounds = new Rectangle();
 
-				String display;
+//				String display;
 
 				if (devices.length > outputScreen)
 				{ // we have a 2nd display/projector
@@ -786,7 +780,7 @@ public class Mother extends PApplet // implements Tool
 
 					location = "--location=" + virtualBounds.x + "," + virtualBounds.y;
 
-					display = "--display=" + (outputScreen + 1); // processing considers the first display to be # 1
+//					display = "--display=" + (outputScreen + 1); // processing considers the first display to be # 1
 
 					pos_X = virtualBounds.x;
 					pos_Y = virtualBounds.y;
@@ -795,7 +789,7 @@ public class Mother extends PApplet // implements Tool
 				{// leave on primary display
 					location = "--location=0,0";
 
-					display = "--display=" + 1; // processing considers the first display to be # 1
+//					display = "--display=" + 1; // processing considers the first display to be # 1
 
 					pos_X = 0;
 					pos_Y = 0;
@@ -815,20 +809,37 @@ public class Mother extends PApplet // implements Tool
 		// PApplet.main(new String[] { "Mother"} );
 	}
 
-	private void CallRegisteredMethods(ChildWrapper w, String fieldName)
+	private void callRegisteredMethod(ChildWrapper w, String parameter)
 	{
 		try
 		{
-			Field sven;
+			Class params[] 	= new Class[1];
+			params[0] 		= String.class;
+			
+			Method m = (Method) ((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass())
+					.getDeclaredMethod("handleMethods", params);
+			
+			 m.setAccessible(true);
 
-			sven = (Field) ((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass())
-					.getDeclaredField(fieldName);
-
-			sven.setAccessible(true);
-
-			RegisteredMethods regMethods = (RegisteredMethods) sven.get(w.Child());
-
-			regMethods.handle();
+			 m.invoke(w.Child(), parameter);
+			 
+//			Field sven;
+//
+//			sven = (Field) ((Class<? extends PApplet>) w.Child().getClass().getGenericSuperclass())
+//					.getDeclaredField(fieldName);
+//
+//			sven.setAccessible(true);
+//
+//			RegisteredMethods regMethods = (RegisteredMethods) sven.get(w.Child());
+//			regMethods.handle();
+			
+			/* EXAMPLE: 
+			 * 
+			 * C1 c1inst=new C1()
+			 * Method m = c1inst.getClass().getDeclaredMethod("printing", null);
+			 * m.setAccessible(true);
+			 * m.invoke(t, null);
+			 */
 		}
 		catch (Exception e)
 		{
@@ -875,7 +886,7 @@ public class Mother extends PApplet // implements Tool
 				 */
 				// System.err.println(vboEnabled);
 				profiledFrameCount = 0;
-				numDrawElementsCalls = 0;
+//				numDrawElementsCalls = 0;
 				startTimeMillis = System.currentTimeMillis();
 
 				NumberFormat nf = NumberFormat.getInstance();
@@ -944,7 +955,7 @@ public class Mother extends PApplet // implements Tool
 			m_osc_receive_port = fp.getIntValue("osc_receive_port");
 			m_osc_send_port = fp.getIntValue("osc_send_port");
 			int[] localDim = fp.getIntValues("screenSize");
-			m_OutputScreen = fp.getIntValue("outputScreen");
+//			m_OutputScreen = fp.getIntValue("outputScreen");
 
 			m_Width = localDim[0];
 			m_Height = localDim[1];

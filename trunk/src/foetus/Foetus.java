@@ -23,7 +23,7 @@ onar3d@hotmail.com, www.onar3d.com
 package foetus;
 
 import processing.core.*;
-import processing.core.PApplet.RegisteredMethods;
+//import processing.core.PApplet.RegisteredMethods;
 
 import java.util.*;
 

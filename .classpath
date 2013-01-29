@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar" sourcepath="/oscP5"/>
+	<classpathentry kind="lib" path="lib/core.jar" sourcepath="/processing/core"/>
+	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="processing-Mother/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl-all.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="processing-Mother/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
-	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/modes/java/libraries/opengl/library/jogl.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/modes/java/libraries/opengl/library/opengl.jar" sourcepath="/processing-head-1.0.1/opengl/src/processing/opengl"/>
-	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/lib/core.jar" sourcepath="/processing-head-1.0.1"/>
-	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/modes/java/libraries/opengl/library/gluegen-rt.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javaosc"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/GLGraphics/library/GLGraphics.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother Synths"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/toxiclibscore/library/toxiclibscore.jar"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/proscene/library/proscene.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
