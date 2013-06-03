@@ -73,8 +73,8 @@ import foetus.*;
 
 public class Mother extends PApplet // implements Tool
 {
-	PGraphicsOpenGL pgl;
-	GL opengl;
+	PGL pgl;
+	GL2 opengl;
 	GLU glu;
 
 	/* a NetAddress contains the ip address and port number of a remote location in the network. */
@@ -141,12 +141,14 @@ public class Mother extends PApplet // implements Tool
 
 		frameRate(m_FrameRate / m_SpeedFraction);
 
-		hint(ENABLE_OPENGL_4X_SMOOTH); // Just to trigger renderer change.
+//		hint(ENABLE_OPENGL_4X_SMOOTH); // Just to trigger renderer change.
 
-		pgl 	= (PGraphicsOpenGL) g;
-		opengl 	= pgl.gl;
-		glu 	= ((PGraphicsOpenGL) g).glu;
-
+		// pgl 	= (PGraphicsOpenGL) g;
+		// opengl 	= pgl.gl;
+		// glu 	= ((PGraphicsOpenGL) g).glu;
+		pgl = beginPGL(); 
+		opengl = pgl.gl.getGL2();
+		
 		if(m_Stereo)
 		{
 //			perspective(PI/3.0f,1f,0.1f,1000f); //this is needed ot stop the images being squashed	
@@ -159,9 +161,11 @@ public class Mother extends PApplet // implements Tool
 
 		listenToOSC();
 
-		pgl.beginGL();
+		// pgl.beginPGL();
+		beginPGL();
 		opengl.setSwapInterval(1); // set vertical sync on
-		pgl.endGL();
+		// pgl.endGL();
+		endPGL();
 
 		this.frame.addWindowListener(new WindowAdapter()
 		{
@@ -242,7 +246,8 @@ public class Mother extends PApplet // implements Tool
 				// opengl.glGetIntegerv(GL.GL_BLEND_DST, arg1);
 				// println(arg1.get(0));
 
-				pgl.colorMode(RGB, 255);
+				//pgl.colorMode(RGB, 255);
+				colorMode(RGB, 255);
 
 //				if (m_Stereo)
 //				{
@@ -307,21 +312,26 @@ public class Mother extends PApplet // implements Tool
 //				}
 //				else
 //				{
-					opengl.glPushMatrix();
+					// opengl.glPushMatrix();
+					opengl.getGL2().glPushMatrix();
 
 					opengl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 
 					// logger.info("Starting drawing");
 					pushStyle();
-					opengl.glPushAttrib(GL.GL_ALL_ATTRIB_BITS);
+					opengl.glPushAttrib(GL2.GL_ALL_ATTRIB_BITS);
+					 
+					  
 					current.draw(m_Stereo);
 
 					CallRegisteredMethods(current, "drawMethods");
 
+					//opengl.glPopAttrib();
 					opengl.glPopAttrib();
 					popStyle();
 					// logger.info("Ending drawing");
-
+					
+					// opengl.glPopMatrix();
 					opengl.glPopMatrix();
 //				}
 
@@ -415,6 +425,8 @@ public class Mother extends PApplet // implements Tool
 
 		// logger.info("Got message: " + theOscMessage.toString());
 
+		println("Got message: " + theOscMessage.toString());
+		
 		/* check if theOscMessage has the address pattern we are looking for. */
 		if (splits.length >= 2 && (splits[1].compareTo("Mother") == 0))
 		{
