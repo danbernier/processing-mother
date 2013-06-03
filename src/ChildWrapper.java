@@ -1,7 +1,11 @@
 
 import processing.core.*; 
 import processing.opengl.*;
+
 import javax.media.opengl.*;
+import javax.media.opengl.glu.GLU;
+
+import processing.opengl.*;
 /*
 import org.apache.log4j.Logger;*/
 
@@ -25,7 +29,7 @@ public class ChildWrapper
 	PApplet m_Child; 
 	Mother  r_Mother;
 	
-	RenderSketchToTexture m_RenderToTexture;
+//	RenderSketchToTexture m_RenderToTexture;
 		
 	boolean m_RenderBillboard = true;
 	
@@ -92,21 +96,21 @@ public class ChildWrapper
 	
 	public void draw(boolean stereo)
 	{		
-		if( (m_Child.g != null) && (((PGraphicsOpenGL)m_Child.g).gl != null) )	// Checking whether applet thread has been properly initialized
+		if( (m_Child.g != null) /*&& (((PGraphicsOpenGL)m_Child.g).gl != null)*/ )	// Checking whether applet thread has been properly initialized
 		{
 			if(m_RenderBillboard)
 			{
-				if( m_RenderToTexture == null)
-				{
-					m_RenderToTexture = new RenderSketchToTexture(	r_Mother.getChildWidth(), 
-																	r_Mother.getChildHeight(), 
-																	m_Child, 
-																	r_Mother,
-																	stereo);
-				}
-				
-				
-				m_RenderToTexture.draw();				
+//				if( m_RenderToTexture == null)
+//				{
+//					m_RenderToTexture = new RenderSketchToTexture(	r_Mother.getChildWidth(), 
+//																	r_Mother.getChildHeight(), 
+//																	m_Child, 
+//																	r_Mother,
+//																	stereo);
+//				}
+//				
+//				
+//				m_RenderToTexture.draw();				
 			}
 			else
 			{
@@ -121,10 +125,19 @@ public class ChildWrapper
 					params.get(pi).tick();
 				}
 				
-				((PGraphicsOpenGL)m_Child.g).gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-				((PGraphicsOpenGL)m_Child.g).pushMatrix();				
+				PGraphicsOpenGL pgl = (PGraphicsOpenGL) m_Child.g;
+				PGL opengl 			= pgl.beginPGL();
+//				GLU glu 			= opengl.glu;
+				
+				opengl.gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+				
+				m_Child.g.pushMatrix();
+//				((PGraphicsOpenGL)m_Child.g).pushMatrix();				
 				m_Child.draw();
-				((PGraphicsOpenGL)m_Child.g).popMatrix();
+				m_Child.g.popMatrix();
+//				((PGraphicsOpenGL)m_Child.g).popMatrix();
+				
+				pgl.endPGL();
 				
 //				logger.info("After Draw: " + m_Name);
 			}

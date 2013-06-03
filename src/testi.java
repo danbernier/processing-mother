@@ -6,7 +6,9 @@ import processing.opengl.*;
 
 import foetus.*;
 import processing.core.*;
-import processing.core.PApplet.RegisteredMethods;
+
+// Commented for P2.0
+//import processing.core.PApplet.RegisteredMethods;
 
 import java.util.*;
 import javax.media.opengl.*;
@@ -39,13 +41,15 @@ public class testi extends PApplet
 	
 	public void init()
 	{
-		sizeMethods 		= new RegisteredMethods();
-		preMethods 			= new RegisteredMethods();
-		drawMethods 		= new RegisteredMethods();
-		postMethods 		= new RegisteredMethods();
-		mouseEventMethods 	= new RegisteredMethods();
-		keyEventMethods 	= new RegisteredMethods();
-		disposeMethods 		= new RegisteredMethods();
+		
+// Commented for P2.0
+//		sizeMethods 		= new RegisteredMethods();
+//		preMethods 			= new RegisteredMethods();
+//		drawMethods 		= new RegisteredMethods();
+//		postMethods 		= new RegisteredMethods();
+//		mouseEventMethods 	= new RegisteredMethods();
+//		keyEventMethods 	= new RegisteredMethods();
+//		disposeMethods 		= new RegisteredMethods();
 		
 		//addListeners();
 	}
