@@ -149,9 +149,10 @@ public class Mother extends PApplet
 		listenToOSC();
 
 		PGraphicsOpenGL pgl = (PGraphicsOpenGL) g;
-		PGL opengl 			= pgl.beginPGL();
-		
-		opengl.gl.setSwapInterval(1); // set vertical sync on
+		PGL gl 			= pgl.beginPGL();
+		GL2 gl2 		= gl.gl.getGL2();
+				
+		gl2.setSwapInterval(1); // set vertical sync on
 		
 		pgl.endPGL();
 
@@ -218,11 +219,14 @@ public class Mother extends PApplet
 
 		dealWithMessageStack(); // Dealing with message stack
 
+		//PGraphicsOpenGL pgl = (PGraphicsOpenGL) g;
+		//PGL opengl 			= pgl.beginPGL();
 		PGraphicsOpenGL pgl = (PGraphicsOpenGL) g;
-		PGL opengl 			= pgl.beginPGL();
+		PGL gl 			= pgl.beginPGL();
+		GL2 gl2 		= gl.gl.getGL2();
 		
-		opengl.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
-		opengl.gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		gl2.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set The Clear Color To Black
+		gl2.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
 		synchronized (m_SynthContainer)
 		{
@@ -234,7 +238,7 @@ public class Mother extends PApplet
 
 				callRegisteredMethod(current, "pre");
 
-				opengl.gl.glEnable(GL.GL_BLEND);
+				gl2.glEnable(GL.GL_BLEND);
 				// opengl.glDisable(GL.GL_DEPTH_TEST); // Disables Depth Testing
 
 				// //For testing (getting opengl state)
@@ -304,24 +308,24 @@ public class Mother extends PApplet
 //				{
 					pushMatrix();
 
-					opengl.gl.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
+					gl2.glBlendFunc(current.GetBlending_Source(), current.GetBlending_Destination());
 
 					pushStyle();
 					
-					((GL2)opengl.gl).glPushAttrib(GL2.GL_ALL_ATTRIB_BITS);
+					gl2.glPushAttrib(GL2.GL_ALL_ATTRIB_BITS);
 					
 					current.draw(m_Stereo);
 
 					callRegisteredMethod(current, "draw");
 
-					((GL2)opengl.gl).glPopAttrib();
+					gl2.glPopAttrib();
 					
 					popStyle();
 
 					popMatrix();
 //				}
 
-				opengl.gl.glDisable(GL.GL_BLEND);
+				gl2.glDisable(GL.GL_BLEND);
 
 				callRegisteredMethod(current, "post");
 			}
