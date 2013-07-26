@@ -4,18 +4,19 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
-
 import java.awt.Rectangle;
 
 import processing.core.*;
 import mother.library.*;
 import mpe.config.FileParser;
+
 import oscP5.*;
 import netP5.*;
 
 public class MotherDelivery extends PApplet
 {
 	Mother m_Mother;
+	
 	static boolean fullScreen;
 	static int pos_X;
 	static int pos_Y;
@@ -29,7 +30,8 @@ public class MotherDelivery extends PApplet
 	}
 	
 	/**
-	 * I had trouble getting the program to close, while closing the window worked the process remained running somehow.
+	 * I had trouble getting the program to close, while closing the window worked, the process remained running somehow,
+	 * meaning the zombie program was holding on to the UDP port.
 	 * This did the trick back then, not sure if it is still necessary with Processing 2.0 though.
 	 */
 	public void setup() {
