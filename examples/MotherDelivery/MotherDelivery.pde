@@ -17,6 +17,10 @@ import mother.library.*;
 * hopefully informative error messages.
 *
 * Note that Mother depends on you having installed the oscP5 library in your library folder!
+*
+* To test out your sketches while developing, you just run this sketch so that you can view output alongside the console.
+* For running in fullscreen, export this MotherDelivery sketch ("Export Application") with the fullscreen option selected. 
+* resolution is still set in the mother.ini file.
 */
 
 Mother m_Mother;

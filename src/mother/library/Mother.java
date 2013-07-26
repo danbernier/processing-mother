@@ -691,7 +691,7 @@ public class Mother
 
 	static public void main(String args[])
 	{
-		FileParser fp = new FileParser("mother" + ".ini");
+		FileParser fp = new FileParser("data//mother" + ".ini");
 
 		// parse ini file if it exists
 		if (fp.fileExists())
