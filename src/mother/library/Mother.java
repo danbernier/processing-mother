@@ -674,7 +674,7 @@ public class Mother
 		m_Synth_Folder 		= "X:\\Lumia Synths";
 
 		// Loading setup values from .ini file
-		loadIniFile(r_Parent.sketchPath("mother" + ".ini"));
+		loadIniFile(r_Parent.sketchPath("data//mother" + ".ini"));
 
 		if (r_Parent.frame != null && m_FullScreen == true)
 		{
@@ -706,22 +706,17 @@ public class Mother
 
 				Rectangle virtualBounds = new Rectangle();
 
-//				String display;
-
 				if (devices.length > outputScreen)
 				{ // we have a 2nd display/projector
 
 					GraphicsConfiguration[] gc = devices[outputScreen].getConfigurations();
 
 					if (gc.length > 0)
-						;
 					{
-						virtualBounds = gc[0].getBounds();// virtualBounds.union(gc[0].getBounds());
+						virtualBounds = gc[0].getBounds();
 					}
 
 					location = "--location=" + virtualBounds.x + "," + virtualBounds.y;
-
-//					display = "--display=" + (outputScreen + 1); // processing considers the first display to be # 1
 
 					pos_X = virtualBounds.x;
 					pos_Y = virtualBounds.y;
@@ -730,24 +725,17 @@ public class Mother
 				{// leave on primary display
 					location = "--location=0,0";
 
-//					display = "--display=" + 1; // processing considers the first display to be # 1
-
 					pos_X = 0;
 					pos_Y = 0;
 				}
 
 				PApplet.main(new String[] { location, "--hide-stop", /* display, */"Mother" });
-
-				// PApplet.main(new String[] { "--present", "--display=3", "Mother"} );
 			}
 			else
 			{
 				PApplet.main(new String[] { "Mother" });
 			}
 		}
-
-		// PApplet.main(new String[] { "--present", "Mother"} );
-		// PApplet.main(new String[] { "Mother"} );
 	}
 
 	private void callRegisteredMethod(ChildWrapper w, String parameter)
