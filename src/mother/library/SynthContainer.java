@@ -56,29 +56,34 @@ public class SynthContainer
 		File[] files 			= oooClassPath.listFiles();
 		m_Visual_Synth_urls 	= new ArrayList<URL>();
 		
-		for (int i = 0; i < files.length; i++)
-		{
-			try
+		if(files!=null) {
+			for (int i = 0; i < files.length; i++)
 			{
-				fileName = files[i].getName().split("\\.");
-				
-				if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
+				try
 				{
-					m_Visual_Synth_urls.add(files[i].toURI().toURL());
-					System.out.println("Found Synth: " + fileName[0]);
+					fileName = files[i].getName().split("\\.");
 					
-					m_Visual_Synth_Names.put(fileName[0], fileName[0]);
-				}	
-			} 
-			catch (MalformedURLException ex)
-			{
-				System.out.println("MalformedURLException: " + ex.getMessage());
+					if((fileName.length>1) && (fileName[fileName.length-1].compareTo("jar")==0))
+					{
+						m_Visual_Synth_urls.add(files[i].toURI().toURL());
+						System.out.println("Found Synth: " + fileName[0]);
+						
+						m_Visual_Synth_Names.put(fileName[0], fileName[0]);
+					}	
+				} 
+				catch (MalformedURLException ex)
+				{
+					System.out.println("MalformedURLException: " + ex.getMessage());
+				}
+				catch(Exception e)
+				{
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			}
-			catch(Exception e)
-			{
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-			}
+		}
+		else {
+			System.out.println("Synth folder not found, or empty!");
 		}
 	}
 	

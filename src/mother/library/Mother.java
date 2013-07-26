@@ -647,9 +647,6 @@ public class Mother
 			r_Parent.println("frame is at " + r_Parent.frame.getLocation());
 			r_Parent.frame.addNotify();
 		}
-
-		//super.init();
-		//r_Parent.init();
 	}
 
 	static public void main(String args[])
