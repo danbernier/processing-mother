@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/core.jar"/>
+	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="P2Eclipse/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl-all.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="P2Eclipse/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/toxiclibscore/library/toxiclibscore.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar" sourcepath="/oscP5"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/colorutils/library/colorutils.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/jogl.jar" sourcepath="/processing-Mother Synths"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/oscP5/library/oscP5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
