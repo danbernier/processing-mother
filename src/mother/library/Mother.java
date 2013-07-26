@@ -34,7 +34,6 @@ import mpe.config.FileParser;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
-import javax.swing.ImageIcon;
 
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
@@ -49,8 +48,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
@@ -120,9 +117,6 @@ public class Mother
 	 */
 	public void setup()
 	{
-//		ImageIcon titlebaricon = new ImageIcon(r_Parent.loadBytes("mother_icon.jpg"));
-//		r_Parent.frame.setIconImage(titlebaricon.getImage());
-
 		if(first_run)
 		{
 			r_Parent.registerMethod("dispose", this);
@@ -148,24 +142,6 @@ public class Mother
 		gl2.setSwapInterval(1); // set vertical sync on
 		
 		pgl.endPGL();
-
-		/*
-		r_Parent.frame.addWindowListener(new WindowAdapter()
-		{
-			public void windowClosing(WindowEvent e)
-			{
-				try
-				{
-					this.finalize();
-					System.exit(0);
-				}
-				catch (Throwable e1)
-				{
-					e1.printStackTrace();
-				}
-			}
-		});
-		*/
 	}
 
 	public void pre() 	
@@ -203,18 +179,7 @@ public class Mother
 	public void draw()
 	{		
 		ChildWrapper current;
-
-		// From ProcessingHacks, for fullscreen without problems
-		// where window minimizes when focus is lost.
 	
-		/*
-		if (m_FullScreen)
-			r_Parent.frame.setLocation(pos_X, pos_Y);
-
-		if (r_Parent.frame.getExtendedState() == 1) // If minimized, expand again
-			r_Parent.frame.setExtendedState(0);
-		 */
-		
 		dealWithMessageStack(); // Dealing with message stack
 
 		PGraphicsOpenGL pgl = (PGraphicsOpenGL) r_Parent.g;
