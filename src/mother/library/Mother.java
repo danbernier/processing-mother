@@ -849,18 +849,22 @@ public class Mother
 			int[] localDim = fp.getIntValues("screenSize");
 //			m_OutputScreen = fp.getIntValue("outputScreen");
 
+			
 			m_Width = localDim[0];
 			m_Height = localDim[1];
 
-			m_Synth_Folder = fp.getStringValue("SynthFolder");
-
-			if (fp.getIntValue("FullScreen") == 1)
-			{
+			if (fp.getIntValue("FullScreen") == 1) {
 				m_FullScreen = true;
 			}
-			else
-			{
+			else {
 				m_FullScreen = false;
+			}
+			
+			if (fp.getIntValue("UseCustomSynthFolder") == 1) {
+				m_Synth_Folder = fp.getStringValue("SynthFolder");
+			}
+			else {
+				m_Synth_Folder = r_Parent.sketchPath("data\\Synths"); 
 			}
 
 			String frameRateString = fp.getStringValue("frameRate");

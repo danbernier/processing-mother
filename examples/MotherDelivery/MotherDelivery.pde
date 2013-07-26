@@ -9,7 +9,7 @@ import mother.library.*;
 * 
 * Run this sketch to run Mother. You will not need to customize this sketch,
 * it is only provided as an easy way to start Mother.
-* all settings are made in the Mother.ini file, which resides in the same folder as this
+* all settings are made in the Mother.ini file, which resides in the data folder of this
 * MotherDelivery.pde.
 * 
 * If you get a crash, chances are that it is one of your Visual synths / sketches

@@ -161,6 +161,11 @@ public class ChildWrapper
     {   
 		File dir1 = new File (".");
 	    
+		if(libraryURLS==null) {
+			  System.out.println ("libraryURLS IS NULL!");
+			  libraryURLS = new URL[0];
+		}
+		
 		try 
 	    {
 	      System.out.println ("Current dir : " + dir1.getCanonicalPath());
@@ -168,8 +173,7 @@ public class ChildWrapper
 	    catch(Exception e)
 	    {
 	    	 
-	    }
-		
+	    }		
 	    
         File oooClassPath; // = new File(classPath + "//" + className + ".jar");
         
@@ -182,13 +186,13 @@ public class ChildWrapper
         
         try
         { 
-        	for(int i = 0; i<libraryURLS.length; i++ )
-            {
-        		toUse[i] = libraryURLS[i];
-            }
-             
-            toUse[libraryURLS.length] = oooClassPath.toURI().toURL();
-             
+	        for(int i = 0; i<libraryURLS.length; i++ )
+	        {
+	      		toUse[i] = libraryURLS[i];
+	        }
+	            
+	        toUse[libraryURLS.length] = oooClassPath.toURI().toURL();
+        	        	
         	URLClassLoader cl = new URLClassLoader( toUse, ClassLoader.getSystemClassLoader() );
 
         	PApplet toReturn = (PApplet)Class.forName(className, true, cl).newInstance(); 
