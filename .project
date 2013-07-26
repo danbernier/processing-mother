@@ -14,4 +14,41 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>examples/Gradient</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/MotherDelivery</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/Waltz</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/Gradient/Gradient.pde</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/ManuallyManagedDistribution/examples/Gradient/Gradient.pde</locationURI>
+		</link>
+		<link>
+			<name>examples/MotherDelivery/MotherDelivery.pde</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/ManuallyManagedDistribution/examples/MotherDelivery/MotherDelivery.pde</locationURI>
+		</link>
+		<link>
+			<name>examples/MotherDelivery/mother.ini</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/ManuallyManagedDistribution/examples/MotherDelivery/mother.ini</locationURI>
+		</link>
+		<link>
+			<name>examples/Waltz/Waltz.pde</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/ManuallyManagedDistribution/examples/Waltz/Waltz.pde</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
