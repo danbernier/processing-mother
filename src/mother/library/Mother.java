@@ -83,9 +83,7 @@ public class Mother
 	private long 			startTimeMillis;
 	private boolean 		m_Stereo;
 	private boolean 		m_Billboard;
-	static int 				pos_X;
-	static int 				pos_Y;
-	
+		
 	static boolean 			first_run = true; 	// For debugging crash with registered methods.
 	
 	ArrayList<Message> m_MessageStack;
@@ -691,6 +689,9 @@ public class Mother
 
 	static public void main(String args[])
 	{
+		int 		pos_X;
+		int 		pos_Y;
+
 		FileParser fp = new FileParser("data//mother" + ".ini");
 
 		// parse ini file if it exists
