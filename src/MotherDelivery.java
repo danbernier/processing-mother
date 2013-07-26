@@ -3,6 +3,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ImageIcon;
 
 import java.awt.Rectangle;
 
@@ -34,6 +35,9 @@ public class MotherDelivery extends PApplet
 	public void setup() {
 		m_Mother.setup();
 		
+		ImageIcon titlebaricon = new ImageIcon(loadBytes("mother_icon.jpg"));
+		frame.setIconImage(titlebaricon.getImage());
+
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				try {
