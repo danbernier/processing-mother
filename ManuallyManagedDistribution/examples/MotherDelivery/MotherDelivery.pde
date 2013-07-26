@@ -1,3 +1,8 @@
+import oscP5.*;
+import netP5.*;
+import processing.core.*;
+import mother.library.*;
+
 /**
 * Mother Main Sketch
 * by Ilias Bergstrom
@@ -10,10 +15,9 @@
 * If you get a crash, chances are that it is one of your Visual synths / sketches
 * that have malfunctioned, or that you have run out of memory. Check the console for 
 * hopefully informative error messages.
+*
+* Note that Mother depends on you having installed the oscP5 library in your library folder!
 */
-
-import processing.core.*;
-import mother.library.*;
 
 Mother m_Mother;
 
