@@ -89,7 +89,7 @@ void setup() {
   // A slider for the Alpha value of the Arcs
   controlP5.Slider sl = cp5.addSlider("ArcsAlpha")
     .setCaptionLabel("Arcs Alpha")
-      .setPosition(10, 266)
+      .setPosition(10, 276)
         .setSize(255, 20)
           .setRange(0, 255)
             .setValue(255)
@@ -121,7 +121,7 @@ void setup() {
   // A slider for the Scale value of the Arcs
   sl = cp5.addSlider("ArcsScale")
     .setCaptionLabel("Arcs Scale")
-      .setPosition(10, 310)
+      .setPosition(10, 320)
         .setSize(255, 20)
           .setRange(0, 255)
             .setValue(64)
@@ -172,6 +172,62 @@ void setup() {
           ;
 
   b.setCaptionLabel("Remove Rotating Arcs")
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+            
+  // Move Rotating Arcs To Top
+  b = cp5.addButton("MoveRotatingArcsToTop")
+    .setValue(0)
+      .setPosition(276, 72)
+        .setSize(255, 30)
+          ;
+
+  b.setCaptionLabel("Move Arcs to Top")
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+            
+  // Move Rotating Arcs To Bottom
+  b = cp5.addButton("MoveRotatingArcsToBottom")
+    .setValue(0)
+      .setPosition(276, 103)
+        .setSize(255, 30)
+          ;
+
+  b.setCaptionLabel("Move Arcs to Bottom")
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+            
+  // Query Synth Names
+  b = cp5.addButton("QuerySynthNames")
+    .setValue(0)
+      .setPosition(276, 134)
+        .setSize(255, 30)
+          ;
+
+  b.setCaptionLabel("Query Synth Names")
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+  
+  // Query Grad Synth supported Messages
+  b = cp5.addButton("QuerySupportedMessages")
+    .setValue(0)
+      .setPosition(276, 165)
+        .setSize(255, 30)
+          ;
+
+  b.setCaptionLabel("Query Grad Synth Messages")
     .getCaptionLabel()
       .setFont(font)
         .toUpperCase(false)
@@ -231,22 +287,45 @@ public void controlEvent(ControlEvent theEvent) {
 
 void ArcsAlpha(float alpha) {
   OscMessage myMessage;
-
   myMessage = new OscMessage("/Mother/Child/Arcs_01/Alpha"); 
   myMessage.add((int)alpha);
   oscP5.send(myMessage, myRemoteLocation);
-  
-  println("ALPHA");
 }
 
 void ArcsScale(float scale) {
   OscMessage myMessage;
-
   myMessage = new OscMessage("/Mother/Child/Arcs_01/Scale"); 
   myMessage.add((float)scale/64f);
   oscP5.send(myMessage, myRemoteLocation);
 }
 
+void MoveRotatingArcsToTop(int theValue) {
+  OscMessage myMessage;
+  myMessage = new OscMessage("/Mother/Move_synth"); 
+  myMessage.add("Arcs_01");
+  myMessage.add(1);
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+void MoveRotatingArcsToBottom(int theValue) {
+  OscMessage myMessage;
+  myMessage = new OscMessage("/Mother/Move_synth"); 
+  myMessage.add("Arcs_01");
+  myMessage.add(0);
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+void QuerySynthNames(int theValue) {
+  OscMessage myMessage;
+  myMessage = new OscMessage("/Mother/Get_synth_names"); 
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+void QuerySupportedMessages(int theValue) {
+  OscMessage myMessage;
+  myMessage = new OscMessage("/Mother/Child/Grad_01/Get_Supported_Messages"); 
+  oscP5.send(myMessage, myRemoteLocation);
+}
 
 // function AddGradient will receive changes from 
 // controller with name AddGradient
