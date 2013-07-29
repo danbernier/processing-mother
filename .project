@@ -14,21 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>ManuallyManagedDistribution/examples/Gradient</name>
-			<type>2</type>
-			<locationURI>PROJECT_LOC/examples/Gradient</locationURI>
-		</link>
-		<link>
-			<name>ManuallyManagedDistribution/examples/MotherDelivery</name>
-			<type>2</type>
-			<locationURI>PROJECT_LOC/examples/MotherDelivery</locationURI>
-		</link>
-		<link>
-			<name>ManuallyManagedDistribution/examples/Waltz</name>
-			<type>2</type>
-			<locationURI>PROJECT_LOC/examples/Waltz</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

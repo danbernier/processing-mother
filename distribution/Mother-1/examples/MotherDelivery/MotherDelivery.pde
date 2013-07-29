@@ -21,6 +21,17 @@ import mother.library.*;
 * To test out your sketches while developing, you just run this sketch so that you can view output alongside the console.
 * For running in fullscreen, export this MotherDelivery sketch ("Export Application") with the fullscreen option selected. 
 * resolution is still set in the mother.ini file.
+*
+*
+* If things do not work and you get error messages in the console, ckech that:
+*
+* you have implemented the "void initializeFoetus()" method, and followed all the other instructions 
+* in the "Mother Documentation" PDF file.
+*
+* Mother can find your synth(s)
+* 
+* you correctly include all the libraries that your synth uses 
+* in the folder specified for this purpose, as per the above PDF document.
 */
 
 Mother m_Mother;
