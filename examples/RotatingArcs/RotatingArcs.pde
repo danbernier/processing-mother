@@ -1,16 +1,11 @@
 import oscP5.*;
-
 import foetus.*;
 import processing.core.*;
-
 import java.util.*;
-
 import processing.opengl.*;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
-public class Waltz extends PApplet
-{
   /**
    * Geometry by Marius Watz.
    * 
@@ -64,60 +59,47 @@ public class Waltz extends PApplet
     m_Alpha = new FoetusParameter(f, 255,   "/Alpha", "i");
 
     // Fill the tables
-    sinLUT = new float[SINCOS_LENGTH];
-    cosLUT = new float[SINCOS_LENGTH];
+  sinLUT=new float[SINCOS_LENGTH];
+  cosLUT=new float[SINCOS_LENGTH];
+  for (int i = 0; i < SINCOS_LENGTH; i++) {
+    sinLUT[i]= (float)Math.sin(i*DEG_TO_RAD*SINCOS_PRECISION);
+    cosLUT[i]= (float)Math.cos(i*DEG_TO_RAD*SINCOS_PRECISION);
+  }
+ 
+  num = 150;
+  pt = new float[6*num]; // rotx, roty, deg, rad, w, speed
+  style = new int[2*num]; // color, render style
+ 
+  // Set up arc shapes
+  int index=0;
+  float prob;
+  for (int i=0; i<num; i++) {
+    pt[index++] = random(PI*2); // Random X axis rotation
+    pt[index++] = random(PI*2); // Random Y axis rotation
+ 
+    pt[index++] = random(60,80); // Short to quarter-circle arcs
+    if(random(100)>90) pt[index]=(int)random(8,27)*10;
+ 
+    pt[index++] = int(random(2,50)*5); // Radius. Space them out nicely
+ 
+    pt[index++] = random(4,32); // Width of band
+    if(random(100)>90) pt[index]=random(40,60); // Width of band
+ 
+    pt[index++] = radians(random(5,30))/5; // Speed of rotation
+ 
+    // get colors
+    prob = random(100);
+    if(prob<30) style[i*2]=colorBlended(random(1), 255,0,100, 255,0,0, 210);
+    else if(prob<70) style[i*2]=colorBlended(random(1), 0,153,255, 170,225,255, 210);
+    else if(prob<90) style[i*2]=colorBlended(random(1), 200,255,0, 150,255,0, 210);
+    else style[i*2]=color(255,255,255, 220);
 
-    for (int i = 0; i < SINCOS_LENGTH; i++)
-    {
-      sinLUT[i] = (float) Math.sin(i * DEG_TO_RAD * SINCOS_PRECISION);
-      cosLUT[i] = (float) Math.cos(i * DEG_TO_RAD * SINCOS_PRECISION);
-    }
+    if(prob<50) style[i*2]=colorBlended(random(1), 200,255,0, 50,120,0, 210);
+    else if(prob<90) style[i*2]=colorBlended(random(1), 255,100,0, 255,255,0, 210);
+    else style[i*2]=color(255,255,255, 220);
 
-    num = 150;
-    pt = new float[6 * num]; // rotx, roty, deg, rad, w, speed
-    style = new int[2 * num]; // color, render style
-
-    // Set up arc shapes
-    int index = 0;
-    float prob;
-    for (int i = 0; i < num; i++)
-    {
-      pt[index++] = random(PI * 2); // Random X axis rotation
-      pt[index++] = random(PI * 2); // Random Y axis rotation
-
-      pt[index++] = random(60, 80); // Short to quarter-circle arcs
-      if (random(100) > 90)
-        pt[index] = (int) random(8, 27) * 10;
-
-      pt[index++] = (int) (random(2, 50) * 5); // Radius. Space them out nicely
-
-      pt[index++] = random(4, 32); // Width of band
-      if (random(100) > 90)
-        pt[index] = random(40, 60); // Width of band
-
-      pt[index++] = radians(random(5, 30)) / 5; // Speed of rotation
-
-      // get colors
-      prob = random(100);
-
-      if (prob < 30)
-        style[i * 2] = colorBlended(random(1), 255, 0, 100, 255, 0, 0, 210);
-      else if (prob < 70)
-        style[i * 2] = colorBlended(random(1), 0, 153, 255, 170, 225, 255, 210);
-      else if (prob < 90)
-        style[i * 2] = colorBlended(random(1), 200, 255, 0, 150, 255, 0, 210);
-      else
-        style[i * 2] = color(255, 255, 255, 220);
-
-      if (prob < 50)
-        style[i * 2] = colorBlended(random(1), 200, 255, 0, 50, 120, 0, 210);
-      else if (prob < 90)
-        style[i * 2] = colorBlended(random(1), 255, 100, 0, 255, 255, 0, 210);
-      else
-        style[i * 2] = color(255, 255, 255, 220);
-
-      style[i * 2 + 1] = (int) (random(100)) % 3;
-    }
+    style[i*2+1]=(int)(random(100))%3;
+  }
   }
 
   void draw()
@@ -259,5 +241,3 @@ public class Waltz extends PApplet
       println("Exception while processing Waltz input " + " " + theOscMessage.addrPattern());
     }
   }
-}
-
