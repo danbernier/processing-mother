@@ -86,6 +86,37 @@ void setup() {
      .setColorValue(color(0, 0, 0, 255))
      ;
 
+
+
+// Remove Gradient Button
+  b = cp5.addButton("RemoveGradient")
+     .setValue(0)
+     .setPosition(276,10)
+     .setSize(255,30)
+     ;
+
+  b.setCaptionLabel("Remove Gradient")
+     .getCaptionLabel()
+     .setFont(font)
+     .toUpperCase(false)
+     .setSize(fontSize)
+     ;
+     
+  // Remove Rotating Arcs Button
+  b = cp5.addButton("RemoveRotatingArcs")
+     .setValue(0)
+     .setPosition(276,41)
+     .setSize(255,30)
+     ;
+
+  b.setCaptionLabel("Remove Rotating Arcs")
+     .getCaptionLabel()
+     .setFont(font)
+     .toUpperCase(false)
+     .setSize(fontSize)
+     ;
+
+/*
   // add a vertical slider
   controlP5.Slider sl = cp5.addSlider("Slider")
      .setPosition(300,105)
@@ -105,7 +136,7 @@ void setup() {
      .toUpperCase(false)
      .setSize(fontSize)
      ;
-
+*/
   // reposition the Label for controller 'slider'
   //cp5.getController("slider").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
   //cp5.getController("slider").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0); 
@@ -202,6 +233,22 @@ public void AddGradient(int theValue) {
 public void AddRotatingArcs(int theValue) {
   OscMessage myMessage = new OscMessage("/Mother/Add_synth");
   myMessage.add("RotatingArcs");
+  myMessage.add("Arcs_01");
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+// function RemoveGradient will receive changes from 
+// controller with name RemoveGradient
+public void RemoveGradient(int theValue) {
+  OscMessage myMessage = new OscMessage("/Mother/Remove_synth");
+  myMessage.add("Grad_01");
+  oscP5.send(myMessage, myRemoteLocation);
+}
+
+// function RemoveRotatingArcs will receive changes from 
+// controller with name RemoveRotatingArcs
+public void RemoveRotatingArcs(int theValue) {
+  OscMessage myMessage = new OscMessage("/Mother/Remove_synth");
   myMessage.add("Arcs_01");
   oscP5.send(myMessage, myRemoteLocation);
 }
