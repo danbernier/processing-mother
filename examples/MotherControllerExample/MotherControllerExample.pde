@@ -1,25 +1,25 @@
 import controlP5.*;
 import oscP5.*;
 import netP5.*;
-  
+
 OscP5 oscP5;
 NetAddress myRemoteLocation;
 
 int fontSize = 18;
 ControlP5 cp5;
-int myColor = color(0,0,0);
+int myColor = color(0, 0, 0);
 
 ColorPicker cpTop, cpBottom;
 Textlabel myTextlabelCP;
-controlP5.Button b;
+Button b;
 
 void setup() {
-  size(700,400);
+  size(700, 400);
   noStroke();
-  
+
   /* start oscP5, listening for incoming messages at port 12000 */
-  oscP5 = new OscP5(this,5432);
-  
+  oscP5 = new OscP5(this, 5432);
+
   /* myRemoteLocation is a NetAddress. a NetAddress takes 2 parameters,
    * an ip address and a port number. myRemoteLocation is used as parameter in
    * oscP5.send() when sending osc packets to another computer, device, 
@@ -27,142 +27,179 @@ void setup() {
    * and the port of the remote location address are the same, hence you will
    * send messages back to this sketch.
    */
-  myRemoteLocation = new NetAddress("127.0.0.1",7000);
-  
+  myRemoteLocation = new NetAddress("127.0.0.1", 7000);
+
   cp5 = new ControlP5(this);
 
-  PFont pfont = createFont("Arial",20,true); // use true/false for smooth/no-smooth
-  ControlFont font = new ControlFont(pfont,241);
-  
+  PFont pfont = createFont("Arial", 20, true); // use true/false for smooth/no-smooth
+  ControlFont font = new ControlFont(pfont, 241);
+
   // Add Gradient Button
   b = cp5.addButton("AddGradient")
-     .setValue(0)
-     .setPosition(10,10)
-     .setSize(255,30)
-     ;
+    .setValue(0)
+      .setPosition(10, 10)
+        .setSize(255, 30)
+          ;
 
   b.setCaptionLabel("Add Gradient")
-     .getCaptionLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
-     
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+
   // Add Rotating Arcs Button
   b = cp5.addButton("AddRotatingArcs")
-     .setValue(0)
-     .setPosition(10,41)
-     .setSize(255,30)
-     ;
+    .setValue(0)
+      .setPosition(10, 41)
+        .setSize(255, 30)
+          ;
 
   b.setCaptionLabel("Add Rotating Arcs")
-     .getCaptionLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
 
- // Gradient Top Color controls
- myTextlabelCP = cp5.addTextlabel("topColorLabel")
-                    .setText("Gradient top color")
-                    .setPosition(10,72)
-                    .setFont(pfont)
-                    ;
+  // Gradient Top Color controls
+  myTextlabelCP = cp5.addTextlabel("topColorLabel")
+    .setText("Gradient top color")
+      .setPosition(10, 72)
+        .setFont(pfont)
+          ;
 
- cpTop = cp5.addColorPicker("topPicker")
-     .setPosition(10, 100)
-     .setColorValue(color(0, 0, 255, 255))
-     ;
-     
-// Gradient Bottom Color controls
- myTextlabelCP = cp5.addTextlabel("botColorLabel")
-                    .setText("Gradient bottom color")
-                    .setPosition(10,163)
-                    .setFont(pfont)
-                    ;
+  cpTop = cp5.addColorPicker("topPicker")
+    .setPosition(10, 100)
+      .setColorValue(color(0, 0, 255, 255))
+        ;
 
- cpBottom = cp5.addColorPicker("botPicker")
-     .setPosition(10, 194)
-     .setColorValue(color(0, 0, 0, 255))
-     ;
+  // Gradient Bottom Color controls
+  myTextlabelCP = cp5.addTextlabel("botColorLabel")
+    .setText("Gradient bottom color")
+      .setPosition(10, 163)
+        .setFont(pfont)
+          ;
 
+  cpBottom = cp5.addColorPicker("botPicker")
+    .setPosition(10, 194)
+      .setColorValue(color(0, 0, 0, 255))
+        ;
 
+  // A slider for the Alpha value of the Arcs
+  controlP5.Slider sl = cp5.addSlider("ArcsAlpha")
+    .setCaptionLabel("Arcs Alpha")
+      .setPosition(10, 266)
+        .setSize(255, 20)
+          .setRange(0, 255)
+            .setValue(255)
+              ;
 
-// Remove Gradient Button
+  sl.getCaptionLabel()
+    .setFont(font)
+      .toUpperCase(false)
+        .setSize(fontSize)
+          ;
+
+  sl.getValueLabel()
+    .setFont(font)
+      .toUpperCase(false)
+        .setSize(fontSize)
+          ;
+
+  // reposition the Label for controller 'slider'
+  cp5.getController("ArcsAlpha").
+    getValueLabel().
+    align(ControlP5.RIGHT, ControlP5.CENTER).
+    setPaddingX(0);
+
+  cp5.getController("ArcsAlpha").
+    getCaptionLabel().
+    align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).
+    setPaddingX(0);
+
+  // A slider for the Scale value of the Arcs
+  sl = cp5.addSlider("ArcsScale")
+    .setCaptionLabel("Arcs Scale")
+      .setPosition(10, 310)
+        .setSize(255, 20)
+          .setRange(0, 255)
+            .setValue(64)
+              ;
+
+  sl.getCaptionLabel()
+    .setFont(font)
+      .toUpperCase(false)
+        .setSize(fontSize)
+          ;
+
+  sl.getValueLabel()
+    .setFont(font)
+      .toUpperCase(false)
+        .setSize(fontSize)
+          ;
+
+  // reposition the Label for controller 'slider'
+  cp5.getController("ArcsScale").
+    getValueLabel().
+    align(ControlP5.RIGHT, ControlP5.CENTER).
+    setPaddingX(0);
+
+  cp5.getController("ArcsScale").
+    getCaptionLabel().
+    align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).
+    setPaddingX(0);
+
+  // Remove Gradient Button
   b = cp5.addButton("RemoveGradient")
-     .setValue(0)
-     .setPosition(276,10)
-     .setSize(255,30)
-     ;
+    .setValue(0)
+      .setPosition(276, 10)
+        .setSize(255, 30)
+          ;
 
   b.setCaptionLabel("Remove Gradient")
-     .getCaptionLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
-     
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
+
   // Remove Rotating Arcs Button
   b = cp5.addButton("RemoveRotatingArcs")
-     .setValue(0)
-     .setPosition(276,41)
-     .setSize(255,30)
-     ;
+    .setValue(0)
+      .setPosition(276, 41)
+        .setSize(255, 30)
+          ;
 
   b.setCaptionLabel("Remove Rotating Arcs")
-     .getCaptionLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
-
-/*
-  // add a vertical slider
-  controlP5.Slider sl = cp5.addSlider("Slider")
-     .setPosition(300,105)
-     .setSize(20,200)
-     .setRange(0,200)
-     .setValue(128)
-     ;
-     
-     sl.getCaptionLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
-     
-     sl.getValueLabel()
-     .setFont(font)
-     .toUpperCase(false)
-     .setSize(fontSize)
-     ;
-*/
-  // reposition the Label for controller 'slider'
-  //cp5.getController("slider").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  //cp5.getController("slider").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0); 
+    .getCaptionLabel()
+      .setFont(font)
+        .toUpperCase(false)
+          .setSize(fontSize)
+            ;
 }
 
 void draw() {
   background(0);
-  
+
   fill(myColor);
-  rect(0,280,width,70);
+  //rect(0,280,width,70);
 }
 
 public void controlEvent(ControlEvent theEvent) {
   // when a value change from a ColorPicker is received, extract the ARGB values
   // from the controller's array value
-  if(theEvent.isFrom(cpTop)) {
+  if (theEvent.isFrom(cpTop)) {
     float r = int(theEvent.getArrayValue(0));
     float g = int(theEvent.getArrayValue(1));
     float b = int(theEvent.getArrayValue(2));
-        
+
     OscMessage myMessage;
-  
+
     myMessage = new OscMessage("/Mother/Child/Grad_01/TopRed"); 
     myMessage.add(r/255f);
     oscP5.send(myMessage, myRemoteLocation);
-  
+
     myMessage = new OscMessage("/Mother/Child/Grad_01/TopGreen");
     myMessage.add(g/255f);
     oscP5.send(myMessage, myRemoteLocation);
@@ -171,17 +208,17 @@ public void controlEvent(ControlEvent theEvent) {
     myMessage.add(b/255f);
     oscP5.send(myMessage, myRemoteLocation);
   }
-  else if(theEvent.isFrom(cpBottom)) {
+  else if (theEvent.isFrom(cpBottom)) {
     float r = int(theEvent.getArrayValue(0));
     float g = int(theEvent.getArrayValue(1));
     float b = int(theEvent.getArrayValue(2));
-        
+
     OscMessage myMessage;
-  
+
     myMessage = new OscMessage("/Mother/Child/Grad_01/BotRed"); 
     myMessage.add(r/255f);
     oscP5.send(myMessage, myRemoteLocation);
-  
+
     myMessage = new OscMessage("/Mother/Child/Grad_01/BotGreen");
     myMessage.add(g/255f);
     oscP5.send(myMessage, myRemoteLocation);
@@ -192,32 +229,24 @@ public void controlEvent(ControlEvent theEvent) {
   }
 }
 
-/*
-// color information from ColorPicker 'picker' are forwarded to the picker(int) function
-void topPicker(int col) {
+void ArcsAlpha(float alpha) {
   OscMessage myMessage;
-  
-  myMessage = new OscMessage("/Mother/Child/Grad_01/TopRed");
-  float topRed = red(col); 
-  myMessage.add(topRed/255f);
-  oscP5.send(myMessage, myRemoteLocation);
-  
-  myMessage = new OscMessage("/Mother/Child/Grad_01/TopGreen");
-  float topGreen = green(col);
-  myMessage.add(topGreen/255f);
-  oscP5.send(myMessage, myRemoteLocation);
 
-  myMessage = new OscMessage("/Mother/Child/Grad_01/TopBlue");
-  float topBlue = blue(col);
-  myMessage.add(topBlue/255f);
+  myMessage = new OscMessage("/Mother/Child/Arcs_01/Alpha"); 
+  myMessage.add((int)alpha);
+  oscP5.send(myMessage, myRemoteLocation);
+  
+  println("ALPHA");
+}
+
+void ArcsScale(float scale) {
+  OscMessage myMessage;
+
+  myMessage = new OscMessage("/Mother/Child/Arcs_01/Scale"); 
+  myMessage.add((float)scale/64f);
   oscP5.send(myMessage, myRemoteLocation);
 }
-*/
 
-void slider(float theColor) {
-  myColor = color(theColor);
-  println("a slider event. setting background to "+theColor);
-}
 
 // function AddGradient will receive changes from 
 // controller with name AddGradient
