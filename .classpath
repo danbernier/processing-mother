@@ -12,7 +12,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="P2Eclipse/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/toxiclibscore/library/toxiclibscore.jar"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar" sourcepath="/oscP5"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/colorutils/library/colorutils.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
