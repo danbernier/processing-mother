@@ -90,7 +90,13 @@ public class SynthContainer
 	private void PopulateLibraryURLS()
 	{
 		String[] fileName;
-		File oooClassPath 		= new File(m_Synth_Folder + "//" + "libraries");
+		File oooClassPath; 
+		
+		if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
+			oooClassPath = new File(m_Synth_Folder + "/libraries");  // Mac
+        else 
+        	oooClassPath = new File(m_Synth_Folder + "//" + "libraries"); // Windows
+		
 		File[] files 			= oooClassPath.listFiles();
 		
 		ArrayList<URL> temp_Library_file_URLS = new ArrayList<URL>();

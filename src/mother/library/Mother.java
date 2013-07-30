@@ -28,7 +28,6 @@ package mother.library;
 
 import processing.core.*;
 import processing.opengl.*;
-
 import oscP5.*;
 import mpe.config.FileParser;
 
@@ -41,13 +40,14 @@ import com.illposed.osc.OSCPortIn;
 import com.illposed.osc.OSCPortOut;
 
 
+
 import java.text.NumberFormat;
 import java.util.*;
-
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
@@ -864,7 +864,10 @@ public class Mother
 				m_Synth_Folder = fp.getStringValue("SynthFolder");
 			}
 			else {
-				m_Synth_Folder = r_Parent.sketchPath("data\\Synths"); 
+				if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
+					m_Synth_Folder = r_Parent.sketchPath("data/Synths");  // Mac
+		        else 
+		        	m_Synth_Folder = r_Parent.sketchPath("data\\Synths"); // Windows
 			}
 
 			String frameRateString = fp.getStringValue("frameRate");
