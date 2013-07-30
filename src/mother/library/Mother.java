@@ -637,7 +637,14 @@ public class Mother
 		m_Synth_Folder 		= "X:\\Lumia Synths";
 
 		// Loading setup values from .ini file
-		loadIniFile(r_Parent.sketchPath("data//mother" + ".ini"));
+		
+	    if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1) {
+	    	 loadIniFile(r_Parent.sketchPath("data/mother" + ".ini")); // Mac
+	    }
+	    else { 
+	        loadIniFile(r_Parent.sketchPath("data//mother" + ".ini")); // Windows  	
+	    }
+		
 
 		if (r_Parent.frame != null && m_FullScreen == true)
 		{
