@@ -70,7 +70,15 @@ public class MotherDelivery extends PApplet
 	}
 	
 	static public void main(String args[]) {
-		FileParser fp = new FileParser("data//mother" + ".ini");
+	    String iniFilePath;
+		if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1) {
+			iniFilePath = "data/mother" + ".ini"; // Mac
+	    }
+	    else { 
+	    	iniFilePath = "data//mother" + ".ini"; // Windows  	
+	    }
+	    
+		FileParser fp = new FileParser(iniFilePath);
 
 		// parse ini file if it exists
 		if (fp.fileExists()) {
