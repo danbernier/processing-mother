@@ -1,13 +1,31 @@
-import oscP5.*;
+import toxi.color.*;
+import toxi.color.theory.*;
+import toxi.math.conversion.*;
+import toxi.geom.*;
+import toxi.math.*;
+import toxi.geom.mesh2d.*;
+import toxi.util.datatypes.*;
+import toxi.util.events.*;
+import toxi.geom.mesh.subdiv.*;
+import toxi.geom.mesh.*;
+import toxi.math.waves.*;
+import toxi.util.*;
+import toxi.math.noise.*;
 
+import oscP5.*;
 import foetus.*;
 import processing.core.*;
-
 import java.util.*;
-
 import processing.opengl.*;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+
+/**
+* Gradient Visual Synth example, for use with the Mother 1.0 library, both by Ilias Bergstrom.
+* To see what this synth looks like when mixed with another synth, please run the MotherDelivery.pde example,
+* and the MotherControllerExample, and then use the contols in the second to add synths and manipulate their parameters.
+* For more info, read the included "Mother Documentation.pdf" file.
+*/
 
 // Messages:
 // "/Gradient/TopColor" iii
@@ -30,7 +48,6 @@ void setup()
   // initializeFoetus().
   // Finally, for the synth to work as a processing sketch within the PDE, call initializeFoetus() from within
   // setup().
-
   size(400, 300, OPENGL);
   frameRate(24);
 

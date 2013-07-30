@@ -7,11 +7,12 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
   /**
-   * Geometry by Marius Watz.
+   * Geometry by Marius Watz, modified by Ilias Bergstrom.
    * 
-   * Modified by Ilias Bergstrom to be compatible with the Mother visual synthesizer host.
-   * 
-   * Using sin/cos lookup tables, blends colors, and draws a series of rotating arcs on the screen.
+   * Visual Synth example, for use with the Mother 1.0 library, both by Ilias Bergstrom.
+   * To see what this synth looks like when mixed with another synth, please run the MotherDelivery example,
+   * and the MotherControllerExample, and then use the contols in the second to add synths and manipulate their parameters.
+   * For more info, read the included "Mother Documentation.pdf" file.
    */
 
   public Foetus f;   // Declare Foetus
