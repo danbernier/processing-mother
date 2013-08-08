@@ -60,12 +60,13 @@ public class ChildWrapper
 	/**
 	 *  ChildWrapper CONSTRUCTOR
 	 */
-	public ChildWrapper(String classPath, URL[] libraryULS, String className, String name, boolean billboard, Mother mother)
+	public ChildWrapper(PApplet child, String name, boolean billboard, Mother mother)
 	{	
 		r_Mother			= mother;
 		m_Name 				= name;
 		m_RenderBillboard 	= billboard;
 		
+		/*
 	    File dir1 = new File (".");
 	    try 
 	    {
@@ -75,16 +76,12 @@ public class ChildWrapper
 	    {
 	    	 
 	    }
+		*/
 		
 		m_Blending_Source 		= GL.GL_SRC_ALPHA;
 		m_Blending_Destination 	= GL.GL_ONE_MINUS_SRC_ALPHA;
 		
-		//if(className!="source_particles")
-			m_Child = LoadSketch(classPath, className, libraryULS);
-		//else
-		//	m_Child = new source_particles();
-			
-//		logger = Logger.getLogger(this.GetName());
+		m_Child = child;
 	}
 		
 	/**
@@ -149,64 +146,4 @@ public class ChildWrapper
 	/*
 	 * This worked but doesn't help much for the plugin handling: "-Djava.ext.dirs=C:\libraries"
 	 */
-	
-	/**
-	 * Loads a sketch from disk
-	 * @param classPath
-	 * @param className
-	 * @return
-	 */
-	
-	private PApplet LoadSketch(String classPath, String className, URL[] libraryURLS)
-    {   
-		File dir1 = new File (".");
-	    
-		if(libraryURLS==null) {
-			  System.out.println ("libraryURLS IS NULL!");
-			  libraryURLS = new URL[0];
-		}
-		
-		try 
-	    {
-	      System.out.println ("Current dir : " + dir1.getCanonicalPath());
-	    }
-	    catch(Exception e)
-	    {
-	    	 
-	    }		
-	    
-        File oooClassPath; // = new File(classPath + "//" + className + ".jar");
-        
-        if (System.getProperty("os.name").toLowerCase().indexOf("mac") != -1)
-        	oooClassPath = new File(classPath + "//" + className + ".jar"); // Mac
-        else 
-        	oooClassPath = new File(classPath + "//" + className + ".jar"); // Windows
-
-        URL[] toUse = new URL[1 + libraryURLS.length];
-        
-        try
-        { 
-	        for(int i = 0; i<libraryURLS.length; i++ )
-	        {
-	      		toUse[i] = libraryURLS[i];
-	        }
-	            
-	        toUse[libraryURLS.length] = oooClassPath.toURI().toURL();
-        	        	
-        	URLClassLoader cl = new URLClassLoader( toUse, ClassLoader.getSystemClassLoader() );
-
-        	PApplet toReturn = (PApplet)Class.forName(className, true, cl).newInstance(); 
-        	
-        	toReturn.noLoop();
-        	
-            return toReturn;
-        } 
-        catch (Exception ex)
-        {
-            System.out.println("Crash: while loading sketch: " +  ex.getMessage());
-            ex.printStackTrace();
-        }
-        
-        return new PApplet();
-    } 
 }

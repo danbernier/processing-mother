@@ -39,15 +39,12 @@ import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.illposed.osc.OSCPortOut;
 
-
-
 import java.text.NumberFormat;
 import java.util.*;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
@@ -374,7 +371,9 @@ public class Mother
 																			theOscMessage.get(0).stringValue(), 
 																			this);
 
-							sendSupportedMessages(wrapper);
+							if(wrapper!=null) {
+								sendSupportedMessages(wrapper);
+							}
 
 							r_Parent.loop();
 //							this.redraw = true;

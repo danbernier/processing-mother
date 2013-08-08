@@ -5,9 +5,9 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/javaosc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shapetween"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/core.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/jogl-all.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/oscP5.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/core/library/core.jar" sourcepath="/processing-head-1.0.1/"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/core/library/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
