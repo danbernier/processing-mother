@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/processing-Mother/lib/core.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/processing-Mother/lib/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/processing-Mother/lib/jogl-all.jar"/>
-	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/processing-Mother/lib/oscP5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javaosc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shapetween"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/core.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/jogl-all.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Lumia_Project/branches/libs/oscP5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
