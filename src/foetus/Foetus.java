@@ -66,11 +66,11 @@ public class Foetus
 		
 		m_Updating = new Hashtable<String,Boolean>();
 				
-		parent.registerDispose(this);
-		parent.registerPre(this);
-		parent.registerPost(this);
-		parent.registerDraw(this);
-		
+		parent.registerMethod("dispose", this);
+		parent.registerMethod("pre", this);
+		parent.registerMethod("post", this);
+		parent.registerMethod("draw", this);
+				
 		m_BGColor = new int[] {128, 128, 128};
 	}
 	
