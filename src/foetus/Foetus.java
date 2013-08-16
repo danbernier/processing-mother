@@ -1,5 +1,5 @@
 /*
-Copyright 2008 Ilias Bergstrom.
+Copyright 2008 - 2013 Ilias Bergstrom.
   
 This file is part of "Mother".
 
@@ -29,8 +29,7 @@ import java.util.*;
 
 import megamu.shapetween.Tween;
 
-public class Foetus
-{
+public class Foetus {
 	PApplet parent;
 	
 	int[] m_BGColor;
@@ -56,8 +55,7 @@ public class Foetus
 	 * Constructor
 	 * @param parent
 	 */
-	public Foetus(PApplet parent)
-	{
+	public Foetus(PApplet parent) {
 		this.parent = parent;
 	
 		m_Parameters = new ArrayList<FoetusParameter>();
@@ -79,8 +77,7 @@ public class Foetus
 	 * 
 	 * @return String
 	 */
-	public String version() 
-	{
+	public String version()	{
 		return VERSION;
 	}
 
@@ -88,8 +85,7 @@ public class Foetus
 	 * For use by Mother, do not alter!
 	 * @param inSF
 	 */
-	public void setSpeedFraction(float inSF) 
-	{
+	public void setSpeedFraction(float inSF) {
 		m_SpeedFraction = inSF; 
 		Tween.timeScale = 1f/m_SpeedFraction;
 	}
@@ -98,8 +94,7 @@ public class Foetus
 	 * For use by Mother!
 	 * @param inSF
 	 */
-	public float getSpeedFraction() 
-	{
+	public float getSpeedFraction() {
 		return m_SpeedFraction; 
 	}
 	
@@ -111,8 +106,7 @@ public class Foetus
 	 * that it would have if it were running in real-time. 
 	 * @return int
 	 */
-	public int millis() 
-	{
+	public int millis()	{
 		double pm = parent.millis();
 	    return (int)(pm/m_SpeedFraction);
 	}
@@ -124,20 +118,17 @@ public class Foetus
 	 * @param g
 	 * @param b
 	 */
-	public void setBGColor(int r, int g, int b)
-	{
+	public void setBGColor(int r, int g, int b)	{
 		m_BGColor[0] = r;
 		m_BGColor[1] = g;
 		m_BGColor[2] = b;
 	}
 	
-	public void dispose()
-	{
+	public void dispose() {
 //		System.out.println("Dispose: " + parent.toString());
 	}
 
-	public void draw()
-	{
+	public void draw() {
 //		System.out.println("draw: " + parent.toString());
 	}
 	
@@ -147,8 +138,7 @@ public class Foetus
 	 * @param OSC address
 	 * @param OSC typetag
 	 */
-	public void registerMethod(String address, String typetag)
-	{
+	public void registerMethod(String address, String typetag) {
 		m_Messages.put(address, typetag);
 		m_Updating.put(address, false);
 	}
@@ -157,8 +147,7 @@ public class Foetus
 	 * For use by Mother!
 	 * @return
 	 */
-	public void unregisterMethod(String address)
-	{
+	public void unregisterMethod(String address) {
 		m_Messages.remove(address);
 		m_Updating.remove(address);
 	}
@@ -167,8 +156,7 @@ public class Foetus
 	 * For use by Mother!
 	 * @return
 	 */
-	public Hashtable<String,String> getSupportedMessages()
-	{
+	public Hashtable<String,String> getSupportedMessages() {
 		return m_Messages;
 	}
 	
@@ -176,10 +164,8 @@ public class Foetus
 	 * For use by Mother, do not alter!
 	 * @return
 	 */
-	public void setUpdatingStatus(String address, boolean status)
-	{
-		synchronized(m_Updating)
-		{
+	public void setUpdatingStatus(String address, boolean status) {
+		synchronized(m_Updating) {
 			m_Updating.put(address, status);
 		}
 	}
@@ -188,16 +174,12 @@ public class Foetus
 	 * For use by Mother!
 	 * @return
 	 */
-	public boolean getUpdatingStatus()
-	{
-		synchronized(m_Updating)
-		{
-			if(m_Updating.containsValue(true))
-			{
+	public boolean getUpdatingStatus()	{
+		synchronized(m_Updating) {
+			if(m_Updating.containsValue(true)) {
 				return true;
 			}
-			else
-			{
+			else {
 				return false;
 			}
 		}
@@ -207,8 +189,7 @@ public class Foetus
 	 * For use by Mother!
 	 * @return
 	 */
-	public void pre()
-	{
+	public void pre() {
 		if (standalone)
 			parent.background(m_BGColor[0],m_BGColor[1],m_BGColor[2]);
 		
@@ -219,14 +200,12 @@ public class Foetus
 	 * For use by Mother!
 	 * @return
 	 */
-	public void post()
-	{
+	public void post() {
 //		System.out.println("Post: " + parent.toString());
 	}
 	
 	
-	public void addParameter(FoetusParameter f)
-	{
+	public void addParameter(FoetusParameter f)	{
 		m_Parameters.add(f);	
 	}
 }

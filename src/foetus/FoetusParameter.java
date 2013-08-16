@@ -1,13 +1,11 @@
 package foetus;
 
-
 import megamu.shapetween.Shaper;
 import megamu.shapetween.Tween;
 
 import processing.core.PApplet;
 
-public class FoetusParameter
-{
+public class FoetusParameter {
 	float m_Value;
 	float m_LastValue;
 	float m_NewValue;
@@ -20,6 +18,8 @@ public class FoetusParameter
 	Foetus r_f; 
 			
 	Tween ani;
+
+	long timeStarted;
 	
 	/**
 	 * Allows spline interpolation for individual floating point synth parameters.
@@ -28,8 +28,7 @@ public class FoetusParameter
 	 * @param address
 	 * @param typetag
 	 */
-	public FoetusParameter(Foetus f, float value, String address, String typetag )
-	{
+	public FoetusParameter(Foetus f, float value, String address, String typetag ) {
 		r_f 					= f;		
 		m_Value 				= value;
 		m_NewValue				= value;
@@ -67,19 +66,15 @@ public class FoetusParameter
 	 * Returns the interpolated value held by the parameter at the current time.
 	 * @return
 	 */
-	public float getValue()
-	{
-		if(m_Splerp)
-		{
+	public float getValue() {
+		if(m_Splerp) {
 			m_Value = PApplet.lerp(m_LastValue, m_NewValue, ani.position());
 		}
 		
-		if(ani.position()>=1.0f)
-		{
+		if(ani.position()>=1.0f) {
 			r_f.setUpdatingStatus(m_Address, false);
 		}
-		else
-		{
+		else {
 			r_f.setUpdatingStatus(m_Address, true);	
 		}
 		
@@ -88,16 +83,13 @@ public class FoetusParameter
 		
 		return m_Value;
 	}
-	
-	long timeStarted;
-	
+		
 	/**
 	 * Set a new value for the parameter. This will trigger an interpolation with the 
 	 * new value as target.
 	 * @param val
 	 */
-	public void setValue(float val)
-	{
+	public void setValue(float val)	{
 		long elapsed;
 		long elapsedTime = System.currentTimeMillis() - timeStarted;
 		
@@ -110,15 +102,13 @@ public class FoetusParameter
 	    
 	    ani.end();
 	    
-	    if(elapsed<(500/r_f.getSpeedFraction()))
-	    {
+	    if(elapsed<(500/r_f.getSpeedFraction())) {
 	    	m_Splerp 	= false;
 	    	m_LastValue = val;
 	    	m_Value 	= val;
 	    	r_f.setUpdatingStatus(m_Address, false);
 	    }
-	    else
-	    {
+	    else {
 	    	m_Splerp = true;
 	    	
 	    	if(elapsed>(3000/r_f.getSpeedFraction()))
@@ -133,10 +123,8 @@ public class FoetusParameter
 	    }
 	}
 	
-	public void tick()
-	{
-		if(ani.isTweening())
-		{
+	public void tick() {
+		if(ani.isTweening()) {
 			ani.tick();
 //			System.out.println("tick " + ani.position());
 		}
