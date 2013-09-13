@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/core/library/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="X:/PortableApps/PortableApps/Processing/core/library/jogl-all.jar"/>
 	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/processing-Mother Synths"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
