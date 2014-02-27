@@ -54,6 +54,15 @@ import java.net.UnknownHostException;
 
 import foetus.*;
 
+/*
+BUILDING RELEASE:
+o	First build the Foetus plugin running the Ant script in the processing-Foetus project. Copy Foetus.jar to the processing-Mother/lib folder overwriting the previous one.
+o	MAKE sure I refresh all files in the libs folder in my workspace, to their latest versions!
+o	Make sure a jdk is used in Eclipse.
+o	Run the Ant script for Mother. This uses the files in the above libs folder.
+o	Build Mother.zip manually, to include documentation pdf.
+*/
+
 public class Mother {
 	public final static String VERSION = "##library.prettyVersion##";
 	
