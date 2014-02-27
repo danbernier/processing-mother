@@ -1,5 +1,5 @@
 /*
-Copyright 2008 - 2013 Ilias Bergstrom.
+Copyright 2008 - 2014 Ilias Bergstrom.
   
 This file is part of "Mother".
 
@@ -40,7 +40,7 @@ public class Foetus {
 	public PGraphics incoming;
 	public PGraphics outgoing;
 	
-	public final String VERSION = "0.5.0";
+	public final String VERSION = "1.5.0";
 	
 	PApplet parent;
 	
@@ -51,33 +51,49 @@ public class Foetus {
 	ArrayList<FoetusParameter> 	m_Parameters;
 	
 	float m_SpeedFraction = 1;
-		
-	public ArrayList<FoetusParameter> getParameters() { return m_Parameters; }
 	
 	PGraphics old_g = null;
 	
 	static float m_MaxAnimationDuration = 3000.0f;
-	
-	public float GetMaxAnimationDuration() { return m_MaxAnimationDuration; }
-	public void  SetMaxAnimationDuration(float maxAnimationDuration) { m_MaxAnimationDuration = maxAnimationDuration; }
-	
+
 	FoetusParameter		m_Alpha;
 	int					m_BlendMode = 1;
 	
+	float m_Xmag, m_Ymag = 0;
+	boolean m_CubeEnabled = false;
+	public PGraphics m_CubePG = null;
+	
+	public ArrayList<FoetusParameter> getParameters() { return m_Parameters; }
+	
+	public float GetMaxAnimationDuration() { return m_MaxAnimationDuration; }
+	public void  SetMaxAnimationDuration(float maxAnimationDuration) { m_MaxAnimationDuration = maxAnimationDuration; }
+
 	public float 	GetAlpha() 				{ return m_Alpha.getValue(); }
 	public void 	SetAlpha(float a) 		{ m_Alpha.setValue(a); }
 		
 	public int 		GetBlendMode()			{ return m_BlendMode; }
 	public void		SetBlendMode(int mode)	{ m_BlendMode = mode; }
 	
+	public boolean	GetCubeEnabledWhenStandalone() { return m_CubeEnabled; }
 	
 	/**
 	 * Constructor
 	 * @param parent
 	 */
+	public Foetus(PApplet parent, boolean cubeEnabled) {
+		m_CubeEnabled = cubeEnabled;
+		
+		Construct(parent);	
+	}
+		
 	public Foetus(PApplet parent) {
-		this.parent = parent;
+		m_CubeEnabled = false;
+		Construct(parent);			
+	}
 	
+	private void Construct(PApplet parent) {
+		this.parent = parent;
+		
 		m_Parameters = new ArrayList<FoetusParameter>();
 		
 		olderSiblings = new ArrayList<PGraphics>();
@@ -94,6 +110,12 @@ public class Foetus {
 		m_BGColor = new int[] {128, 128, 128};
 		
 		m_Alpha = new FoetusParameter(this, 1.0f, "/SetAlpha", "f" );
+		
+		if(m_CubeEnabled) {
+			m_CubePG = parent.createGraphics(	parent.width, 
+					parent.height, 
+					parent.OPENGL);
+		}
 	}
 	
 	/**
@@ -217,6 +239,12 @@ public class Foetus {
 		if (standalone) {
 			parent.background(m_BGColor[0],m_BGColor[1],m_BGColor[2]);
 			
+			if(m_CubeEnabled) {
+				drawCube();
+				
+				incoming = m_CubePG;
+			}
+			
 			outgoing = parent.g;
 		}
 		
@@ -250,5 +278,61 @@ public class Foetus {
 			parent.g = old_g;
 			old_g = null;
 		}
+	}
+	
+	public void drawCube()  { 
+		m_CubePG.beginDraw();
+		
+		m_CubePG.noStroke();
+		m_CubePG.clear();
+		  
+		m_CubePG.pushMatrix();
+		 
+		m_CubePG.translate(m_CubePG.width/2, m_CubePG.height/2, -30); 
+				  
+		m_Ymag+= 0.005 * m_CubePG.TWO_PI;
+		m_Xmag+= 0.005 * m_CubePG.TWO_PI;
+		  
+		m_CubePG.rotateX(-m_Ymag); 
+		m_CubePG.rotateY(-m_Xmag); 
+		  
+		m_CubePG.scale(90);
+		m_CubePG.beginShape(m_CubePG.QUADS);
+
+		m_CubePG.fill(255, 0, 0); m_CubePG.vertex(-1,  1,  1);
+		m_CubePG.fill(255, 0, 0); m_CubePG.vertex( 1,  1,  1);
+		m_CubePG.fill(255, 0, 0); m_CubePG.vertex( 1, -1,  1);
+		m_CubePG.fill(255, 0, 0); m_CubePG.vertex(-1, -1,  1);
+
+		m_CubePG.fill(0, 0, 255); m_CubePG.vertex( 1,  1,  1);
+		m_CubePG.fill(0, 0, 255); m_CubePG.vertex( 1,  1, -1);
+		m_CubePG.fill(0, 0, 255); m_CubePG.vertex( 1, -1, -1);
+		m_CubePG.fill(0, 0, 255); m_CubePG.vertex( 1, -1,  1);
+
+		m_CubePG.fill(0, 255, 0); m_CubePG.vertex( 1,  1, -1);
+		m_CubePG.fill(0, 255, 0); m_CubePG.vertex(-1,  1, -1);
+		m_CubePG.fill(0, 255, 0); m_CubePG.vertex(-1, -1, -1);
+		m_CubePG.fill(0, 255, 0); m_CubePG.vertex( 1, -1, -1);
+
+		m_CubePG.fill(0, 255, 255); m_CubePG.vertex(-1,  1, -1);
+		m_CubePG.fill(0, 255, 255); m_CubePG.vertex(-1,  1,  1);
+		m_CubePG.fill(0, 255, 255); m_CubePG.vertex(-1, -1,  1);
+		m_CubePG.fill(0, 255, 255); m_CubePG.vertex(-1, -1, -1);
+
+		m_CubePG.fill(255, 255, 0); m_CubePG.vertex(-1,  1, -1);
+		m_CubePG.fill(255, 255, 0); m_CubePG.vertex( 1,  1, -1);
+		m_CubePG.fill(255, 255, 0); m_CubePG.vertex( 1,  1,  1);
+		m_CubePG.fill(255, 255, 0); m_CubePG.vertex(-1,  1,  1);
+
+		m_CubePG.fill(255, 255, 255); m_CubePG.vertex(-1, -1, -1);
+		m_CubePG.fill(255, 255, 255); m_CubePG.vertex( 1, -1, -1);
+		m_CubePG.fill(255, 255, 255); m_CubePG.vertex( 1, -1,  1);
+		m_CubePG.fill(255, 255, 255); m_CubePG.vertex(-1, -1,  1);
+
+		m_CubePG.endShape();
+		  
+		m_CubePG.popMatrix();
+		
+		m_CubePG.endDraw();
 	}
 }
