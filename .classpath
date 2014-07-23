@@ -2,12 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/jogl.jar" sourcepath="/processing-Mother Synths"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/opengl/library/opengl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/lib/core.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Processing/libraries/oscP5/library/oscP5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jdesktop.animation.timing"/>
+	<classpathentry kind="lib" path="X:/PortableApps/Processing_Sketchbook/libraries/oscP5/library/oscP5.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/GitHub/processing/build/windows/work/core/library/core.jar" sourcepath="/processing-head-1.0.1/"/>
+	<classpathentry kind="lib" path="X:/PortableApps/GitHub/processing/build/windows/work/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="X:/PortableApps/GitHub/processing/build/windows/work/core/library/jogl-all.jar"/>
+	<classpathentry kind="lib" path="lib/shapetween.jar"/>
+	<classpathentry kind="lib" path="lib/javaosc.jar"/>
+	<classpathentry kind="lib" path="lib/javaoscfull.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/processing-Foetus"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
