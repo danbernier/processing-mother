@@ -19,7 +19,7 @@ public class SynthLoader {
 
 	public URL[] 		get_Library_File_URLS() 	{return m_Library_file_URLS;}
 	Hashtable<String, 	String> get_Synth_Names() 	{return m_Visual_Synth_Names;}
-
+	public ArrayList<URL> get_Visual_Synth_urls() 	{return m_Visual_Synth_urls;}
 	/**
 	 * Constructor
 	 * @param folder

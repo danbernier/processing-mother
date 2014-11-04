@@ -1,8 +1,11 @@
 package mother.library;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -52,10 +55,12 @@ public class Operations
 					Record(theOscMessage);
 				else if (splits[2].compareTo("MaxAnimationDuration") == 0)
 					MaxAnimationDuration(theOscMessage);
-				else if (splits[2].compareTo("WriteSynth_OSC_Namespace") == 0)
-					serializeSynth(theOscMessage, m_Synth_Folder);
+				else if (splits[2].compareTo("WriteSynth_OSC_Namespace") == 0) {
+					String name = theOscMessage.get(0).stringValue();
+					serializeSynth(name, m_Synth_Folder);
+				}
 				else if (splits[2].compareTo("WriteSynths_OSC_Namespace") == 0)
-					serializeSynths(theOscMessage, m_Synth_Folder);
+					serializeSynths(m_Synth_Folder);
 				else if (splits.length >= 3)
 					Child(theOscMessage, splits, r_M.GetSynthContainer(), 0);
 		}
@@ -427,15 +432,42 @@ public class Operations
 		}
 	}
 	
-	protected void serializeSynth(OscMessage theOscMessage, String synth_Folder) {
-		String name = theOscMessage.get(0).stringValue();
+	protected void serializeSynth(String name, String synth_Folder) {
 		
-		ChildWrapper wrapper = r_M.GetSynthContainer().GetChildWrapper(name);
+		//
+		r_M.GetParent().noLoop();
+
+		PApplet child = null;
 		
-		OSC_Namespace_Serializer.Serialize_Synth(wrapper, synth_Folder);
+		System.out.println("Started making synth file: " + name);
+		
+		child = r_M.GetSynthLoader().LoadSketch(name);
+		
+		if(child!=null) {
+			ChildWrapper wrapper = new ChildWrapper(	child,										 
+														name, 
+														name,
+														r_M.getBillboardFlag(), // Render Billboard
+														r_M);
+				
+			r_M.GetSynthLoader().InitChild( wrapper, r_M );
+		
+			OSC_Namespace_Serializer.Serialize_Synth(wrapper, synth_Folder);
+			
+			r_M.callRegisteredMethod(wrapper, "dispose");
+			r_M.GetParent().loop();
+		}
+		//
+			
+		// Previous implementation
+	//	ChildWrapper wrapper = r_M.GetSynthContainer().GetChildWrapper(name);
+	//	OSC_Namespace_Serializer.Serialize_Synth(wrapper, synth_Folder);
 	}
 	
-	protected void serializeSynths(OscMessage theOscMessage, String synth_Folder) {				
-		OSC_Namespace_Serializer.Serialize_Synths(r_M.GetSynthContainer(), synth_Folder);
+	protected void serializeSynths(String synth_Folder) {		
+		for (Enumeration<String> e = r_M.GetSynthLoader().get_Synth_Names().keys(); e.hasMoreElements();) {
+			serializeSynth(e.nextElement(), synth_Folder);
+		}
+		//OSC_Namespace_Serializer.Serialize_Synths(r_M.GetSynthContainer(), synth_Folder);
 	}
 }

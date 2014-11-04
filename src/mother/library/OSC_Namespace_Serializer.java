@@ -20,6 +20,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import foetus.FoetusParameter;
 
 public class OSC_Namespace_Serializer {
+	/*
 	public static void Serialize_Synths(SynthContainer scIn, String filePath) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
@@ -46,7 +47,8 @@ public class OSC_Namespace_Serializer {
 			System.out.println("Error while trying to instantiate DocumentBuilder " + pce);
 		}
 	}
-
+	*/
+	
 	public static void Serialize_Synth(ChildWrapper wrapper, String filePath) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
@@ -57,11 +59,11 @@ public class OSC_Namespace_Serializer {
 			// create an instance of DOM
 			Document dom = db.newDocument();
 			
-			System.out.println("Started making synth file.. ");
+			System.out.println("Started making synth file: " + wrapper.GetTypeName());
 			createDOMSynthTree(dom, wrapper);
 			String pathAndName = filePath + "//" + wrapper.GetTypeName() + ".node"; 
 			printToFile(dom, pathAndName);
-			System.out.println("Generated SYNTH file successfully.");
+			System.out.println("Generated SYNTH file successfully: " + wrapper.GetTypeName());
 		} 
 		catch (ParserConfigurationException pce) {
 			System.out.println("Error while trying to instantiate DocumentBuilder " + pce);

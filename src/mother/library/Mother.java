@@ -46,6 +46,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
@@ -114,6 +115,7 @@ public class Mother implements Runnable {
 	
 	public int getChildHeight()	{ return m_Height; }
 	
+	public PGraphics getOutputImage() { return m_synthOutputStack; }
 	
 	// SPOUT
 	//Spout spout;
@@ -213,6 +215,7 @@ public class Mother implements Runnable {
 		child.mousePressed 	= r_Parent.mousePressed;
 		child.keyPressed 	= r_Parent.keyPressed;
 		child.key 			= r_Parent.key;
+		child.sketchPath 	= m_Synth_Folder;
 	}
 
 	// //For testing (getting opengl state)
@@ -337,6 +340,8 @@ public class Mother implements Runnable {
 				gl2.glDisable(GL.GL_BLEND);
 
 				callRegisteredMethod(current, "post");
+				
+				//System.gc();
 			}
 
 			r_Parent.image(m_synthOutputStack, 0, 0, width, height);
@@ -512,8 +517,7 @@ public class Mother implements Runnable {
 	    }
 	    else { 
 	        loadIniFile(r_Parent.sketchPath("data//mother" + ".ini")); // Windows  	
-	    }
-		
+	    }		
 
 		if (r_Parent.frame != null && m_FullScreen == true)	{
 			r_Parent.frame.removeNotify();// make the frame not displayable

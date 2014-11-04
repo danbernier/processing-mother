@@ -11,8 +11,8 @@ uniform vec2 texOffset;
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
 
-uniform float max_distort = 2.2;
-uniform int num_iter = 12;
+uniform float max_distort;
+uniform int num_iter;
 
 vec2 barrelDistortion(vec2 coord, float amt) {
 	vec2 cc = coord - 0.5;
