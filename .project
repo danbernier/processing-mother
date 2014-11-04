@@ -18,7 +18,7 @@
 		<link>
 			<name>lib/core.jar</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/GitHub/processing/build/windows/work/core/library/core.jar</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/PortableApps/Processing/core/library/core.jar</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
