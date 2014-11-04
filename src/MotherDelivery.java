@@ -9,9 +9,7 @@ import java.awt.Rectangle;
 import processing.core.*;
 import mother.library.*;
 import mpe.config.FileParser;
-
-import oscP5.*;
-import netP5.*;
+//import spout.library.*;
 
 public class MotherDelivery extends PApplet
 {
@@ -20,7 +18,10 @@ public class MotherDelivery extends PApplet
 	static boolean fullScreen;
 	static int pos_X;
 	static int pos_Y;
-	
+	static boolean m_UseSpout;
+
+	//Spout m_Spout;
+
 	public void init() {
 		m_Mother = new Mother(this);
 		
@@ -51,6 +52,11 @@ public class MotherDelivery extends PApplet
 				}
 			}
 		});
+		
+		if(m_UseSpout) {
+			//m_Spout = new Spout(this);
+			//m_Spout.initSender("Processing Mother", width, height);
+		}	
 	}
 	
 	public void draw() {
@@ -63,8 +69,29 @@ public class MotherDelivery extends PApplet
 			frame.setExtendedState(0);
 		 
 		m_Mother.draw();
+		
+		if(m_UseSpout) {
+			//m_Spout.sendTexture();
+		}
+	}	
+
+	// over-ride exit to release sharing
+	public void exit() {
+		killSpout();
+		super.exit(); // necessary
+	} 
+	
+	public void dispose() {
+		killSpout();
 	}
 	
+	private void killSpout() {
+		// CLOSE THE SPOUT SENDER HERE
+		if(m_UseSpout) {
+		  //m_Spout.closeSender();
+		}
+	}
+
 	public void keyPressed() {
 		m_Mother.keyPressed();
 	}
@@ -82,6 +109,13 @@ public class MotherDelivery extends PApplet
 
 		// parse ini file if it exists
 		if (fp.fileExists()) {
+			if (fp.getIntValue("videoMemorySharing") == 1) {
+				m_UseSpout = true;
+			}
+			else {
+				m_UseSpout = false;
+			}
+			
 			if (fp.getIntValue("FullScreen") == 1) {
 				fullScreen = true;
 				int outputScreen = fp.getIntValue("outputScreen");
@@ -111,7 +145,7 @@ public class MotherDelivery extends PApplet
 					pos_X = 0;
 					pos_Y = 0;
 				}
-
+			
 				PApplet.main(new String[] { location, "--hide-stop", "MotherDelivery" });
 			}
 			else {
